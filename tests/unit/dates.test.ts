@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuration, formatYM, monthsBetween, resolveYM, ymIndex } from '@/lib/dates';
+import { formatDuration, formatYM, monthOffset, monthsBetween, resolveYM } from '@/lib/dates';
 
-describe('ymIndex', () => {
-  it('counts months from year zero so differences are month gaps', () => {
-    expect(ymIndex('2018-09') - ymIndex('2018-01')).toBe(8);
-    expect(ymIndex('2019-01') - ymIndex('2018-12')).toBe(1);
+describe('monthOffset', () => {
+  it('counts calendar months from one month to another', () => {
+    expect(monthOffset('2018-01', '2018-09')).toBe(8);
+    expect(monthOffset('2018-12', '2019-01')).toBe(1);
+    expect(monthOffset('2019-01', '2018-12')).toBe(-1);
   });
+
+  it('rejects malformed months', () => expect(() => monthOffset('2018-13', '2019-01')).toThrow());
 });
 
 describe('monthsBetween', () => {
@@ -17,10 +20,10 @@ describe('monthsBetween', () => {
 });
 
 describe('formatDuration', () => {
-  it('formats years and months', () => expect(formatDuration(32)).toBe('2 y 8 mo'));
-  it('drops a zero month part', () => expect(formatDuration(12)).toBe('1 y'));
-  it('drops a zero year part', () => expect(formatDuration(8)).toBe('8 mo'));
-  it('never returns an empty string', () => expect(formatDuration(0)).toBe('0 mo'));
+  it('formats years and months', () => expect(formatDuration(32)).toBe('2 years 8 months'));
+  it('drops a zero month part', () => expect(formatDuration(12)).toBe('1 year'));
+  it('drops a zero year part', () => expect(formatDuration(8)).toBe('8 months'));
+  it('never returns an empty string', () => expect(formatDuration(0)).toBe('0 months'));
 });
 
 describe('formatYM', () => {
