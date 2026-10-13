@@ -1,14 +1,29 @@
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import type { PostEntry } from '@/lib/posts';
+import { FEED_PATH } from '@/lib/site';
 import { OpenWindowButton } from './OpenWindowButton';
 import styles from './Writing.module.css';
 
 /** The blog index: newest first, each post opens in a reader window with its own URL. */
 export function Writing({ posts }: { posts: PostEntry[] }) {
-  if (posts.length === 0) {
-    return <p className={styles.empty}>No posts yet.</p>;
-  }
+  return (
+    <>
+      {posts.length === 0 ? (
+        <p className={styles.empty}>No posts yet.</p>
+      ) : (
+        <PostList posts={posts} />
+      )}
+      <p className={clsx(styles.subscribe, 'pix')}>
+        <a className="btn" href={FEED_PATH}>
+          Subscribe with RSS
+        </a>
+      </p>
+    </>
+  );
+}
+
+function PostList({ posts }: { posts: PostEntry[] }) {
   return (
     <ol className={styles.list}>
       {posts.map(({ slug, meta }) => (

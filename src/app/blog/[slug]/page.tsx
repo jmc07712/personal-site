@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { DesktopPage } from '@/components/os/DesktopPage';
 import { identity } from '@/content/resume';
 import { getPost, postStaticParams } from '@/lib/posts';
-import { SITE_URL } from '@/lib/site';
+import { alternates, SITE_URL } from '@/lib/site';
 
 export function generateStaticParams() {
   return postStaticParams();
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): P
   return {
     title: post.meta.title,
     description: post.meta.summary,
-    alternates: { canonical: `/blog/${post.slug}` },
+    alternates: alternates(`/blog/${post.slug}`),
     openGraph: {
       type: 'article',
       title: post.meta.title,

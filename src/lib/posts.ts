@@ -3,6 +3,7 @@ import { Feed } from 'feed';
 import type { ComponentType } from 'react';
 import { postModules } from '@/content/posts';
 import { identity } from '@/content/resume';
+import { FEED_PATH } from '@/lib/site';
 
 /** The `metadata` export every post in `src/content/posts/*.mdx` must provide. */
 export interface PostMeta {
@@ -129,7 +130,7 @@ export function rssFeed(
     description: identity.positioning,
     link: blogUrl,
     language: 'en',
-    feedLinks: { rss: `${siteUrl}/feed.xml` },
+    feedLinks: { rss: `${siteUrl}${FEED_PATH}` },
     // With nothing published the epoch keeps the document deterministic.
     updated: newest === undefined ? new Date(0) : parsePostDate(newest),
     generator: false,

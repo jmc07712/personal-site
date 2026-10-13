@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { DesktopPage } from '@/components/os/DesktopPage';
 import { caseFileBySlug, caseFiles } from '@/content/caseFiles';
+import { alternates } from '@/lib/site';
 
 export function generateStaticParams() {
   return caseFiles.map((file) => ({ slug: file.slug }));
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: PageProps<'/work/[slug]'>): P
   return {
     title: file.title,
     description: file.summary,
-    alternates: { canonical: `/work/${file.slug}` },
+    alternates: alternates(`/work/${file.slug}`),
     openGraph: { title: file.title, description: file.summary, url: `/work/${file.slug}` },
   };
 }

@@ -2,7 +2,7 @@ import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import { Atkinson_Hyperlegible_Next, Jersey_10 } from 'next/font/google';
 import { identity } from '@/content/resume';
-import { SITE_URL } from '@/lib/site';
+import { alternates, SITE_URL } from '@/lib/site';
 import './globals.css';
 
 const chrome = Jersey_10({
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   description: identity.positioning,
   authors: [{ name: identity.name, url: SITE_URL }],
-  alternates: { canonical: '/' },
+  alternates: alternates('/'),
   openGraph: { type: 'website', siteName: identity.name, url: '/' },
   twitter: { card: 'summary_large_image' },
 };
