@@ -25,16 +25,16 @@ export const caseFiles: CaseFile[] = [
     ],
     diagram: {
       cols: 5,
-      rows: 4,
+      rows: 5,
       nodes: [
         { id: 'user', label: 'Seller', col: 0, row: 1 },
         { id: 'agent', label: 'Agent runtime', col: 1, row: 1 },
         { id: 'llm', label: 'Claude', col: 2, row: 0 },
-        { id: 'mcp', label: 'MCP gateway', col: 2, row: 2 },
-        { id: 'api', label: 'Insights API', col: 3, row: 1 },
-        { id: 'sql', label: 'SQL analysis', col: 3, row: 2 },
-        { id: 'charts', label: 'Charts', col: 3, row: 3 },
         { id: 'deck', label: 'Pitch deck', col: 4, row: 1 },
+        { id: 'mcp', label: 'MCP gateway', col: 2, row: 3 },
+        { id: 'api', label: 'Insights API', col: 3, row: 2 },
+        { id: 'sql', label: 'SQL analysis', col: 3, row: 3 },
+        { id: 'charts', label: 'Charts', col: 3, row: 4 },
       ],
       edges: [
         { from: 'user', to: 'agent', label: 'asks' },

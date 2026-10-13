@@ -7,6 +7,14 @@ export interface SchematicGrid {
   gapY: number;
 }
 
+/** Sized so a five-column diagram fits a case-file window at 1:1, keeping the pixel font crisp. */
+export const SCHEMATIC_GRID: SchematicGrid = { cellWidth: 136, cellHeight: 44, gapX: 40, gapY: 24 };
+
+interface Point {
+  x: number;
+  y: number;
+}
+
 export interface PlacedNode {
   id: string;
   label: string;
@@ -17,11 +25,13 @@ export interface PlacedNode {
 }
 
 export interface RoutedEdge {
-  /** SVG path made of horizontal and vertical segments only, so it stays crisp at 1px. */
+  /** The corners of the route; every segment is horizontal or vertical. */
+  points: Point[];
+  /** The same route as an SVG path, crisp at 1px because it never runs diagonally. */
   d: string;
   arrow: 'right' | 'left' | 'down' | 'up';
   /** Where the path ends, which is where the arrowhead is drawn. */
-  tip: { x: number; y: number };
+  tip: Point;
   label?: string;
   labelX: number;
   labelY: number;
@@ -33,6 +43,16 @@ export interface SchematicLayout {
   height: number;
   nodes: PlacedNode[];
   edges: RoutedEdge[];
+}
+
+function toPath(points: Point[]): string {
+  return points
+    .map((p, i) => {
+      if (i === 0) return `M${p.x} ${p.y}`;
+      const prev = points[i - 1];
+      return prev && prev.y === p.y ? `H${p.x}` : `V${p.y}`;
+    })
+    .join('');
 }
 
 /**
@@ -69,8 +89,13 @@ export function layoutSchematic(diagram: Diagram, grid: SchematicGrid): Schemati
       const x = a.x + a.w / 2;
       const y1 = down ? a.y + a.h : a.y;
       const y2 = down ? b.y : b.y + b.h;
+      const points = [
+        { x, y: y1 },
+        { x, y: y2 },
+      ];
       return {
-        d: `M${x} ${y1}V${y2}`,
+        points,
+        d: toPath(points),
         arrow: down ? 'down' : 'up',
         tip: { x, y: y2 },
         label: edge.label,
@@ -85,8 +110,21 @@ export function layoutSchematic(diagram: Diagram, grid: SchematicGrid): Schemati
     const y1 = a.y + a.h / 2;
     const y2 = b.y + b.h / 2;
     const elbow = (x1 + x2) / 2;
+    const points =
+      y1 === y2
+        ? [
+            { x: x1, y: y1 },
+            { x: x2, y: y2 },
+          ]
+        : [
+            { x: x1, y: y1 },
+            { x: elbow, y: y1 },
+            { x: elbow, y: y2 },
+            { x: x2, y: y2 },
+          ];
     return {
-      d: `M${x1} ${y1}H${elbow}V${y2}H${x2}`,
+      points,
+      d: toPath(points),
       arrow: right ? 'right' : 'left',
       tip: { x: x2, y: y2 },
       label: edge.label,

@@ -7,7 +7,7 @@ import { Schematic } from './Schematic';
 export function CaseFile({ file }: { file: CaseFileData }) {
   const headingId = `case-${file.slug}`;
   return (
-    <article className={styles.article} aria-labelledby={headingId}>
+    <article aria-labelledby={headingId}>
       <header className={styles.header}>
         <p className={clsx(styles.meta, 'pix')}>
           {file.role}, {file.when}

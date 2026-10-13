@@ -1,9 +1,14 @@
-.article {
+.header {
   max-width: 72ch;
+  margin-bottom: 8px;
 }
 
-.header {
-  margin-bottom: 8px;
+/* Text keeps a readable measure; the diagram may use the full window width. */
+.section > p,
+.list,
+.decisions,
+.stack {
+  max-width: 72ch;
 }
 
 .meta {
