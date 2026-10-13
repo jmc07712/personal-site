@@ -28,7 +28,7 @@ export function DesktopIcons() {
   return (
     <ul
       className={clsx(styles.icons, 'pix')}
-      aria-label="Desktop. Double-click or press Enter to open"
+      aria-label="Desktop icons, double-click or press Enter to open"
     >
       {ICONS.map((item) => (
         <li key={item.id}>

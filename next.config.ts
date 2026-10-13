@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   // Don't have `next dev` write an AGENTS.md into the repo.
   agentRules: false,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
+  // Case files that were renamed keep their old links working.
+  async redirects() {
+    return [
+      { source: '/work/agent-architecture', destination: '/work/domain-agent', permanent: true },
+    ];
+  },
 };
 
 /**

@@ -68,7 +68,7 @@ export function TraceWaterfall({
         className={styles.rows}
         role="listbox"
         tabIndex={0}
-        aria-label="Career spans. Arrow keys to move, Enter to open the case file."
+        aria-label="Career spans, use the arrow keys to move and Enter to open a case file"
         aria-activedescendant={`row-${selected}`}
         onKeyDown={onKeyDown}
       >

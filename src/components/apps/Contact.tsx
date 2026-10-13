@@ -21,7 +21,7 @@ export function Contact() {
 
   return (
     <>
-      <p className={styles.intro}>Email is the best way to reach me.</p>
+      <p className={styles.intro}>Email reaches me fastest.</p>
       <a className={clsx(styles.mail, 'pix')} href={`mailto:${identity.email}`}>
         {identity.email}
       </a>

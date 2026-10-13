@@ -49,7 +49,7 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
   const labels = new Map(diagram.nodes.map((n) => [n.id, n.label]));
   const description = diagram.edges
     .map((e) => `${labels.get(e.from)} to ${labels.get(e.to)}${e.label ? ` (${e.label})` : ''}`)
-    .join('; ');
+    .join(', ');
   const kinds = [...new Set(layout.nodes.flatMap((n) => (n.kind ? [n.kind] : [])))];
   const { x, y, w, h } = layout.bounds;
 
@@ -62,7 +62,7 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
         height={h + PAD * 2}
         viewBox={`${x - PAD} ${y - PAD} ${w + PAD * 2} ${h + PAD * 2}`}
         role="img"
-        aria-label={`${title} architecture: ${description}.`}
+        aria-label={`Diagram of ${title}, showing ${description}.`}
         shapeRendering="crispEdges"
       >
         {layout.groups.map((group) => (

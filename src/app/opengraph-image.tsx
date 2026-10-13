@@ -17,7 +17,7 @@ export default async function Image() {
           Senior software engineer at {identity.employer}
         </div>
         <div style={{ display: 'flex', fontSize: 28, marginTop: 6 }}>
-          AI agents and large-scale data systems
+          I build AI agents and the data infrastructure they run on
         </div>
         <div style={{ display: 'flex', gap: 36, marginTop: 'auto' }}>
           <Metric value="5,000" label="sellers use the Pitching Agent" />

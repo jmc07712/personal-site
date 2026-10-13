@@ -1,24 +1,23 @@
 export const metadata = {
   title: 'How this site works',
   date: '2026-10-13',
-  summary:
-    'How the GPU wallpaper, the two-color dither and the server-rendered windows on this site fit together.',
+  summary: 'How the GPU wallpaper and the server-rendered windows on this site fit together.',
   tags: ['webgl', 'nextjs', 'design'],
 };
 
-This site is a desktop. Windows open, drag and close. Behind them, an agent sits in the wallpaper. It has a core and six tool nodes on tethers, with a quarter of a million points of data moving between them. Everything is drawn in two colors, a pale LCD green and a dark olive, and there is no third color anywhere on the page.
+This site is a desktop, with windows you can open and drag around. Behind the windows, an agent sits in the wallpaper. It has a core and six tool nodes on tethers, with a quarter of a million points of data moving between them. Everything on the page is drawn in two colors, a pale LCD green and a dark olive.
 
-I wanted the site to look like what I work on. Most of my job is AI agents and the data systems underneath them, so the picture is an agent with data flowing through its tools. These are notes on how it's built.
+I wanted the site to show what I work on. Most of my job is AI agents and the data infrastructure underneath them, so the picture is an agent with data flowing through its tools. These are notes on how it's built.
 
 ## One GPU, one dither
 
 The wallpaper is two very different things drawn by one renderer.
 
-The agent is raymarched. A fragment shader describes the core, the tool nodes and the ring around them as signed distance functions, then marches a ray through every pixel to find the surface, light it and shade it with soft shadows.
+The agent is raymarched. A fragment shader describes the core and its tool nodes as signed distance functions. It marches a ray through every pixel to find the surface, then lights it and adds soft shadows.
 
-The data is 262,144 particles. Their positions and velocities live on the GPU and update with WebGL2 transform feedback, so the CPU never touches them. Each frame, every particle adds a little ink to one cell of a half-float buffer at the site's pixel scale.
+The data is 262,144 particles. Their positions and velocities live on the GPU and update there through WebGL2 transform feedback. Each frame, every particle adds a little ink to one cell of a half-float buffer at the site's pixel scale.
 
-Both meet in a single composite pass. It raymarches the hub, multiplies the particle ink into it, and turns the result into exactly two colors with an 8×8 Bayer dither.
+Both meet in a single composite pass. It raymarches the hub and multiplies the particle ink into it. An 8×8 Bayer dither then turns the result into exactly two colors.
 
 ```glsl
 float bayer2(vec2 a) { a = floor(a); return fract(a.x * 0.5 + a.y * a.y * 0.75); }
@@ -26,34 +25,36 @@ float bayer4(vec2 a) { return bayer2(0.5 * a) * 0.25 + bayer2(a); }
 float bayer8(vec2 a) { return bayer4(0.5 * a) * 0.25 + bayer2(a); }
 ```
 
-That's the closed form of the classic matrix, with no lookup texture. A unit test proves it matches the recursive 8×8 matrix. Because the particles and the agent go through the same dither, the particles read as 1-bit pixel dust instead of glowing sprites pasted on top.
+That's the closed form of the classic matrix, computed in the shader. A unit test proves it matches the recursive 8×8 matrix. The particles and the agent go through the same dither, so the particles read as 1-bit pixel dust that belongs to the same image.
 
-The dither pattern is locked to the page, not the screen. The threshold indices are offset by the scroll position, so when you scroll, the pattern moves with the document instead of shimmering in place.
+The dither pattern is locked to the page. The threshold indices are offset by the scroll position, so the pattern stays fixed to the document as you scroll.
 
 ## What the points mean
 
-The count isn't arbitrary. My Insights API serves about 1.2 billion records a month, so each of the 262,144 points stands for about 4,578 of them. On a phone the scene runs 32,768 points, and each one stands for about 36,621.
+The point count stands for real data. The Insights API I led serves about 1.2 billion records a month, so each of the 262,144 points stands for about 4,578 of them. On a phone the scene runs 32,768 points, and each one stands for about 36,621.
 
 ## Three moments
 
-On your first visit the site boots. Points stream in on curl-noise currents and spell my name, sampled from the same pixel font the menus use. Then they fall into the agent's core and the desktop appears. It plays once a session, and Restart in the menu plays it again. A short inline script decides before first paint whether the boot will play, based on screen width, your motion setting and whether you've seen it already. Only then does it hide the hero, so the page never flashes. If anything goes wrong, the hero comes back after eight seconds regardless.
+On your first visit the site boots. Points stream in on curl-noise currents and spell my name in the same pixel font the menus use. Then they fall into the agent's core and the desktop appears. The boot plays once a session on wide screens with motion allowed, and Restart in the menu plays it again. A short inline script makes that call before first paint and hides the hero only when the boot will play. That keeps the page from flashing. If anything goes wrong, the hero comes back after eight seconds.
 
-After that the agent idles in the wallpaper. Points travel along the tethers between the core and the tools, and a tether surges after its tool dives into the core, which is a tool call. Your cursor pushes the points away and they spring back.
+After that the agent idles in the wallpaper. Points travel along the tethers between the core and the tools. When a tool dives into the core, which stands for a tool call, its tether surges. Your cursor pushes the points away and they spring back.
 
-The Experience window shows my career as a distributed-trace waterfall. When it's on screen, the points pour out of the agent into the three role bars. Those bars sit inside a draggable window that other windows can cover, so drawing particles in the wallpaper and lining them up with the window wouldn't layer correctly. Instead, each bar holds a small 2D canvas that copies its patch of the GPU canvas every frame. The bar is ordinary DOM, so it stacks, drags and scrolls like everything else in the window.
+The Experience window shows my career as a distributed-trace waterfall. When it's on screen, the points pour out of the agent into the three role bars. Those bars sit inside a draggable window that other windows can cover. Particles drawn in the wallpaper behind it would show through any window on top. So each bar holds a small 2D canvas that copies its patch of the GPU canvas every frame. The bar is ordinary DOM, so it moves and stacks like everything else in the window.
+
+As you scroll further, the points leave the agent and gather in a dithered ring around whichever window fills most of the screen. Scroll back to the top and they stream home to the core.
 
 ## The rest is a normal web app
 
-Under the wallpaper it's a Next.js app, and most of it is deliberately plain.
+Under the wallpaper, most of the site is ordinary Next.js.
 
-Every window body is rendered on the server. Closed windows are still in the HTML, so search engines and screen readers get every word. Only the window chrome, the trace, a copy button and the scene run on the client. Case files and posts have their own URLs. Opening one pushes `/work/<slug>` or `/blog/<slug>`, and the back button closes it. Load that URL directly and the desktop opens with the file already showing.
+Every window body is rendered on the server. Closed windows are still in the HTML, so search engines and screen readers get every word. Only the window chrome, the trace, a copy button and the scene run on the client. Case files and posts have their own URLs. Opening one pushes `/work/<slug>` or `/blog/<slug>`, and the back button closes it. Load that URL directly and the desktop opens to that file.
 
-The only time-dependent input on the site is the current date, which sets the end of the trace. Next.js 16 makes you say how to handle the clock, so the trace geometry is computed on the server, cached for a day and handed to the client. The page stays static, and the bars keep up with the calendar without a redeploy.
+The only time-dependent input on the site is the current date, which sets the end of the trace. Next.js 16 makes you say how to handle the clock. Here the server computes the trace geometry and caches it for a day. The page stays static, and the bars still track the calendar without a redeploy.
 
-On a phone it becomes a calmer layout I call Pocket mode. It's one column with my name first, a dock in the thumb zone and the scene in a small square. It runs 32,768 points at 30 frames a second, never fights your scrolling, and goes to sleep after 20 seconds without a tap.
+On a phone it becomes a calmer layout I call Pocket mode. It's a single column with my name first and a dock in the thumb zone. The scene shrinks to a small square that runs 32,768 points at 30 frames a second. It goes to sleep after 20 seconds without a tap.
 
 ## Guardrails as tests
 
-Some rules matter more than any one feature, so they're written as tests. One checks that no internal project names or colleagues' names appear in the content. It compares hashes, so the banned words themselves are never in the repo. Others check that my phone number never appears in any format, that the copy has no filler words, and that no line in an architecture diagram passes through a box it doesn't connect to. Without WebGL2 you still get a dithered still image, and with reduced motion turned on you get a still frame.
+Some rules matter more than any one feature, so they're written as tests. One checks the content for internal project names and colleagues' names. It compares hashes, so the repo holds only hashes of the banned words. Another test keeps my phone number off the site in any format, and another bans filler words from the copy. A diagram test makes sure each line touches only the two boxes it connects. Browsers without WebGL2 get a dithered still image, and so do visitors who turn on reduced motion.
 
 The source is on [GitHub](https://github.com/jmc07712/personal-site), with a README that walks through how the pieces fit together.

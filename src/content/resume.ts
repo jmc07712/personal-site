@@ -11,12 +11,12 @@ export const identity = {
   linkedin: 'https://www.linkedin.com/in/jared-chester-52b76a190/',
   source: 'https://github.com/jmc07712/personal-site',
   positioning:
-    'Senior software engineer at Amazon Ads in New York. I build AI agents and the data systems they run on.',
+    'Senior software engineer at Amazon Ads in New York. I build AI agents and the data infrastructure they run on.',
   about: [
-    'I designed and lead the Pitching Agent, an AI agent that turns an advertiser’s account data into a pitch deck in about five minutes instead of two hours. It’s used by 5,000 Amazon Ads sellers and saves more than 100,000 hours a year.',
-    'I’m now the architect of a domain agent that puts four teams’ AI capabilities behind one interface, so a product integrates once instead of four times.',
+    'I designed and lead the Pitching Agent. It turns an advertiser’s account data into a pitch deck in about five minutes, down from two hours. It serves 5,000 Amazon Ads sellers and saves more than 100,000 hours a year.',
+    'I now lead the design of a domain agent that puts four teams’ AI capabilities behind one interface. A product integrates once to reach all four.',
     'Before agents I built data infrastructure. The Insights API I led serves 1.2 billion records a month. My orchestration service runs 2,000+ Spark jobs over tens of petabytes a month and cut their compute cost by about 40%.',
-    'I also mentor new grads, sit on promotion panels, run my org’s GenAI talk series and ship apps on the side.',
+    'I also mentor new grads and sit on promotion panels. I run my org’s GenAI talk series and ship apps on the side.',
   ],
   education:
     'B.S. Computer Science, minor in mathematics, Rutgers University, summa cum laude, 2021',
@@ -32,7 +32,7 @@ export const spans: Span[] = [
     kind: 'root',
     from: '2018-09',
     to: 'now',
-    summary: 'A research lab at Rutgers, then AT&T, then Amazon Ads.',
+    summary: 'I started in a research lab at Rutgers and worked at AT&T before joining Amazon Ads.',
     metrics: [],
   },
   {
@@ -73,7 +73,7 @@ export const spans: Span[] = [
     at: '2021-05',
     org: 'Rutgers University',
     title: 'B.S. Computer Science, minor in mathematics',
-    summary: 'Summa cum laude.',
+    summary: 'Graduated summa cum laude.',
     metrics: [],
   },
   {
@@ -99,7 +99,7 @@ export const spans: Span[] = [
     from: '2021-07',
     to: '2022-07',
     summary:
-      'Replaced every app’s home-grown login with one shared OAuth 2.0 and OIDC sign-in, leaving one login path to secure instead of many.',
+      'Replaced every app’s home-grown login with one shared OAuth 2.0 and OIDC sign-in, leaving a single login path to secure.',
     metrics: [{ value: 'OIDC', label: 'replaced per-app login flows' }],
     stack: ['AngularJS', 'Express', 'MySQL', 'OAuth 2.0', 'OIDC'],
   },
@@ -114,7 +114,7 @@ export const spans: Span[] = [
     title: 'Senior software engineer (L6)',
     location: 'New York',
     summary:
-      'I build AI agents, recommendation systems, APIs and data pipelines. Promoted to L6 in 2025.',
+      'I build AI agents, recommendation services, APIs and data pipelines. I was promoted to L6 in 2025.',
     metrics: [
       { value: '5,000', label: 'sellers use the Pitching Agent' },
       { value: '1.2B', label: 'records a month through the Insights API' },
@@ -146,7 +146,7 @@ export const spans: Span[] = [
     to: '2024-12',
     approx: true,
     summary:
-      'The storage and serving layer behind the Insights API. Teams add a new insight with a config file instead of code.',
+      'The storage and serving layer behind the Insights API. Teams add a new insight by writing a config file.',
     metrics: [],
     stack: ['Java', 'Lambda', 'DynamoDB', 'S3'],
   },
@@ -177,7 +177,7 @@ export const spans: Span[] = [
     to: '2025-12',
     approx: true,
     summary:
-      'Picks a third-party measurement study in under two minutes instead of four hours, using a rules engine, a ranking model and LLM-written explanations.',
+      'Picks a third-party measurement study in under two minutes, down from four hours. A rules engine and a ranking model choose the study, and an LLM explains the pick.',
     metrics: [
       { value: '4h → <2m', label: 'to choose a study' },
       { value: '4', label: 'engineers led' },
@@ -210,7 +210,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'An AI agent on Claude and Amazon Bedrock that turns account data into a pitch deck in five minutes instead of two hours. It’s used by 5,000 sellers.',
+      'An AI agent on Claude and Amazon Bedrock that turns account data into a pitch deck in five minutes, down from two hours. It serves 5,000 sellers.',
     metrics: [
       { value: '5,000', label: 'sellers served' },
       { value: '2h → 5m', label: 'to build a pitch' },
@@ -228,20 +228,20 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'Started my org’s GenAI talk series, co-wrote its adoption plan and shared two AI tools across the org.',
+      'Started my org’s GenAI talk series and co-wrote its adoption plan. I also shared two AI tools across the org.',
     metrics: [{ value: '2', label: 'internal AI tools shared across the org' }],
     stack: ['Claude', 'Amazon Bedrock', 'Python'],
   },
   {
-    id: 'agent-architecture',
-    name: 'Agent architecture',
+    id: 'domain-agent',
+    name: 'Domain agent',
     kind: 'system',
     parent: 'amazon-ads',
     from: '2026-01',
     to: 'now',
     approx: true,
     summary:
-      'One domain agent in front of four teams’ AI capabilities, so a product integrates once instead of four times. It’s live in production.',
+      'One agent in front of four teams’ AI capabilities, so a product integrates once to reach all of them. It’s live in production.',
     metrics: [
       { value: '4', label: 'teams behind one agent' },
       { value: '50', label: 'engineers in the org it covers' },
@@ -258,7 +258,7 @@ export const products: Product[] = [
     url: 'https://counterdex.vercel.app',
     source: 'https://github.com/jmc07712/counterdex',
     summary:
-      'A Pokémon team builder. Give it any team and it builds a counter team, and it tells you when PokéAPI changes a Pokémon you rely on.',
+      'A Pokémon team builder that finds a counter team for any team you give it. It also tells you when PokéAPI changes a Pokémon you rely on.',
     highlights: [
       'A sync job makes about 3,000 PokéAPI requests and keeps a before-and-after snapshot of every change, so you can see exactly what moved.',
       'Checking every possible team would mean about 1.6 quadrillion combinations, so Counterdex builds the counter one pick at a time from pairwise matchup scores.',
@@ -270,7 +270,7 @@ export const products: Product[] = [
     name: 'Docly',
     url: 'https://askdocly.com',
     summary:
-      'Upload a document and get a summary, the risks worth a second look, and answers that point back to where they came from.',
+      'Upload a document and Docly summarizes it and flags the risks worth a second look. Every answer to your questions cites the part of the document it came from.',
     highlights: [
       'It runs on the web with Next.js and on phones with React Native.',
       'Claude reads the document and answers questions. Stripe handles billing on the web, and in-app purchases handle it on mobile.',
@@ -283,7 +283,7 @@ export const products: Product[] = [
     url: 'https://dateescape.app',
     summary: 'Schedules a realistic fake phone call so you have an easy way out of a bad date.',
     highlights: [
-      'The call rings on the phone’s real incoming-call screen through CallKeep, so it looks exactly like a normal call.',
+      'CallKeep puts the call on the phone’s real incoming-call screen, so nobody can tell it apart from a normal call.',
       'Firebase schedules the calls and RevenueCat handles subscriptions.',
     ],
     stack: ['React Native', 'Expo', 'Firebase', 'CallKeep', 'RevenueCat'],
