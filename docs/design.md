@@ -330,3 +330,41 @@ Recruiters and interviewers will read this code, so it is held to production sta
 ## 12. Open questions
 
 None. Resolved: Amazon system dates (approximate years), LinkedIn (added), domain (`jaredmchester.com`, registered at Wix, DNS pointed at Vercel).
+
+## 13. Version 2 (approved 2026-10-13)
+
+Three changes, all in the same two inks. The particle boot stays exactly as it is.
+
+### 13a. Big screens scale up in steps
+
+On a large monitor the interface used to stay at laptop size and float in empty paper. Now the whole interface scales by a factor `--ui`, so a big screen shows the laptop layout at a larger size.
+
+1. `--ui` is the largest of 1, 1.25, 1.5, 2 and 2.5 that leaves at least 1440×860 CSS px of room. Media queries test width and height together, so the thresholds are 1800×1075 for 1.25, 2160×1290 for 1.5, 2880×1720 for 2 and 3600×2150 for 2.5. A 2560×1440 monitor gets 1.5, and a 3840×2160 one gets 2.5.
+2. CSS keeps writing pixels. A PostCSS step (`postcss-pxtorem`) turns them into rem at build time, and the root font size is `16px × --ui`. Media queries stay in pixels.
+3. Sizes set from JavaScript scale too. That covers pixel icons, schematic diagrams and anything else given a pixel width in code.
+4. The GPU wallpaper's pixel cell grows with `--ui`, rounded to whole device pixels, so its dither matches the interface.
+5. Dragging a window still tracks the pointer one to one, and nothing scrolls sideways.
+
+### 13b. Phones become a pocket computer (≤ 768px)
+
+This replaces 4a's light chrome and square screen. The calm GPU budget from 4a stays, meaning 32,768 particles at 30 fps, a still frame for reduced motion or Save-Data, and sleep after 20 s without input.
+
+1. The scene becomes the fixed, full-screen wallpaper behind the windows, as on desktop. It never takes a scroll gesture, and a tap on empty wallpaper sends a ripple.
+2. The first screen is a home screen. The agent sits large in the upper part, my name and title are set in the display font, and an icon grid sits below in four columns with labels. The icons are About, Experience, Writing, Counterdex, Docly, DateEscape and Contact. Tapping one scrolls to that window and focuses it.
+3. Every section is a full window again, with title bar, close box, border and hard shadow. Windows run full width inside the gutters, with gaps where the wallpaper shows through.
+4. The particles follow you from window to window, as on desktop, and gather in the gutters around the window you are reading.
+5. The bottom dock stays.
+
+### 13c. Real menus and power
+
+1. The menubar becomes real dropdown menus, built on Radix Menubar for keyboard use and ARIA. The menus are as follows.
+   - The hub glyph menu holds About This Computer, Restart and Shut Down.
+   - Go opens any window.
+   - View holds Pause or Play scene, Close all windows and Clean up, which puts dragged windows back.
+   - Special holds Restart and Shut Down.
+   - Help holds How this site works and View source.
+   - The clock stays on the right. On a phone the bar shows the hub menu and the clock, and the hub menu also lists the Go items.
+2. About This Computer is a small window describing the live machine. It shows the GPU name when the browser reports it, the particle count, the live frame rate, the display size and UI scale, the uptime since boot and the versions of Next.js and React.
+3. Shut Down closes the windows one after another and pulls every particle into the agent's core. The screen then goes dark like an old CRT switching off, shrinking to a line and then a dot. Last comes the line "It's now safe to turn off your computer." with a Power on button, and any key works too. Power on runs Restart, which replays the particle boot. With reduced motion it goes straight to the last screen.
+4. During the existing particle boot, a short BIOS-style log types out in the bottom-left corner and fades when the desktop appears. It never delays or changes the particle boot.
+5. New copy follows the site's style rules, including plain sentences and the banned-word list in the copy test.
