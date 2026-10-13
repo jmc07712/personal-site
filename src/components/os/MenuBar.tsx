@@ -5,7 +5,7 @@ import { identity } from '@/content/resume';
 import { Clock } from './Clock';
 import styles from './MenuBar.module.css';
 import { PixelIcon } from './PixelIcon';
-import { ScenePauseButton } from './SceneChrome';
+import { restart, ScenePauseButton } from './SceneChrome';
 import { useWindowManager } from './WindowManager';
 
 const MENU = [
@@ -22,7 +22,9 @@ export function MenuBar() {
   return (
     <header className={clsx(styles.menubar, 'pix')}>
       <div className={styles.left}>
-        <PixelIcon name="hub" scale={2} className={styles.glyph} />
+        <button type="button" className={styles.glyph} aria-label="Restart" onClick={restart}>
+          <PixelIcon name="hub" scale={2} />
+        </button>
         <span className={styles.name}>{identity.name}</span>
         <span className={styles.sep} aria-hidden="true" />
         <nav className={styles.nav} aria-label="Windows">
@@ -45,6 +47,9 @@ export function MenuBar() {
           Source
         </a>
         <ScenePauseButton className={clsx(styles.item, styles.pause)} />
+        <button type="button" className={clsx(styles.item, styles.pause)} onClick={restart}>
+          Restart
+        </button>
         <Clock className={styles.clock} />
       </div>
     </header>

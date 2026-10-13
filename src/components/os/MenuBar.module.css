@@ -21,8 +21,19 @@
 }
 
 .glyph {
+  display: grid;
   flex: none;
+  place-items: center;
   margin-right: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.glyph:hover {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .name {
