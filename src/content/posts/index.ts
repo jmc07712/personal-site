@@ -1,5 +1,5 @@
 import type { MDXModule } from 'mdx/types';
-import * as helloWorld from './hello-world.mdx';
+import * as howThisSiteWorks from './how-this-site-works.mdx';
 
 /**
  * Every post, keyed by slug (its file name). To add one, import its module and list it here.
@@ -9,5 +9,5 @@ import * as helloWorld from './hello-world.mdx';
  * read posts through those, never from this map.
  */
 export const postModules: Readonly<Record<string, MDXModule>> = {
-  'hello-world': helloWorld,
+  'how-this-site-works': howThisSiteWorks,
 };
