@@ -1,0 +1,11 @@
+.next
+node_modules
+docs
+prototypes
+playwright-report
+test-results
+package-lock.json
+.superpowers
+.omc
+.remember
+next-env.d.ts
