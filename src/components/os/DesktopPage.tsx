@@ -72,9 +72,6 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
             <div data-boot="hide">
               <DesktopIcons />
             </div>
-            <p className={clsx(styles.caption, 'pix')} data-boot="hide">
-              <SceneCaption />
-            </p>
           </section>
 
           <section id="work" className={styles.band} aria-label="Experience">
@@ -126,7 +123,7 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
               <span>
                 {identity.name}, {identity.location}
               </span>
-              <span>Built with Next.js and WebGL</span>
+              <SceneCaption />
               <a href={identity.source}>Source</a>
             </footer>
           </section>

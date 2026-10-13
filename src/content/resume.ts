@@ -14,7 +14,7 @@ export const identity = {
     'Senior software engineer at Amazon Ads in New York. I work on AI agents and large-scale data systems.',
   about: [
     'I’m the architect of the Pitching Agent, which builds pitch decks for 5,000 Amazon Ads sellers, and of the agent architecture that now serves four teams’ AI tools through one agent.',
-    'Much of my work has been data infrastructure: the Insights API (1.2 billion records a month), orchestration for 2,000+ Spark jobs, and a cross-VPC cache for pseudonymized IDs.',
+    'Much of my work has been data infrastructure, including the Insights API (1.2 billion records a month), orchestration for 2,000+ Spark jobs, and a cross-VPC cache for pseudonymized IDs.',
     'I mentor new grads, sit on promotion panels and run my org’s GenAI talk series. I also build apps on the side.',
   ],
   education:

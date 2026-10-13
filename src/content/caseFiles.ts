@@ -14,7 +14,7 @@ export const caseFiles: CaseFile[] = [
     summary:
       'A conversational agent that researches an advertiser’s account and drafts a pitch deck in about five minutes. By hand it took about two hours.',
     problem: [
-      'Building a pitch by hand took about two hours: pull metrics from several tools, pick the insights that matter, write the story, then make the slides.',
+      'Building a pitch by hand took about two hours. Someone had to pull metrics from several tools, pick the insights that mattered, write the story and then make the slides.',
       'The insights already existed in our platforms. Nothing could turn them into a narrative on demand.',
     ],
     built: [
@@ -137,7 +137,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Organizer and co-author',
     when: '2025 to now (approx.)',
     summary:
-      'I started a GenAI talk series, co-wrote my org’s adoption plan and shared two tools: an LLM code reviewer and a design-doc knowledge base for coding agents.',
+      'I started a GenAI talk series, co-wrote my org’s adoption plan, and shared an LLM code reviewer and a design-doc knowledge base for coding agents.',
     problem: [
       'Engineers wanted to use GenAI but had no shared practices, tools, or place to learn from each other.',
     ],
@@ -308,7 +308,7 @@ export const caseFiles: CaseFile[] = [
       'Search over a billion records was too slow for interactive use or for agents.',
     ],
     built: [
-      'A layered model: metrics combine into insight types, and types group into families. Consumers ask for an insight, not a table.',
+      'A layered model where metrics combine into insight types and types group into families. Consumers ask for an insight, not a table.',
       'Signals with dependency resolution. When upstream data refreshes, the API works out which insights are now stale and starts the pipelines that rebuild them.',
       'OpenSearch indexes for search over 1.2 billion records, 1,000 times faster than before.',
       'It grew into a shared platform for three UIs, more than 12 backend services, recommendation systems, and GenAI workflows. I then handed ownership to the team.',
@@ -372,7 +372,7 @@ export const caseFiles: CaseFile[] = [
     ],
     built: [
       'A redesign of the store and its serving layer, based on the failures we had seen in the old one.',
-      'Onboarding by configuration: an insight owner registers content with a config file instead of new code.',
+      'Onboarding through configuration. An insight owner registers new content with a config file instead of writing code.',
       'An ingestion layer for several upstream data providers, with dependency signals that keep data fresh.',
       'Runbooks and operational tools so other engineers could troubleshoot it themselves.',
     ],
@@ -422,7 +422,7 @@ export const caseFiles: CaseFile[] = [
     ],
     built: [
       'A DynamoDB cache shared across VPCs, built with another team by extending their implementation.',
-      'A warm-up order: smaller jobs fill the cache first, then the largest jobs read from it on staggered schedules so the table is never overloaded.',
+      'A warm-up order. Smaller jobs fill the cache first, and the largest jobs then read from it on staggered schedules so the table is never overloaded.',
       'A shadow test, then a gradual dial-up to 100% of traffic, then removal of the old path. All traffic moved in 3.5 weeks.',
       'Support for GDPR deletion.',
     ],
