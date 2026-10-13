@@ -39,7 +39,12 @@ describe('confidentiality', () => {
 
   it('publishes no phone number', () => {
     for (const s of strings) {
+      // Any formatted number, plus the owner's own number (hashed in the denylist) unformatted.
       expect(s).not.toMatch(/\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/);
+      const digits = s.replace(/\D/g, '');
+      for (let i = 0; i + 10 <= digits.length; i++) {
+        expect(DENYLIST.has(sha256(digits.slice(i, i + 10)))).toBe(false);
+      }
     }
   });
 });
