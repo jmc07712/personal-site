@@ -1,49 +1,166 @@
+/*
+ * Two inks, nothing else: paper (an unlit reflective LCD) and ink (deep olive).
+ * Every grey on the site is a 1-bit dither pattern applied as a mask, so tones work
+ * in either ink and never introduce a third colour.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #c9cebb;
+  --ink: #262e1b;
+
+  --bar: 32px;
+  --gutter: clamp(16px, 5vw, 96px);
+
+  --dither-12: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0 0h1v1H0zM2 2h1v1H2z'/%3E%3C/svg%3E");
+  --dither-25: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M0 0h1v1H0z'/%3E%3C/svg%3E");
+  --dither-50: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z'/%3E%3C/svg%3E");
+  --dither-75: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1 0h1v2H0V1h1z'/%3E%3C/svg%3E");
+  --hatch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M3 0h1v1H3zM2 1h1v1H2zM1 2h1v1H1zM0 3h1v1H0z'/%3E%3C/svg%3E");
 }
 
-@media (prefers-color-scheme: dark) {
+@media (max-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bar: 40px;
   }
 }
 
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  scrollbar-color: var(--ink) var(--paper);
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--bar) + 24px);
+}
+
+body {
   margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font:
+    400 17px/1.55 var(--font-body),
+    system-ui,
+    sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 a {
   color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Jersey 10 is drawn on a 10-unit grid; keep it at multiples of 10px and unsmoothed. */
+.pix,
+.pix * {
+  font-family: var(--font-chrome), ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  left: 8px;
+  top: -60px;
+  z-index: 3000;
+  padding: 6px 12px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 20px/20px var(--font-chrome);
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+.skip-link:focus {
+  top: calc(var(--bar) + 8px);
+}
+
+/* Buttons: a hard 3px offset shadow that the button "presses" into. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px 1px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  font: 20px/20px var(--font-chrome);
+  -webkit-font-smoothing: none;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn:active {
+  translate: 3px 3px;
+  box-shadow: none;
+}
+
+.btn[data-variant='solid'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn[data-variant='solid']:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.text-link {
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.text-link:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:active {
+    translate: none;
+  }
+
   html {
-    color-scheme: dark;
+    scroll-behavior: auto;
   }
 }
