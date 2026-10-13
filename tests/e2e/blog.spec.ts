@@ -15,6 +15,6 @@ test('the RSS feed is served as RSS', async ({ request }) => {
 
 test('drafts are not published', async ({ page }) => {
   await page.goto('/blog/hello-world');
-  await expect(page.getByText('That file isn’t on this desktop')).toBeVisible();
+  await expect(page.getByText('Page not found')).toBeVisible();
   await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
 });

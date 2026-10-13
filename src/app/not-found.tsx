@@ -9,11 +9,11 @@ export default function NotFound() {
         <div className={clsx(styles.bar, 'pix')}>Error</div>
         <div className={styles.body}>
           <h1 className={clsx(styles.title, 'pix')} id="not-found-title">
-            That file isn’t on this desktop
+            Page not found
           </h1>
-          <p>The link may be old, or the case file or post may have moved.</p>
+          <p>The link may be out of date.</p>
           <Link className="btn pix" href="/">
-            Go to the desktop
+            Go to the home page
           </Link>
         </div>
       </section>

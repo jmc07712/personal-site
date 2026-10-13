@@ -12,7 +12,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect and tech lead',
     when: '2025 to now (approx.)',
     summary:
-      'A conversational agent that researches an advertiser’s account and drafts a pitch deck in about five minutes, down from two hours by hand.',
+      'A conversational agent that researches an advertiser’s account and drafts a pitch deck in about five minutes. By hand it took about two hours.',
     problem: [
       'Building a pitch by hand took about two hours: pull metrics from several tools, pick the insights that matter, write the story, then make the slides.',
       'The insights already existed in our platforms. Nothing could turn them into a narrative on demand.',
@@ -48,16 +48,16 @@ export const caseFiles: CaseFile[] = [
     },
     decisions: [
       {
-        title: 'Tools behind MCP, not custom integrations',
-        body: 'Each data team exposes its capability as MCP tools behind one gateway. A new capability ships without a change to the agent.',
+        title: 'Tools behind MCP',
+        body: 'Each data team exposes its capability as MCP tools behind one gateway. Adding a capability doesn’t require changes to the agent.',
       },
       {
-        title: 'Stop resending a 16,000-token prompt',
-        body: 'The first version sent a 16,000-token system prompt on every model call. I split it so each step loads only the context it needs, which cut the cost and latency of each call.',
+        title: 'Load context per step',
+        body: 'The first version sent a 16,000-token system prompt on every call. Splitting it so each step loads only what it needs cut cost and latency.',
       },
       {
         title: 'Guardrails in code',
-        body: 'The runtime enforces the agent’s limits. The prompt states them too, but only code holds when the model drifts.',
+        body: 'The runtime enforces the agent’s limits. They’re also stated in the prompt, but the code is what holds.',
       },
     ],
     impact: [
@@ -76,7 +76,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect, with Principal Engineers',
     when: '2026 to now (approx.)',
     summary:
-      'An architecture, now live, that puts four teams’ AI capabilities behind a single domain agent, so a calling product talks to one agent instead of coordinating four.',
+      'A single domain agent that fronts four teams’ AI capabilities. Calling products integrate once. It’s live in production.',
     problem: [
       'Four teams were each building an agent. A product that wanted research, a chart, and a narrative had to know about all of them and stitch the answers together itself.',
       'Each team was also solving routing, memory, and security on its own.',
@@ -110,16 +110,16 @@ export const caseFiles: CaseFile[] = [
     },
     decisions: [
       {
-        title: 'One agent at the boundary',
-        body: 'Callers integrate once. Adding a capability means registering MCP tools, not asking every consumer to change.',
+        title: 'Integrate once',
+        body: 'Callers talk to one agent. Adding a capability means registering MCP tools; consumers don’t change.',
       },
       {
-        title: 'Contracts and latency budgets first',
-        body: 'Each capability registers against an interface contract with a latency budget, so teams ship on their own schedules and a combined answer stays fast.',
+        title: 'Contracts and latency budgets',
+        body: 'Each capability registers against an interface contract with a latency budget, so teams can ship on their own schedules.',
       },
       {
-        title: 'Extend the Pitching Agent',
-        body: 'The domain agent starts from the Pitching Agent’s runtime, which already serves 5,000 sellers, instead of a new codebase.',
+        title: 'Built on the Pitching Agent',
+        body: 'The domain agent runs on the Pitching Agent’s runtime rather than a new codebase.',
       },
     ],
     impact: [
@@ -135,7 +135,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Organizer and co-author',
     when: '2025 to now (approx.)',
     summary:
-      'A tech talk series I started, an adoption plan I co-wrote, and two tools I shared with the org: an LLM code reviewer and a design-doc knowledge base for coding agents.',
+      'I started a GenAI talk series, co-wrote my org’s adoption plan and shared two tools: an LLM code reviewer and a design-doc knowledge base for coding agents.',
     problem: [
       'Engineers wanted to use GenAI but had no shared practices, tools, or place to learn from each other.',
     ],
@@ -165,12 +165,12 @@ export const caseFiles: CaseFile[] = [
     },
     decisions: [
       {
-        title: 'Use the docs we already write',
-        body: 'The knowledge base reads existing design docs, so it costs no extra work and stays current as the docs change.',
+        title: 'Reuse existing docs',
+        body: 'The knowledge base indexes the design docs the team already writes, so it needs no extra upkeep.',
       },
       {
-        title: 'Talks over one-on-one help',
-        body: 'One talk reaches more engineers than one-on-one help can, and the series turns up tools other teams can reuse.',
+        title: 'A talk series',
+        body: 'One talk reaches more people than one-on-one help, and it surfaces tools other teams can reuse.',
       },
     ],
     impact: [
@@ -187,7 +187,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect',
     when: '2025 (approx.)',
     summary:
-      'One service that starts more than 2,000 Spark jobs over tens of petabytes a month as soon as their input data lands, in place of cron jobs and manual runs.',
+      'A service that starts 2,000+ Spark jobs over tens of petabytes a month as soon as their inputs are ready. It replaced cron jobs and manual runs.',
     problem: [
       'Metric pipelines were started by a mix of cron jobs and manual runs. A full refresh took about two weeks.',
       'When upstream data landed, nobody could easily tell which downstream jobs needed to run.',
@@ -218,12 +218,12 @@ export const caseFiles: CaseFile[] = [
     },
     decisions: [
       {
-        title: 'Start jobs when their inputs exist',
-        body: 'Jobs run when their data is ready, not on a timer, so refreshes happen as early as possible and never read stale inputs. It is also most of the 40% compute saving: no duplicate or premature runs, and no clusters sitting idle while they wait for data.',
+        title: 'Run on data, not on a schedule',
+        body: 'Jobs start when their inputs land. That’s also where most of the 40% compute saving came from: no duplicate or early runs, and no clusters idling while they wait.',
       },
       {
         title: 'Migrate every provider',
-        body: 'Keeping cron jobs alongside the new service would have left two answers to “is this data ready?”, so I moved every metric provider over.',
+        body: 'Leaving some jobs on cron would have meant two answers to whether data was ready, so every provider moved over.',
       },
     ],
     impact: [
@@ -241,7 +241,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Tech lead, team of four',
     when: '2024 to 2025 (approx.)',
     summary:
-      'A platform that recommends the right third-party measurement study in under two minutes instead of four hours.',
+      'Recommends a third-party measurement study in under two minutes. The manual process took about four hours.',
     problem: [
       'Choosing a third-party measurement study meant working through vendors and eligibility rules by hand, about four hours each time.',
       'The eligibility rules change often, so they couldn’t be hard-coded.',
@@ -276,15 +276,15 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Rules as configuration',
-        body: 'Eligibility lives in a rules engine the business can change without a deploy. The model only ranks what the rules allow.',
+        body: 'Eligibility rules live in a rules engine the business can change without a deploy. The model only ranks what the rules allow.',
       },
       {
-        title: 'Explain every recommendation',
-        body: 'Each pick comes with a plain-language reason, so people can check it instead of trusting a score.',
+        title: 'Explain each pick',
+        body: 'Every recommendation comes with a plain-language reason people can check.',
       },
       {
-        title: 'Mocks before APIs',
-        body: 'I drew the UX first. The mocks settled the requirements with the partner org faster than design documents did.',
+        title: 'Mocks first',
+        body: 'I designed the UX mocks before the APIs. They settled requirements with the partner org faster than design docs did.',
       },
     ],
     impact: [
@@ -300,7 +300,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect and tech lead',
     when: '2023 to 2025 (approx.)',
     summary:
-      'The shared API that products, backend services, and AI agents use to find and serve advertising insights.',
+      'A shared API for advertising insights, used by product UIs, backend services and AI agents.',
     problem: [
       'Insights came out of many pipelines and were served in many one-off ways. Every new product rebuilt the same plumbing.',
       'Search over a billion records was too slow for interactive use or for agents.',
@@ -337,15 +337,15 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Insight types, not tables',
-        body: 'The metric, type, and family layers let new insights reuse existing pieces, and they gave models and agents a vocabulary to ask with.',
+        body: 'Metrics roll up into insight types and families. New insights reuse existing pieces, and agents get a clear vocabulary to ask for.',
       },
       {
-        title: 'Push freshness instead of polling',
-        body: 'Upstream refreshes emit signals and the API decides what is stale, so consumers never have to check.',
+        title: 'Signals for freshness',
+        body: 'When upstream data refreshes, the API works out what’s stale and triggers rebuilds. Consumers don’t poll.',
       },
       {
         title: 'Index for search',
-        body: 'Moving search onto OpenSearch made it 1,000 times faster, fast enough for people and agents to use interactively.',
+        body: 'Moving search to OpenSearch made it 1,000 times faster, fast enough for interactive use.',
       },
     ],
     impact: [
@@ -364,7 +364,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Designer and owner',
     when: '2023 to 2024 (approx.)',
     summary:
-      'The storage and serving layer behind the Insights API. A new insight is onboarded with a config file, not code.',
+      'The storage and serving layer behind the Insights API. New insights are onboarded with a config file.',
     problem: [
       'The old store had grown around one-off integrations. Adding a new insight meant writing custom code, and stale data was hard to trace.',
     ],
@@ -396,11 +396,11 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Config over code',
-        body: 'Owners describe their insight in a config file and the store does the rest, so onboarding stopped waiting on the store team.',
+        body: 'Owners describe an insight in a config file. No code changes and no wait on the store team.',
       },
       {
-        title: 'Design from the old failures',
-        body: 'I started the redesign from what had gone wrong in the legacy store and wrote it up so the team could own it after me.',
+        title: 'Redesign',
+        body: 'I started from what had gone wrong in the legacy store and documented the new design for the team.',
       },
     ],
     impact: [],
@@ -413,7 +413,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Designer and builder',
     when: '2022 to 2023 (approx.)',
     summary:
-      'A DynamoDB cache that lets pipelines in many VPCs share pseudonymized identity lookups, with 97–99% hit rates in three regions.',
+      'A DynamoDB cache for pseudonymized identity lookups, shared by pipelines across VPCs. Hit rates are 97–99% in three regions.',
     problem: [
       'A privacy change moved our advertising pipelines to pseudonymized identifiers.',
       'The default cache was a Redis cluster inside one VPC. Our pipelines run across many.',
@@ -469,7 +469,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Full-stack developer',
     when: 'Jul 2021 to Jul 2022',
     summary:
-      'Security applications for internal AT&T teams, and a move from each app’s own login to OAuth 2.0 and OpenID Connect.',
+      'Internal security apps at AT&T, and a move from per-app logins to OAuth 2.0 and OpenID Connect.',
     problem: [
       'Every internal security app carried its own legacy login flow. They were hard to maintain and behind current security standards.',
     ],
@@ -508,7 +508,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Lead developer and data analyst',
     when: 'Sep 2018 to May 2021',
     summary:
-      'Computer-vision tools for a Tourette syndrome study that split recorded behavior into discrete “syllables” with an autoregressive hidden Markov model.',
+      'Computer-vision tools for a Tourette syndrome study. An autoregressive hidden Markov model splits recorded behavior into discrete “syllables”.',
     problem: [
       'Researchers needed to turn hours of video into behavior they could measure. Doing it by eye was slow and subjective.',
     ],
@@ -536,12 +536,12 @@ export const caseFiles: CaseFile[] = [
     },
     decisions: [
       {
-        title: 'Syllables instead of raw motion',
-        body: 'A small vocabulary of behavioral syllables made behavior countable and comparable across subjects.',
+        title: 'Discrete syllables',
+        body: 'A small vocabulary of behaviors made them countable and comparable across subjects.',
       },
       {
-        title: 'Tools researchers run themselves',
-        body: 'We built desktop apps so researchers could run the pipeline without a developer in the room.',
+        title: 'Tools researchers run',
+        body: 'Desktop apps let researchers run the pipeline without a developer.',
       },
     ],
     impact: [

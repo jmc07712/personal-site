@@ -126,7 +126,7 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
               <span>
                 {identity.name}, {identity.location}
               </span>
-              <span>Set in two inks, #C9CEBB and #262E1B, and nothing else</span>
+              <span>Built with Next.js and WebGL</span>
               <a href={identity.source}>Source</a>
             </footer>
           </section>

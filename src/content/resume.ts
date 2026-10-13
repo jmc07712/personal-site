@@ -11,11 +11,11 @@ export const identity = {
   linkedin: 'https://www.linkedin.com/in/jared-chester-52b76a190/',
   source: 'https://github.com/jmc07712/personal-site',
   positioning:
-    'I build AI agents and the data systems underneath them. Senior software engineer at Amazon Ads in New York.',
+    'Senior software engineer at Amazon Ads in New York. I work on AI agents and large-scale data systems.',
   about: [
-    'My current work is a conversational agent that builds pitch decks for 5,000 Amazon Ads sellers, and an architecture that puts four teams’ AI capabilities behind one agent.',
-    'Most of my Amazon work has been data infrastructure: an insights API that serves 1.2 billion records a month, orchestration for more than 2,000 Spark jobs, and a cross-VPC cache for pseudonymized identity data.',
-    'I mentor new graduates, sit on promotion panels, and run my org’s GenAI tech talk series. On my own time I ship small products.',
+    'I’m the architect of the Pitching Agent, which builds pitch decks for 5,000 Amazon Ads sellers, and of the agent architecture that now serves four teams’ AI tools through one agent.',
+    'Much of my work has been data infrastructure: the Insights API (1.2 billion records a month), orchestration for 2,000+ Spark jobs, and a cross-VPC cache for pseudonymized IDs.',
+    'I mentor new grads, sit on promotion panels and run my org’s GenAI talk series. I also build apps on the side.',
   ],
   education:
     'B.S. Computer Science, minor in mathematics, Rutgers University, summa cum laude, 2021',
@@ -31,8 +31,7 @@ export const spans: Span[] = [
     kind: 'root',
     from: '2018-09',
     to: 'now',
-    summary:
-      'Research software at Rutgers, security apps at AT&T, then data platforms and AI agents at Amazon Ads.',
+    summary: 'A Rutgers research lab, then AT&T, then Amazon Ads.',
     metrics: [],
   },
   {
@@ -46,7 +45,7 @@ export const spans: Span[] = [
     title: 'Lead developer and data analyst',
     location: 'Piscataway, NJ',
     summary:
-      'I led five developers across four universities building computer-vision tools for a Tourette syndrome study.',
+      'Led five developers across four universities on computer-vision tools for a Tourette syndrome study.',
     metrics: [
       { value: '5', label: 'developers led, across 4 universities' },
       { value: '100-node', label: 'SLURM GPU cluster' },
@@ -61,7 +60,7 @@ export const spans: Span[] = [
     from: '2018-09',
     to: '2021-05',
     summary:
-      'Tools that split recorded behavior into discrete “syllables” with an autoregressive hidden Markov model.',
+      'Split recorded behavior into discrete “syllables” with an autoregressive hidden Markov model.',
     metrics: [{ value: 'AR-HMM', label: 'segments behavior into syllables' }],
     stack: ['Python', 'Electron', 'TensorFlow', 'PyTorch', 'SLURM'],
   },
@@ -73,7 +72,7 @@ export const spans: Span[] = [
     at: '2021-05',
     org: 'Rutgers University',
     title: 'B.S. Computer Science, minor in mathematics',
-    summary: 'Graduated summa cum laude.',
+    summary: 'Summa cum laude.',
     metrics: [],
   },
   {
@@ -86,8 +85,7 @@ export const spans: Span[] = [
     org: 'AT&T, Chief Security Organization',
     title: 'Full-stack application developer',
     location: 'Middletown, NJ',
-    summary:
-      'I built security applications for internal teams and moved their logins to OAuth 2.0 and OpenID Connect.',
+    summary: 'Built internal security apps and moved their logins to OAuth 2.0 and OpenID Connect.',
     metrics: [{ value: 'OAuth 2.0', label: 'and OIDC across internal apps' }],
     stack: ['AngularJS', 'Express', 'MySQL'],
   },
@@ -98,7 +96,7 @@ export const spans: Span[] = [
     parent: 'att',
     from: '2021-07',
     to: '2022-07',
-    summary: 'One standard login path in place of each app’s own legacy flow.',
+    summary: 'Replaced each app’s legacy login with a shared OAuth 2.0 and OIDC sign-in.',
     metrics: [{ value: 'OIDC', label: 'replaced per-app login flows' }],
     stack: ['AngularJS', 'Express', 'MySQL', 'OAuth 2.0', 'OIDC'],
   },
@@ -112,8 +110,7 @@ export const spans: Span[] = [
     org: 'Amazon Ads',
     title: 'Senior software engineer (L6)',
     location: 'New York',
-    summary:
-      'AI agents, recommendation systems, APIs, and the pipelines under them. Promoted to L6 in 2025.',
+    summary: 'AI agents, recommendations, APIs and data pipelines. Promoted to L6 in 2025.',
     metrics: [
       { value: '5,000', label: 'sellers use the Pitching Agent' },
       { value: '1.2B', label: 'records a month through the Insights API' },
@@ -127,8 +124,7 @@ export const spans: Span[] = [
     from: '2022-08',
     to: '2023-12',
     approx: true,
-    summary:
-      'A DynamoDB cache that lets pipelines in many VPCs share pseudonymized identity lookups.',
+    summary: 'A DynamoDB cache for pseudonymized identity lookups, shared across VPCs.',
     metrics: [
       { value: '97–99%', label: 'cache hit rate in 3 regions' },
       { value: '3B+', label: 'pseudonymized records a month' },
@@ -144,8 +140,7 @@ export const spans: Span[] = [
     from: '2023-01',
     to: '2024-12',
     approx: true,
-    summary:
-      'The storage and serving layer behind the Insights API. A new insight is onboarded with a config file, not code.',
+    summary: 'The storage and serving layer behind the Insights API.',
     metrics: [],
     stack: ['Java', 'Lambda', 'DynamoDB', 'S3'],
   },
@@ -157,7 +152,8 @@ export const spans: Span[] = [
     from: '2023-01',
     to: '2025-12',
     approx: true,
-    summary: 'The shared API that products, services, and agents use to find and serve insights.',
+    summary:
+      'A shared API for advertising insights, used by product UIs, backend services and AI agents.',
     metrics: [
       { value: '1.2B', label: 'records a month' },
       { value: '10M+', label: 'requests a month' },
@@ -175,7 +171,7 @@ export const spans: Span[] = [
     to: '2025-12',
     approx: true,
     summary:
-      'A platform that recommends third-party measurement studies, with a rules engine, a model, and plain-language explanations.',
+      'Recommends third-party measurement studies with a rules engine, a ranking model and LLM explanations.',
     metrics: [
       { value: '4h → <2m', label: 'to choose a study' },
       { value: '4', label: 'engineers led' },
@@ -190,8 +186,7 @@ export const spans: Span[] = [
     from: '2025-01',
     to: '2025-12',
     approx: true,
-    summary:
-      'One service that starts more than 2,000 Spark jobs as soon as their input data lands.',
+    summary: 'Starts 2,000+ Spark jobs as soon as their input data is ready.',
     metrics: [
       { value: '2,000+', label: 'Spark/EMR jobs' },
       { value: '~40%', label: 'lower compute cost' },
@@ -208,7 +203,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'A conversational agent on Claude and Amazon Bedrock that researches an advertiser’s account and drafts a pitch deck.',
+      'A conversational agent on Claude and Amazon Bedrock that builds pitch decks from account data.',
     metrics: [
       { value: '5,000', label: 'sellers served' },
       { value: '2h → 5m', label: 'to build a pitch' },
@@ -226,7 +221,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'A tech talk series I started, an adoption plan I co-wrote, and two tools I shared with the org: an LLM code reviewer and a design-doc knowledge base for coding agents.',
+      'Started a GenAI talk series, co-wrote the adoption plan and shared two internal AI tools.',
     metrics: [{ value: '2', label: 'internal AI tools shared across the org' }],
     stack: ['Claude', 'Amazon Bedrock', 'Python'],
   },
@@ -238,7 +233,7 @@ export const spans: Span[] = [
     from: '2026-01',
     to: 'now',
     approx: true,
-    summary: 'One domain agent in front of four teams’ AI capabilities.',
+    summary: 'One domain agent in front of four teams’ AI capabilities. Live in production.',
     metrics: [
       { value: '4', label: 'teams behind one agent' },
       { value: '50', label: 'engineers in the org it covers' },
@@ -255,11 +250,10 @@ export const products: Product[] = [
     url: 'https://counterdex.vercel.app',
     source: 'https://github.com/jmc07712/counterdex',
     summary:
-      'Build Pokémon teams, see how to beat any team, and find out when PokéAPI changes a Pokémon on one of yours.',
+      'A Pokémon team builder. It suggests a counter team for any team and tells you when PokéAPI changes a Pokémon you use.',
     highlights: [
-      'A sync of about 3,000 requests fingerprints every Pokémon and keeps a before-and-after snapshot whenever one changes.',
-      'Counter teams come from pairwise matchup scores and a greedy builder. Searching every possible team would mean checking about 1.6 quadrillion of them.',
-      'React and FastAPI deploy together on one Vercel domain. The backend is tested against a real Postgres.',
+      'A sync job pulls about 3,000 PokéAPI requests and keeps a before-and-after snapshot of anything that changed.',
+      'Counter teams are built one pick at a time from pairwise matchup scores. Checking every possible team would mean about 1.6 quadrillion of them.',
     ],
     stack: ['React', 'Vite', 'TanStack Query', 'FastAPI', 'SQLAlchemy', 'Postgres', 'Vercel'],
   },
@@ -267,12 +261,10 @@ export const products: Product[] = [
     id: 'docly',
     name: 'Docly',
     url: 'https://askdocly.com',
-    summary:
-      'Upload a document and get a summary, risk flags, clause explanations, and answers that cite the source.',
+    summary: 'Upload a document and get a summary, flagged risks and answers that cite the source.',
     highlights: [
-      'Web and mobile apps from one codebase family: Next.js and React Native.',
-      'Answers come from Claude and point back to the passage they rely on.',
-      'Payments through Stripe on the web and in-app purchases on mobile.',
+      'A Next.js web app and a React Native mobile app.',
+      'Claude answers the questions; Stripe and in-app purchases handle billing.',
     ],
     stack: ['Next.js', 'React Native', 'Claude', 'Firebase', 'Stripe'],
   },
@@ -280,12 +272,10 @@ export const products: Product[] = [
     id: 'dateescape',
     name: 'DateEscape',
     url: 'https://dateescape.app',
-    summary:
-      'A way out of an uncomfortable situation: schedule a realistic fake call and let your phone ring on cue.',
+    summary: 'Schedules a realistic fake phone call so you have a reason to leave.',
     highlights: [
-      'CallKeep shows the native incoming-call screen, so the call looks real.',
-      'Firebase schedules the call and push notifications deliver it.',
-      'Home-screen widgets, and subscriptions through RevenueCat.',
+      'CallKeep shows the phone’s native incoming-call screen.',
+      'Firebase schedules the calls; RevenueCat handles subscriptions.',
     ],
     stack: ['React Native', 'Expo', 'Firebase', 'CallKeep', 'RevenueCat'],
   },

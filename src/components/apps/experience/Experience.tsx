@@ -59,7 +59,7 @@ export function Experience({ trace }: ExperienceProps) {
             </span>
             <span>
               <i className={styles.swatchSystem} />
-              system I built
+              project
             </span>
             <span>
               <PixelIcon name="diamond" scale={1} />
@@ -88,8 +88,8 @@ export function Experience({ trace }: ExperienceProps) {
 export function ExperienceStatus() {
   return (
     <>
-      <span>Select a span to see its numbers</span>
-      <span>Arrow keys move, Enter opens the case file</span>
+      <span>Click a row for details</span>
+      <span>Arrow keys to move, Enter to open</span>
     </>
   );
 }

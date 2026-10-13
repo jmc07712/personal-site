@@ -67,6 +67,6 @@ test('an unknown case file shows the not-found page and is kept out of search', 
   page,
 }) => {
   await page.goto('/work/nope');
-  await expect(page.getByText('That file isn’t on this desktop')).toBeVisible();
+  await expect(page.getByText('Page not found')).toBeVisible();
   await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
 });

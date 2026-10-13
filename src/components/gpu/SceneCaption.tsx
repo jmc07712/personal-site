@@ -1,20 +1,14 @@
 'use client';
 
 import { useScene } from './SceneProvider';
-import { recordsPerPoint } from './sizing';
 
-const SCALE = 'The Insights API serves 1.2 billion records a month';
+const SCENE = 'The wallpaper is drawn live on your GPU: one agent, six tools';
 
-/**
- * One line that says what the points are, computed from the live count so Pocket mode's smaller
- * simulation reads true too. Without WebGL2 there are no points, so it only states the scale.
- */
+/** One plain line about the wallpaper, with the live particle count (smaller in Pocket mode). */
 export function SceneCaption({ className }: { className?: string }) {
   const { pointCount, supported } = useScene();
-  const points = pointCount.toLocaleString('en-US');
-  const each = recordsPerPoint(pointCount);
   const text = supported
-    ? `${points} points on your GPU. ${SCALE}, so each point stands for about ${each}.`
-    : `${SCALE}.`;
+    ? `${SCENE}, ${pointCount.toLocaleString('en-US')} particles.`
+    : 'The wallpaper is an agent and its tools, drawn in two colors.';
   return <span className={className}>{text}</span>;
 }
