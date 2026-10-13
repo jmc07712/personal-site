@@ -155,6 +155,11 @@ button {
   color: var(--paper);
 }
 
+/* Set by the inline boot script; the scene lifts it when the boot finishes. */
+html.booting [data-boot='hide'] {
+  visibility: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn:active {
     translate: none;

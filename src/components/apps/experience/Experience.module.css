@@ -63,6 +63,8 @@
 .trace {
   --label: 286px;
   min-width: 0;
+  /* Labels never push the page sideways, whatever the viewport. */
+  overflow-x: clip;
   border-right: 1px solid var(--ink);
 }
 
@@ -214,6 +216,14 @@
   background: var(--fg);
 }
 
+/* The particle bar: a window onto the GPU scene laid over the plain bar it replaces. */
+.gpuBar {
+  position: absolute;
+  inset: -4px 0;
+  width: 100%;
+  height: calc(100% + 8px);
+}
+
 /* The root spans the whole career as a hatched outline. */
 .root b {
   position: relative;
@@ -247,6 +257,12 @@
   font-size: 20px;
   line-height: 20px;
   white-space: nowrap;
+}
+
+/* Bars in the right half of the axis carry their label at the end, so it stays on screen. */
+.barLabelEnd {
+  left: auto;
+  right: 0;
 }
 
 .event {

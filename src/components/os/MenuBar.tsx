@@ -1,11 +1,11 @@
 'use client';
 
 import clsx from 'clsx';
-import type { ReactNode } from 'react';
 import { identity } from '@/content/resume';
 import { Clock } from './Clock';
 import styles from './MenuBar.module.css';
 import { PixelIcon } from './PixelIcon';
+import { ScenePauseButton } from './SceneChrome';
 import { useWindowManager } from './WindowManager';
 
 const MENU = [
@@ -17,7 +17,7 @@ const MENU = [
 ] as const;
 
 /** The top bar: open any window, read the source, pause the scene, check the time. */
-export function MenuBar({ sceneControl }: { sceneControl?: ReactNode }) {
+export function MenuBar() {
   const { state, open } = useWindowManager();
   return (
     <header className={clsx(styles.menubar, 'pix')}>
@@ -44,7 +44,7 @@ export function MenuBar({ sceneControl }: { sceneControl?: ReactNode }) {
         <a className={clsx(styles.item, styles.source)} href={identity.source}>
           Source
         </a>
-        {sceneControl}
+        <ScenePauseButton className={clsx(styles.item, styles.pause)} />
         <Clock className={styles.clock} />
       </div>
     </header>

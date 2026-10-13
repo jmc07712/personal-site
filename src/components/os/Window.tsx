@@ -54,18 +54,19 @@ export function Window({
   const x = useMotionValue(win?.pos?.x ?? 0);
   const y = useMotionValue(win?.pos?.y ?? 0);
 
-  // When a window opens after the first render, bring it into view and move focus into it.
-  const wasOpen = useRef(isOpen);
+  // Each open request after the first render (even for a window that's already open) brings the
+  // window into view and moves focus into it.
+  const opens = win?.opens ?? 0;
+  const seenOpens = useRef(opens);
   useEffect(() => {
-    if (isOpen && !wasOpen.current) {
-      const el = sectionRef.current;
-      el?.focus({ preventScroll: true });
-      if (variant === 'inflow') {
-        el?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-      }
+    if (opens === seenOpens.current) return;
+    seenOpens.current = opens;
+    const el = sectionRef.current;
+    el?.focus({ preventScroll: true });
+    if (variant === 'inflow') {
+      el?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
-    wasOpen.current = isOpen;
-  }, [isOpen, variant, reducedMotion]);
+  }, [opens, variant, reducedMotion]);
 
   // On phones an open case file or post is a full-screen sheet, so the page behind it stays put.
   useEffect(() => {
@@ -139,7 +140,13 @@ export function Window({
               <PixelIcon name="close" scale={1} />
             </button>
           </div>
-          <div className={clsx(styles.body, flush && styles.flush)}>{children}</div>
+          <div
+            className={clsx(styles.body, flush && styles.flush)}
+            // Overlay bodies scroll on their own, so keyboard users must be able to focus them.
+            tabIndex={variant === 'inflow' ? undefined : 0}
+          >
+            {children}
+          </div>
           {status && <div className={clsx(styles.status, 'pix')}>{status}</div>}
         </div>
       </motion.section>

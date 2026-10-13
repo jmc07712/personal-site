@@ -88,7 +88,9 @@
 }
 
 @media (max-width: 768px) {
-  .source {
+  /* Pocket mode's screen has its own tap-to-wake control. */
+  .source,
+  .pause {
     display: none;
   }
 

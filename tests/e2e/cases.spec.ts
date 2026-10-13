@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.beforeEach(async ({}, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'desktop windows');
@@ -40,8 +40,14 @@ test('two case files can be open; closing them leaves no stale URL', async ({ pa
   await page.goto('/');
   await page.getByRole('option', { name: /Pitching Agent/ }).click();
   await page.getByRole('button', { name: 'Open case file' }).click();
-  await page.getByRole('option', { name: /Insights API/ }).click();
-  await page.getByRole('button', { name: 'Open case file' }).click();
+  // The first case file now covers the trace, so reach the second one by keyboard.
+  const trace = page.getByRole('listbox', { name: /Career spans/ });
+  await trace.focus();
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+  await expect(trace).toHaveAttribute('aria-activedescendant', 'row-insights-api');
+  await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/work\/insights-api$/);
   await page.getByRole('button', { name: 'Close insights-api.case' }).click();
   await expect(page).toHaveURL(/\/work\/pitching-agent$/);
@@ -55,8 +61,12 @@ test('a case-file URL loads with the case file open', async ({ page }) => {
   await expect(page).toHaveTitle(/Insights API/);
 });
 
-test('an unknown case file is a 404', async ({ page }) => {
-  const response = await page.goto('/work/nope');
-  expect(response?.status()).toBe(404);
+// Unknown params stream after the static shell, so Next.js answers with the not-found page and a
+// noindex tag rather than a 404 status (see "Status codes" in the loading.js docs).
+test('an unknown case file shows the not-found page and is kept out of search', async ({
+  page,
+}) => {
+  await page.goto('/work/nope');
   await expect(page.getByText('That file isn’t on this desktop')).toBeVisible();
+  await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
 });

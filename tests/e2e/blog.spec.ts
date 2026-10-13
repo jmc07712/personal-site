@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('the blog index opens the Writing window', async ({ page }) => {
   await page.goto('/blog');
@@ -14,6 +14,7 @@ test('the RSS feed is served as RSS', async ({ request }) => {
 });
 
 test('drafts are not published', async ({ page }) => {
-  const response = await page.goto('/blog/hello-world');
-  expect(response?.status()).toBe(404);
+  await page.goto('/blog/hello-world');
+  await expect(page.getByText('That file isn’t on this desktop')).toBeVisible();
+  await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
 });

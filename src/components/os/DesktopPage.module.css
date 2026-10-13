@@ -1,3 +1,9 @@
+/* Page content sits above the fixed GPU wallpaper layer (z-index 0). */
+.main {
+  position: relative;
+  z-index: 1;
+}
+
 /*
  * The desktop: the hero is at least one screen tall and grows with the About window,
  * so the icons never sit on top of it. Every other window sits in its own band below.
@@ -17,6 +23,29 @@
 .band {
   position: relative;
   padding: 88px var(--gutter) 0;
+}
+
+.caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 20px;
+  z-index: 3;
+  max-width: min(640px, calc(100% - 180px));
+  margin: 0;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.caption span {
+  padding: 2px 6px;
+  background: var(--paper);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Pocket mode's square screen; on desktop the scene is the wallpaper instead. */
+.pocketScreen {
+  display: none;
 }
 
 .slotWide {
@@ -118,6 +147,20 @@
 
   .slotAbout {
     width: auto;
+  }
+
+  .pocketScreen {
+    display: block;
+    margin-top: 32px;
+  }
+
+  .caption {
+    position: static;
+    max-width: none;
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: var(--font-body), sans-serif;
   }
 
   .band {

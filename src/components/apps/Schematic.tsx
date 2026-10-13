@@ -21,7 +21,8 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
     .join('; ');
 
   return (
-    <figure className={styles.figure}>
+    // A wide diagram scrolls sideways on small screens, so it can take keyboard focus.
+    <figure className={styles.figure} tabIndex={0}>
       <svg
         className={styles.svg}
         width={layout.width + PAD * 2}

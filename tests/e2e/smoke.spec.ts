@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('home page renders with metadata and no console errors', async ({ page }) => {
   const errors: string[] = [];

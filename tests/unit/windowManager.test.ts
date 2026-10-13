@@ -16,6 +16,21 @@ describe('windowManager', () => {
     expect(s.focused).toBe('experience');
   });
 
+  it('counts every open, even of a window that is already open, so it can be revealed', () => {
+    const before = initial.wins.experience?.opens ?? 0;
+    let s = wmReducer(initial, { type: 'open', id: 'experience' });
+    s = wmReducer(s, { type: 'open', id: 'experience' });
+    expect(s.wins.experience?.opens).toBe(before + 2);
+  });
+
+  it('does not count focus as an open', () => {
+    const s = wmReducer(wmReducer(initial, { type: 'open', id: 'experience' }), {
+      type: 'focus',
+      id: 'about',
+    });
+    expect(s.wins.about?.opens).toBe(initial.wins.about?.opens);
+  });
+
   it('adds windows it has not seen before, such as case files', () => {
     const s = wmReducer(initial, { type: 'open', id: 'case:pitching-agent' });
     expect(s.wins['case:pitching-agent']?.open).toBe(true);

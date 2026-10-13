@@ -121,7 +121,11 @@ function Bar({ row, children }: { row: TraceViewRow; children?: ReactNode }) {
     >
       <b />
       {children}
-      {label && <span className={clsx(styles.barLabel, 'pix')}>{label}</span>}
+      {label && (
+        <span className={clsx(styles.barLabel, row.leftPct > 50 && styles.barLabelEnd, 'pix')}>
+          {label}
+        </span>
+      )}
     </span>
   );
 }

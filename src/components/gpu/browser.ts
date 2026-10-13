@@ -3,6 +3,7 @@
  * the same on the server and the first client pass, then update without effects that set state.
  */
 import { useCallback, useSyncExternalStore } from 'react';
+import { BOOTED_KEY, PAUSED_KEY } from './storageKeys';
 import { SceneRenderer } from './renderer';
 
 export function useMediaQuery(query: string, serverValue = false): boolean {
@@ -54,7 +55,6 @@ function noSubscription(): () => void {
 
 // ------------------------------------------------------------------ the pause preference
 
-const PAUSED_KEY = 'scene-paused';
 const pausedListeners = new Set<() => void>();
 /** In memory too, so the choice holds for the page even where storage is blocked. */
 let pausedValue: boolean | null = null;
@@ -92,8 +92,6 @@ export function usePausedPreference(): [boolean, (paused: boolean) => void] {
 }
 
 // ------------------------------------------------------------------ the boot, once a session
-
-const BOOTED_KEY = 'booted';
 
 export function bootedThisSession(): boolean {
   try {

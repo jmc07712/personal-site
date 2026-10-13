@@ -1,10 +1,14 @@
 'use client';
 
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { GpuRegion } from '@/components/gpu/GpuRegion';
+import { useScene } from '@/components/gpu/SceneProvider';
+import { useOnScreen } from '@/components/gpu/sceneHooks';
 import { PixelIcon } from '@/components/os/PixelIcon';
 import { useWindowManager } from '@/components/os/WindowManager';
 import type { TraceView } from '@/lib/trace';
+import { POCKET_QUERY, useMedia } from '@/lib/useMedia';
 import { Inspector } from './Inspector';
 import { caseFileForSpan } from './lookup';
 import { TraceAccordion } from './TraceAccordion';
@@ -20,7 +24,21 @@ const DEFAULT_SELECTION = 'pitching-agent';
 /** The Experience window: a trace waterfall on desktop, an accordion in Pocket mode. */
 export function Experience({ trace }: ExperienceProps) {
   const [selected, setSelected] = useState(DEFAULT_SELECTION);
-  const { open } = useWindowManager();
+  const { open, state } = useWindowManager();
+  const { mode, setMode, supported } = useScene();
+  const pocket = useMedia(POCKET_QUERY);
+  const traceRef = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(traceRef, !pocket);
+
+  // The particles pour into the role bars while the trace is open and on screen, and flow
+  // back to the hub when it closes or scrolls away. The boot finishes undisturbed.
+  const wantsBars = Boolean(state.wins.experience?.open) && onScreen && !pocket;
+  useEffect(() => {
+    if (mode === 'boot') return;
+    const next = wantsBars ? 'experience' : 'wallpaper';
+    if (next !== mode) setMode(next);
+  }, [wantsBars, mode, setMode]);
+
   const openCase = (slug: string, opener: HTMLElement) => open(`case:${slug}`, opener);
   const activate = (id: string, row: HTMLElement) => {
     const caseFile = caseFileForSpan(id);
@@ -30,7 +48,7 @@ export function Experience({ trace }: ExperienceProps) {
 
   return (
     <>
-      <div className={styles.desktopView}>
+      <div className={styles.desktopView} ref={traceRef}>
         <div className={clsx(styles.toolbar, 'pix')}>
           <span className={styles.traceName}>career.trace</span>
           <span>{spanCount} spans, Sep 2018 to now</span>
@@ -55,6 +73,7 @@ export function Experience({ trace }: ExperienceProps) {
             selected={selected}
             onSelect={setSelected}
             onActivate={activate}
+            renderRoleBar={(id) => supported && <GpuRegion id={id} className={styles.gpuBar} />}
           />
           <Inspector row={trace.rows.find((r) => r.id === selected)} onOpenCase={openCase} />
         </div>

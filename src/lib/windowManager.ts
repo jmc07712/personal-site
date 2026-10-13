@@ -7,6 +7,11 @@ export interface Win {
   id: string;
   open: boolean;
   z: number;
+  /**
+   * How many times the window has been asked to open. Opening one that is already open still
+   * counts, so the window can scroll into view and take focus when the user asks for it again.
+   */
+  opens: number;
   /** Where the user dragged it, in CSS px from its default position. */
   pos?: { x: number; y: number };
 }
@@ -26,9 +31,9 @@ export type WMAction =
 
 export function createWM(ids: string[], open: string[]): WM {
   const wins: Record<string, Win> = {};
-  for (const id of ids) wins[id] = { id, open: false, z: 0 };
+  for (const id of ids) wins[id] = { id, open: false, z: 0, opens: 0 };
   let z = 0;
-  for (const id of open) wins[id] = { id, open: true, z: ++z };
+  for (const id of open) wins[id] = { id, open: true, z: ++z, opens: 0 };
   return { wins, z, focused: open.at(-1) ?? null };
 }
 
@@ -41,19 +46,21 @@ export function topOpen(state: WM): string | null {
   return top?.id ?? null;
 }
 
-function raise(state: WM, win: Win, open: boolean): WM {
+function raise(state: WM, win: Win): WM {
   const z = state.z + 1;
-  return { wins: { ...state.wins, [win.id]: { ...win, open, z } }, z, focused: win.id };
+  return { wins: { ...state.wins, [win.id]: { ...win, z } }, z, focused: win.id };
 }
 
 export function wmReducer(state: WM, action: WMAction): WM {
   const win = state.wins[action.id];
   switch (action.type) {
-    case 'open':
-      return raise(state, win ?? { id: action.id, open: false, z: 0 }, true);
+    case 'open': {
+      const current = win ?? { id: action.id, open: false, z: 0, opens: 0 };
+      return raise(state, { ...current, open: true, opens: current.opens + 1 });
+    }
     case 'focus':
       if (!win?.open || win.z === state.z) return state;
-      return raise(state, win, true);
+      return raise(state, win);
     case 'close': {
       if (!win?.open) return state;
       const next = { ...state, wins: { ...state.wins, [win.id]: { ...win, open: false } } };
