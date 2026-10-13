@@ -12,7 +12,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect and tech lead',
     when: '2025 to now (approx.)',
     summary:
-      'A conversational agent that researches a seller’s account and writes a complete pitch deck in about five minutes.',
+      'A conversational agent that researches an advertiser’s account and drafts a pitch deck in about five minutes, down from two hours by hand.',
     problem: [
       'Building a pitch by hand took about two hours: pull metrics from several tools, pick the insights that matter, write the story, then make the slides.',
       'The insights already existed in our platforms. Nothing could turn them into a narrative on demand.',
@@ -53,16 +53,16 @@ export const caseFiles: CaseFile[] = [
       },
       {
         title: 'Stop resending a 16,000-token prompt',
-        body: 'The first version sent a 16,000-token system prompt with every model call. I restructured it so each step loads only the context it needs, which cut cost and latency, and split a 380-line dependency module into focused pieces.',
+        body: 'The first version sent a 16,000-token system prompt on every model call. I split it so each step loads only the context it needs, which cut the cost and latency of each call.',
       },
       {
         title: 'Guardrails in code',
-        body: 'Limits are enforced by the runtime, not just requested in the prompt, so they hold when the model drifts.',
+        body: 'The runtime enforces the agent’s limits. The prompt states them too, but only code holds when the model drifts.',
       },
     ],
     impact: [
       { value: '5,000', label: 'sellers served' },
-      { value: '300 TPM', label: 'at peak' },
+      { value: '300', label: 'requests a minute at peak' },
       { value: '2h → 5m', label: 'to build a pitch' },
       { value: '100K+', label: 'hours saved a year' },
       { value: '40+', label: 'MCP tools' },
@@ -72,8 +72,8 @@ export const caseFiles: CaseFile[] = [
   {
     slug: 'agent-architecture',
     spanId: 'agent-architecture',
-    title: 'One agent for the whole org',
-    role: 'Architecture lead',
+    title: 'Agent architecture',
+    role: 'Architect, with Principal Engineers',
     when: '2026 to now (approx.)',
     summary:
       'An architecture that puts four teams’ AI capabilities behind a single domain agent, so a calling product talks to one agent instead of coordinating four.',
@@ -84,7 +84,7 @@ export const caseFiles: CaseFile[] = [
     built: [
       'A three-layer design. Each capability is an MCP server. A domain agent routes requests by intent, chains capabilities together, and keeps session memory. A registration layer holds interface contracts and latency budgets.',
       'Trust zones between capabilities, so one tool’s permissions never reach another’s.',
-      'A plan to grow the existing pitching agent into the domain agent, so the team writing narratives didn’t have to rebuild anything.',
+      'A plan to grow the existing Pitching Agent into the domain agent, so the team writing narratives didn’t have to rebuild anything.',
       'I set this direction with Principal Engineers and took it through review with org leadership.',
     ],
     diagram: {
@@ -118,14 +118,13 @@ export const caseFiles: CaseFile[] = [
         body: 'Each capability registers against an interface contract with a latency budget, so teams ship on their own schedules and a combined answer stays fast.',
       },
       {
-        title: 'Grow it, don’t rebuild it',
-        body: 'The domain agent starts from the pitching agent’s infrastructure layer, which kept the narrative team’s design intact.',
+        title: 'Extend the Pitching Agent',
+        body: 'The domain agent starts from the Pitching Agent’s runtime, which already serves 5,000 sellers, instead of a new codebase.',
       },
     ],
     impact: [
-      { value: '4+', label: 'teams behind one agent' },
-      { value: '50', label: 'engineers in the org it sets patterns for' },
-      { value: '3', label: 'layers: tools, agent, contracts' },
+      { value: '4', label: 'teams behind one agent' },
+      { value: '50', label: 'engineers in the org it covers' },
     ],
     stack: ['MCP', 'Claude', 'Amazon Bedrock', 'Agent-to-agent protocol', 'Python', 'ECS'],
   },
@@ -133,10 +132,10 @@ export const caseFiles: CaseFile[] = [
     slug: 'genai-adoption',
     spanId: 'genai-adoption',
     title: 'GenAI adoption',
-    role: 'Org lead',
+    role: 'Organizer and co-author',
     when: '2025 to now (approx.)',
     summary:
-      'Getting an engineering org to use GenAI well: a talk series, the adoption plan, and tools people use every day.',
+      'A tech talk series I started, an adoption plan I co-wrote, and two tools I shared with the org: an LLM code reviewer and a design-doc knowledge base for coding agents.',
     problem: [
       'Engineers wanted to use GenAI but had no shared practices, tools, or place to learn from each other.',
     ],
@@ -145,7 +144,6 @@ export const caseFiles: CaseFile[] = [
       'The org’s GenAI adoption plan, which I co-wrote, and the working group that carries it out.',
       'An LLM code reviewer that reads a git diff and comments on it.',
       'A knowledge base that feeds the team’s existing design docs to coding agents.',
-      'A framework that reads customer feedback, from text and meeting summaries, and uses AI to pull out the main themes.',
     ],
     diagram: {
       cols: 3,
@@ -171,8 +169,8 @@ export const caseFiles: CaseFile[] = [
         body: 'The knowledge base reads existing design docs, so it costs no extra work and stays current as the docs change.',
       },
       {
-        title: 'Teach in the open',
-        body: 'A talk series spreads what works faster than one-on-one help, and it finds the people building interesting things.',
+        title: 'Talks over one-on-one help',
+        body: 'One talk reaches more engineers than one-on-one help can, and the series turns up tools other teams can reuse.',
       },
     ],
     impact: [
@@ -189,7 +187,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect',
     when: '2025 (approx.)',
     summary:
-      'One service that runs more than 2,000 Spark jobs over hundreds of petabytes a month, in place of cron jobs and manual runs.',
+      'One service that starts more than 2,000 Spark jobs over hundreds of petabytes a month as soon as their input data lands, in place of cron jobs and manual runs.',
     problem: [
       'Metric pipelines were started by a mix of cron jobs and manual runs. A full refresh took about two weeks.',
       'When upstream data landed, nobody could easily tell which downstream jobs needed to run.',
@@ -224,8 +222,8 @@ export const caseFiles: CaseFile[] = [
         body: 'Jobs run when their data is ready, not on a timer, so refreshes happen as early as possible and never read stale inputs.',
       },
       {
-        title: 'Move everyone over',
-        body: 'A platform only pays off when it is the only path, so I migrated every provider instead of leaving the old scripts running beside it.',
+        title: 'Migrate every provider',
+        body: 'Keeping cron jobs alongside the new service would have left two answers to “is this data ready?”, so I moved every metric provider over.',
       },
     ],
     impact: [
@@ -237,9 +235,9 @@ export const caseFiles: CaseFile[] = [
     stack: ['Java', 'Spark', 'EMR', 'S3', 'Lambda', 'DynamoDB', 'CloudWatch'],
   },
   {
-    slug: '3pm-recommendations',
-    spanId: '3pm-recommendations',
-    title: '3PM study recommendations',
+    slug: 'study-recommendations',
+    spanId: 'study-recommendations',
+    title: 'Measurement study recommendations',
     role: 'Tech lead, team of four',
     when: '2024 to 2025 (approx.)',
     summary:
@@ -310,8 +308,8 @@ export const caseFiles: CaseFile[] = [
     built: [
       'A layered model: metrics combine into insight types, and types group into families. Consumers ask for an insight, not a table.',
       'Signals with dependency resolution. When upstream data refreshes, the API works out which insights are now stale and starts the pipelines that rebuild them.',
-      'OpenSearch indexes that made search 1,000 times faster.',
-      'It grew into a shared platform for three UIs, more than twelve backend services, recommendation systems, and GenAI workflows. I then handed ownership to the team.',
+      'OpenSearch indexes for search over 1.2 billion records, 1,000 times faster than before.',
+      'It grew into a shared platform for three UIs, more than 12 backend services, recommendation systems, and GenAI workflows. I then handed ownership to the team.',
     ],
     diagram: {
       cols: 4,
@@ -338,7 +336,7 @@ export const caseFiles: CaseFile[] = [
     },
     decisions: [
       {
-        title: 'Model meaning, not tables',
+        title: 'Insight types, not tables',
         body: 'The metric, type, and family layers let new insights reuse existing pieces, and they gave models and agents a vocabulary to ask with.',
       },
       {
@@ -355,7 +353,7 @@ export const caseFiles: CaseFile[] = [
       { value: '10M+', label: 'requests a month' },
       { value: '100 TPS', label: 'at peak' },
       { value: '1,000×', label: 'faster search' },
-      { value: '3 + 12', label: 'UIs and backend services served' },
+      { value: '12+', label: 'backend services, plus 3 UIs' },
     ],
     stack: ['Java', 'Lambda', 'API Gateway', 'DynamoDB', 'OpenSearch', 'S3', 'CDK'],
   },
@@ -366,12 +364,12 @@ export const caseFiles: CaseFile[] = [
     role: 'Designer and owner',
     when: '2023 to 2024 (approx.)',
     summary:
-      'The store and serving layer that every packaged insight passes through before it reaches a product.',
+      'The storage and serving layer behind the Insights API. A new insight is onboarded with a config file, not code.',
     problem: [
       'The old store had grown around one-off integrations. Adding a new insight meant writing custom code, and stale data was hard to trace.',
     ],
     built: [
-      'A redesign of the store and its serving layer, based on the failures we had seen in the old one. The design document is still the team’s reference.',
+      'A redesign of the store and its serving layer, based on the failures we had seen in the old one.',
       'Onboarding by configuration: an insight owner registers content with a config file instead of new code.',
       'An ingestion layer for several upstream data providers, with dependency signals that keep data fresh.',
       'Runbooks and operational tools so other engineers could troubleshoot it themselves.',
@@ -405,10 +403,7 @@ export const caseFiles: CaseFile[] = [
         body: 'I started the redesign from what had gone wrong in the legacy store and wrote it up so the team could own it after me.',
       },
     ],
-    impact: [
-      { value: 'Config', label: 'not code, to onboard an insight' },
-      { value: 'Runbooks', label: 'so anyone on the team can troubleshoot it' },
-    ],
+    impact: [],
     stack: ['Java', 'Lambda', 'DynamoDB', 'S3', 'API Gateway', 'CDK'],
   },
   {
@@ -420,8 +415,8 @@ export const caseFiles: CaseFile[] = [
     summary:
       'A DynamoDB cache that lets pipelines in many VPCs share pseudonymized identity lookups, with 97–99% hit rates in three regions.',
     problem: [
-      'A privacy program required replacing hashed customer IDs with pseudonymized IDs throughout our advertising pipelines.',
-      'The default cache was Redis, which only works inside a single VPC. Our pipelines run across many.',
+      'A privacy change moved our advertising pipelines to pseudonymized identifiers.',
+      'The default cache was a Redis cluster inside one VPC. Our pipelines run across many.',
     ],
     built: [
       'A DynamoDB cache shared across VPCs, built with another team by extending their implementation.',
@@ -449,7 +444,7 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'DynamoDB over Redis',
-        body: 'Redis is fast but tied to one VPC. DynamoDB can be shared across VPCs with IAM, which our multi-service setup needed.',
+        body: 'DynamoDB access is controlled by IAM, not network placement, so pipelines in any VPC could share one table without peering.',
       },
       {
         title: 'Warm first, then stagger',
@@ -457,7 +452,7 @@ export const caseFiles: CaseFile[] = [
       },
       {
         title: 'Shadow before switching',
-        body: 'Shadow reports kept a link to the original IDs, so we could compare results before any customer saw the new path.',
+        body: 'The new path ran in shadow, and we compared its output with the old path’s before any customer-facing report used it.',
       },
     ],
     impact: [
@@ -470,7 +465,7 @@ export const caseFiles: CaseFile[] = [
   {
     slug: 'oauth-oidc',
     spanId: 'oauth-oidc',
-    title: 'One login for security tools',
+    title: 'OAuth and OIDC sign-in',
     role: 'Full-stack developer',
     when: 'Jul 2021 to Jul 2022',
     summary:
@@ -500,7 +495,7 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Standards over custom auth',
-        body: 'Moving every app to OAuth 2.0 and OIDC replaced several homegrown login flows with one well-understood one.',
+        body: 'With OAuth 2.0 and OIDC, the apps hand sign-in to an identity provider instead of checking passwords themselves, so there is one login path to secure.',
       },
     ],
     impact: [{ value: 'OIDC', label: 'in place of per-app logins' }],
@@ -513,7 +508,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Lead developer and data analyst',
     when: 'Sep 2018 to May 2021',
     summary:
-      'Computer-vision tools for a Tourette syndrome study that split recorded behavior into discrete "syllables" with an autoregressive hidden Markov model.',
+      'Computer-vision tools for a Tourette syndrome study that split recorded behavior into discrete “syllables” with an autoregressive hidden Markov model.',
     problem: [
       'Researchers needed to turn hours of video into behavior they could measure. Doing it by eye was slow and subjective.',
     ],
@@ -551,7 +546,7 @@ export const caseFiles: CaseFile[] = [
     ],
     impact: [
       { value: '5', label: 'developers led, across 4 universities' },
-      { value: '100', label: 'node GPU cluster' },
+      { value: '100-node', label: 'GPU cluster' },
     ],
     stack: ['Python', 'Electron', 'TensorFlow', 'PyTorch', 'SLURM'],
   },

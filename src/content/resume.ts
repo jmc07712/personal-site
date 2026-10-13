@@ -13,8 +13,8 @@ export const identity = {
   positioning:
     'I build AI agents and the data systems underneath them. Senior software engineer at Amazon Ads in New York.',
   about: [
-    'I design agent systems and the data platforms they run on. Right now that means a conversational agent that writes pitch decks for sellers, and the architecture that puts four teams’ AI capabilities behind one agent.',
-    'Before agents, I built the plumbing: an insights API that serves 1.2 billion records a month, orchestration for thousands of Spark jobs, and a cross-VPC cache for pseudonymized identity data.',
+    'My current work is a conversational agent that builds pitch decks for 5,000 Amazon Ads sellers, and an architecture that puts four teams’ AI capabilities behind one agent.',
+    'Most of my Amazon work has been data infrastructure: an insights API that serves 1.2 billion records a month, orchestration for more than 2,000 Spark jobs, and a cross-VPC cache for pseudonymized identity data.',
     'I mentor new graduates, sit on promotion panels, and run my org’s GenAI tech talk series. On my own time I ship small products.',
   ],
   education:
@@ -32,7 +32,7 @@ export const spans: Span[] = [
     from: '2018-09',
     to: 'now',
     summary:
-      'Research software, then security tooling, then AI agents and data platforms at scale.',
+      'Research software at Rutgers, security apps at AT&T, then data platforms and AI agents at Amazon Ads.',
     metrics: [],
   },
   {
@@ -49,7 +49,7 @@ export const spans: Span[] = [
       'I led five developers across four universities building computer-vision tools for a Tourette syndrome study.',
     metrics: [
       { value: '5', label: 'developers led, across 4 universities' },
-      { value: '100', label: 'node SLURM GPU cluster' },
+      { value: '100-node', label: 'SLURM GPU cluster' },
     ],
     stack: ['Python', 'Electron', 'TensorFlow', 'PyTorch'],
   },
@@ -61,7 +61,7 @@ export const spans: Span[] = [
     from: '2018-09',
     to: '2021-05',
     summary:
-      'Tools that split recorded behavior into discrete "syllables" with an autoregressive hidden Markov model.',
+      'Tools that split recorded behavior into discrete “syllables” with an autoregressive hidden Markov model.',
     metrics: [{ value: 'AR-HMM', label: 'segments behavior into syllables' }],
     stack: ['Python', 'Electron', 'TensorFlow', 'PyTorch', 'SLURM'],
   },
@@ -93,7 +93,7 @@ export const spans: Span[] = [
   },
   {
     id: 'oauth-oidc',
-    name: 'OAuth and OIDC',
+    name: 'OAuth and OIDC sign-in',
     kind: 'system',
     parent: 'att',
     from: '2021-07',
@@ -115,8 +115,8 @@ export const spans: Span[] = [
     summary:
       'AI agents, recommendation systems, APIs, and the pipelines under them. Promoted to L6 in 2025.',
     metrics: [
-      { value: '5,000', label: 'sellers use the agent I architected' },
-      { value: '1.2B', label: 'records a month through my API' },
+      { value: '5,000', label: 'sellers use the Pitching Agent' },
+      { value: '1.2B', label: 'records a month through the Insights API' },
     ],
   },
   {
@@ -132,7 +132,7 @@ export const spans: Span[] = [
     metrics: [
       { value: '97–99%', label: 'cache hit rate in 3 regions' },
       { value: '3B+', label: 'pseudonymized records a month' },
-      { value: '3.5 weeks', label: 'to migrate all traffic' },
+      { value: '3.5 weeks', label: 'to move all traffic' },
     ],
     stack: ['DynamoDB', 'Spark', 'EMR', 'Scala', 'Java'],
   },
@@ -144,8 +144,9 @@ export const spans: Span[] = [
     from: '2023-01',
     to: '2024-12',
     approx: true,
-    summary: 'The store and serving layer that every packaged insight passes through.',
-    metrics: [{ value: 'Config', label: 'not code, to onboard a new insight' }],
+    summary:
+      'The storage and serving layer behind the Insights API. A new insight is onboarded with a config file, not code.',
+    metrics: [],
     stack: ['Java', 'Lambda', 'DynamoDB', 'S3'],
   },
   {
@@ -166,8 +167,8 @@ export const spans: Span[] = [
     stack: ['Java', 'Lambda', 'API Gateway', 'DynamoDB', 'OpenSearch'],
   },
   {
-    id: '3pm-recommendations',
-    name: '3PM recommendations',
+    id: 'study-recommendations',
+    name: 'Measurement study recommendations',
     kind: 'system',
     parent: 'amazon-ads',
     from: '2024-01',
@@ -189,7 +190,8 @@ export const spans: Span[] = [
     from: '2025-01',
     to: '2025-12',
     approx: true,
-    summary: 'One service that runs every metric pipeline when its inputs land.',
+    summary:
+      'One service that starts more than 2,000 Spark jobs as soon as their input data lands.',
     metrics: [
       { value: '2,000+', label: 'Spark/EMR jobs' },
       { value: '~40%', label: 'lower compute cost' },
@@ -206,7 +208,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'A conversational agent on Claude and Bedrock that researches an account and writes the pitch deck.',
+      'A conversational agent on Claude and Amazon Bedrock that researches an advertiser’s account and drafts a pitch deck.',
     metrics: [
       { value: '5,000', label: 'sellers served' },
       { value: '2h → 5m', label: 'to build a pitch' },
@@ -224,7 +226,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'A tech talk series, the org’s adoption plan, and shared tools that engineers use every day.',
+      'A tech talk series I started, an adoption plan I co-wrote, and two tools I shared with the org: an LLM code reviewer and a design-doc knowledge base for coding agents.',
     metrics: [{ value: '2', label: 'internal AI tools shared across the org' }],
     stack: ['Claude', 'Amazon Bedrock', 'Python'],
   },
@@ -238,8 +240,8 @@ export const spans: Span[] = [
     approx: true,
     summary: 'One domain agent in front of four teams’ AI capabilities.',
     metrics: [
-      { value: '4+', label: 'teams behind one agent' },
-      { value: '50', label: 'engineers in the org it sets patterns for' },
+      { value: '4', label: 'teams behind one agent' },
+      { value: '50', label: 'engineers in the org it covers' },
     ],
     stack: ['MCP', 'Claude', 'Amazon Bedrock', 'Python'],
   },

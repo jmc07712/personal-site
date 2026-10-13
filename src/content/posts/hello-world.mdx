@@ -1,0 +1,21 @@
+export const metadata = {
+  title: 'Hello, world',
+  date: '2026-10-12',
+  summary: 'A test post for the Writing app.',
+  tags: ['meta'],
+  draft: true,
+};
+
+{/* Fixture, not a real post: it exercises the MDX pipeline until the first post ships. */}
+
+This is a placeholder. It gives the Writing app, the post route and the feed something to render
+while the first real post is written.
+
+It is marked as a draft, so production builds leave it out of the index, the sitemap and the feed.
+Set `INCLUDE_DRAFTS=1` to see it locally.
+
+```ts
+export function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+```
