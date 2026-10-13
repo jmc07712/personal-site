@@ -1,0 +1,69 @@
+/**
+ * Window state for the desktop, as a pure reducer so it can be unit-tested without a DOM.
+ * Stacking uses an ever-increasing counter: raising a window gives it the next z value.
+ */
+
+export interface Win {
+  id: string;
+  open: boolean;
+  z: number;
+  /** Where the user dragged it, in CSS px from its default position. */
+  pos?: { x: number; y: number };
+}
+
+export interface WM {
+  wins: Record<string, Win>;
+  /** The highest z handed out so far. */
+  z: number;
+  focused: string | null;
+}
+
+export type WMAction =
+  | { type: 'open'; id: string }
+  | { type: 'close'; id: string }
+  | { type: 'focus'; id: string }
+  | { type: 'move'; id: string; x: number; y: number };
+
+export function createWM(ids: string[], open: string[]): WM {
+  const wins: Record<string, Win> = {};
+  for (const id of ids) wins[id] = { id, open: false, z: 0 };
+  let z = 0;
+  for (const id of open) wins[id] = { id, open: true, z: ++z };
+  return { wins, z, focused: open.at(-1) ?? null };
+}
+
+/** The open window drawn on top, or null when the desktop is empty. */
+export function topOpen(state: WM): string | null {
+  let top: Win | null = null;
+  for (const win of Object.values(state.wins)) {
+    if (win.open && (!top || win.z > top.z)) top = win;
+  }
+  return top?.id ?? null;
+}
+
+function raise(state: WM, win: Win, open: boolean): WM {
+  const z = state.z + 1;
+  return { wins: { ...state.wins, [win.id]: { ...win, open, z } }, z, focused: win.id };
+}
+
+export function wmReducer(state: WM, action: WMAction): WM {
+  const win = state.wins[action.id];
+  switch (action.type) {
+    case 'open':
+      return raise(state, win ?? { id: action.id, open: false, z: 0 }, true);
+    case 'focus':
+      if (!win?.open || win.z === state.z) return state;
+      return raise(state, win, true);
+    case 'close': {
+      if (!win?.open) return state;
+      const next = { ...state, wins: { ...state.wins, [win.id]: { ...win, open: false } } };
+      return { ...next, focused: topOpen(next) };
+    }
+    case 'move':
+      if (!win) return state;
+      return {
+        ...state,
+        wins: { ...state.wins, [win.id]: { ...win, pos: { x: action.x, y: action.y } } },
+      };
+  }
+}
