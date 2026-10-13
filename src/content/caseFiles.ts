@@ -76,7 +76,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect, with Principal Engineers',
     when: '2026 to now (approx.)',
     summary:
-      'An architecture that puts four teams’ AI capabilities behind a single domain agent, so a calling product talks to one agent instead of coordinating four.',
+      'An architecture, now live, that puts four teams’ AI capabilities behind a single domain agent, so a calling product talks to one agent instead of coordinating four.',
     problem: [
       'Four teams were each building an agent. A product that wanted research, a chart, and a narrative had to know about all of them and stitch the answers together itself.',
       'Each team was also solving routing, memory, and security on its own.',
@@ -187,7 +187,7 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect',
     when: '2025 (approx.)',
     summary:
-      'One service that starts more than 2,000 Spark jobs over hundreds of petabytes a month as soon as their input data lands, in place of cron jobs and manual runs.',
+      'One service that starts more than 2,000 Spark jobs over tens of petabytes a month as soon as their input data lands, in place of cron jobs and manual runs.',
     problem: [
       'Metric pipelines were started by a mix of cron jobs and manual runs. A full refresh took about two weeks.',
       'When upstream data landed, nobody could easily tell which downstream jobs needed to run.',
@@ -219,7 +219,7 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Start jobs when their inputs exist',
-        body: 'Jobs run when their data is ready, not on a timer, so refreshes happen as early as possible and never read stale inputs.',
+        body: 'Jobs run when their data is ready, not on a timer, so refreshes happen as early as possible and never read stale inputs. It is also most of the 40% compute saving: no duplicate or premature runs, and no clusters sitting idle while they wait for data.',
       },
       {
         title: 'Migrate every provider',
@@ -228,7 +228,7 @@ export const caseFiles: CaseFile[] = [
     ],
     impact: [
       { value: '2,000+', label: 'Spark/EMR jobs' },
-      { value: '100s of PB', label: 'processed a month' },
+      { value: '10s of PB', label: 'processed a month' },
       { value: '~40%', label: 'lower compute cost' },
       { value: '2w → <1w', label: 'full refresh time' },
     ],
@@ -421,7 +421,7 @@ export const caseFiles: CaseFile[] = [
     built: [
       'A DynamoDB cache shared across VPCs, built with another team by extending their implementation.',
       'A warm-up order: smaller jobs fill the cache first, then the largest jobs read from it on staggered schedules so the table is never overloaded.',
-      'A four-phase rollout: shadow mode on 20% of traffic, then 25%, 50%, and 100%, then removal of the old path. All traffic moved in 3.5 weeks.',
+      'A shadow test, then a gradual dial-up to 100% of traffic, then removal of the old path. All traffic moved in 3.5 weeks.',
       'Support for GDPR deletion.',
     ],
     diagram: {

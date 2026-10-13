@@ -5,7 +5,7 @@ import { OpenWindowButton } from './OpenWindowButton';
 
 const FACTS = [
   { value: '5,000', label: 'sellers use the Pitching Agent I architected' },
-  { value: '100s of PB', label: 'a month through 2,000+ Spark jobs I orchestrate' },
+  { value: '10s of PB', label: 'a month through 2,000+ Spark jobs I orchestrate' },
   { value: '1.2B', label: 'records a month through the Insights API' },
 ];
 
