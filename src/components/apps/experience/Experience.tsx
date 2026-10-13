@@ -25,19 +25,19 @@ const DEFAULT_SELECTION = 'pitching-agent';
 export function Experience({ trace }: ExperienceProps) {
   const [selected, setSelected] = useState(DEFAULT_SELECTION);
   const { open, state } = useWindowManager();
-  const { mode, setMode, supported } = useScene();
+  const { setTraceVisible, supported } = useScene();
   const pocket = useMedia(POCKET_QUERY);
   const traceRef = useRef<HTMLDivElement>(null);
   const onScreen = useOnScreen(traceRef, !pocket);
 
-  // The particles pour into the role bars while the trace is open and on screen, and flow
-  // back to the hub when it closes or scrolls away. The boot finishes undisturbed.
-  const wantsBars = Boolean(state.wins.experience?.open) && onScreen && !pocket;
+  // The particles pour into the role bars while the trace is open and on screen. The scene
+  // decides when (the boot and the other windows get their turn); this only reports it.
+  const traceVisible = Boolean(state.wins.experience?.open) && onScreen && !pocket;
   useEffect(() => {
-    if (mode === 'boot') return;
-    const next = wantsBars ? 'experience' : 'wallpaper';
-    if (next !== mode) setMode(next);
-  }, [wantsBars, mode, setMode]);
+    if (!traceVisible) return;
+    setTraceVisible(true);
+    return () => setTraceVisible(false);
+  }, [traceVisible, setTraceVisible]);
 
   const openCase = (slug: string, opener: HTMLElement) => open(`case:${slug}`, opener);
   const activate = (id: string, row: HTMLElement) => {

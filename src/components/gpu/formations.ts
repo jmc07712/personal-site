@@ -15,6 +15,9 @@ export interface PointState {
 /** The boot current, in px/s: the stream drifts right at this speed until points peel off. */
 export const RIVER_CURRENT = 760;
 
+/** Lateral offsets are standard Gaussians clamped to ± this many deviations. */
+export const LATERAL_LIMIT = 2.6;
+
 const emptyState = (count: number): PointState => ({
   positions: new Float32Array(count * 4),
   velocities: new Float32Array(count * 4),
@@ -33,7 +36,7 @@ export function seedMeta(count: number, rng: Rng): Float32Array {
       [
         (i % TOOL_COUNT) + TOOL_COUNT * lane,
         rng(),
-        Math.max(-2.6, Math.min(2.6, gaussian(rng))),
+        Math.max(-LATERAL_LIMIT, Math.min(LATERAL_LIMIT, gaussian(rng))),
         rng(),
       ],
       i * 4,

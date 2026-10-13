@@ -6,6 +6,9 @@ export const PARTICLES_DESKTOP = 262_144;
 export const PARTICLES_POCKET = 32_768;
 /** The widest viewport that gets Pocket mode, matching the CSS breakpoint. */
 export const POCKET_MAX_WIDTH = 768;
+/** Which variant runs: the pocket screen at that width and below, the desktop layer above. */
+export const POCKET_QUERY = `(max-width: ${POCKET_MAX_WIDTH}px)`;
+export const DESKTOP_QUERY = `(min-width: ${POCKET_MAX_WIDTH + 1}px)`;
 
 /** Records a month served by the Insights API: the number each point stands in for. */
 const RECORDS_PER_MONTH = 1.2e9;

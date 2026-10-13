@@ -12,6 +12,8 @@ export interface InkBudget {
   hub: number;
   /** Per point filling a role bar (solid: tone above 1). */
   bar: number;
+  /** Per point in the halo round a followed window. */
+  halo: number;
   /** The floor for a fast-moving point, so a stream reads as visible grain. */
   flight: number;
 }
@@ -26,6 +28,8 @@ export interface InkInputs {
   tetherLength: number;
   /** CSS px² the role bars cover. */
   barArea: number;
+  /** CSS px² the halo round a followed window covers at its edge tone (see haloArea). */
+  haloArea: number;
   pocket: boolean;
 }
 
@@ -40,6 +44,8 @@ export function inkPerPoint(p: InkInputs): InkBudget {
     name: Math.min(0.5, (0.95 * cells(p.nameArea)) / p.count),
     hub: Math.min(0.08, cells(p.tetherLength * TETHER_WIDTH) / tetherPoints),
     bar: p.barArea > 0 ? Math.min(1, (2.2 * cells(p.barArea)) / p.count) : 0.004,
+    // Nearly solid at the frame; the dither takes it out to paper as the points thin.
+    halo: Math.min(0.5, (0.85 * cells(p.haloArea)) / p.count),
     flight: p.pocket ? 0.12 : Math.min(0.5, 0.075 * Math.sqrt(262_144 / p.count)),
   };
 }

@@ -7,9 +7,10 @@
  *   2. splat      each point adds its ink to one cell of a half-float buffer (splat.glsl.ts)
  *   3. composite  raymarch the hub, multiply the ink in, dither once (compositor.ts)
  *
- * This class is the scene's state machine: boot, wallpaper, experience. It knows nothing about
- * React: callers feed it the pointer, the role-bar rects and a mode, and get pixels back. All
- * simulation coordinates are page px, so formations stay attached to the document as it scrolls.
+ * This class is the scene's state machine: boot, wallpaper, experience, follow. It knows nothing
+ * about React: callers feed it the pointer, the role-bar rects, the followed window and a mode, and
+ * get pixels back. All simulation coordinates are page px, so formations stay attached to the
+ * document as it scrolls.
  */
 import { identity } from '@/content/resume';
 import { BarFormation, barsInView, MAX_BARS, packBars, writeBarSlots } from './bars';
@@ -18,6 +19,7 @@ import { CompositePass, type CompositeFrame } from './compositor';
 import { RIVER_CURRENT, seedInflow, seedMeta, seedRiver } from './formations';
 import { clearTarget, createDensityTarget, deleteDensityTarget, type DensityTarget } from './gl';
 import { loadFont, rasterizeName } from './glyphs';
+import { FollowFormation, haloArea } from './halo';
 import { createHubScreen, STILL_TIME, TetherClock, updateHubScreen } from './hub';
 import { inkPerPoint } from './ink';
 import { FrameLoop } from './loop';
@@ -30,7 +32,7 @@ import { writeTextTargets, type InkedPixels } from './text';
 
 export type { Rect } from './rect';
 
-export type SceneMode = 'boot' | 'wallpaper' | 'experience';
+export type SceneMode = 'boot' | 'wallpaper' | 'experience' | 'follow';
 
 export interface SceneOptions {
   /** How many points to simulate (see sizing.ts). */
@@ -66,6 +68,10 @@ const RIPPLE_SECONDS = 2.5;
 const SLOW_FRAME_LIMIT = 45;
 const MAX_PIXEL = 5;
 
+/** A rect as a shader vec4 (x, y, w, h), zeros for none. */
+const rectUniform = (r: Rect | null): [number, number, number, number] =>
+  r ? [r.x, r.y, r.w, r.h] : [0, 0, 0, 0];
+
 export class SceneRenderer {
   /** Called once per boot, when the hub has resolved and the page can reveal its windows. */
   onBootDone: (() => void) | null = null;
@@ -100,6 +106,7 @@ export class SceneRenderer {
   private readonly hub = createHubScreen();
   private readonly tethers = new TetherClock();
   private readonly bars = new BarFormation();
+  private readonly follow = new FollowFormation();
   private readonly packedBars = new Float32Array(MAX_BARS * 4);
   private readonly cuts = new Float32Array(MAX_BARS * 4);
   private nameSpan: [number, number] = [0, 1];
@@ -171,6 +178,14 @@ export class SceneRenderer {
       this.gpu?.particles.uploadTargets(this.targets);
     }
     if (moved) this.renderStill();
+  }
+
+  /**
+   * The window the points gather round in 'follow', in viewport px, or null for none. Call it every
+   * frame so the halo chases a dragged window. It is kept in page px, so scrolling doesn't move it.
+   */
+  setFollow(rect: Rect | null): void {
+    this.follow.update(rect && { ...rect, x: rect.x + window.scrollX, y: rect.y + window.scrollY });
   }
 
   setMode(mode: SceneMode): void {
@@ -247,9 +262,10 @@ export class SceneRenderer {
     if (this.phase === 'unseeded') this.settle();
     const place = this.stage.place();
     this.updateHub(place);
-    // Stopped in Experience: snap the points straight into (or out of) the bars.
-    const jumped = this.bars.jump(this.wantsBars());
-    this.draw(0, place, this.takeSnap() || jumped);
+    // Stopped: snap the points straight into (or out of) the bars and the halo.
+    const barsJumped = this.bars.jump(this.wantsBars());
+    const haloJumped = this.follow.jump(this.wantsHalo());
+    this.draw(0, place, this.takeSnap() || barsJumped || haloJumped);
   };
 
   private advance(dt: number, place: Placement): void {
@@ -261,6 +277,7 @@ export class SceneRenderer {
     this.updateHub(place);
     this.tethers.advance(dt, this.hub.tools);
     this.bars.step(dt, this.wantsBars(), place.scrollX, place.scrollY);
+    this.follow.step(dt, this.wantsHalo());
   }
 
   private draw(dt: number, place: Placement, snap: boolean): void {
@@ -323,6 +340,20 @@ export class SceneRenderer {
       this.mode === 'experience' &&
       this.phase === 'live' &&
       barsInView(boundingBox(this.bars.rects), window.innerHeight, this.bars.engaged)
+    );
+  }
+
+  /**
+   * Points rest in a halo round the followed window instead of on the hub. Experience counts too:
+   * the bars lie over the halo, so points drain from them straight into the next window's halo
+   * rather than flying back to the hub, which has scrolled off the top of the page by then.
+   */
+  private wantsHalo(): boolean {
+    return (
+      !this.options.pocket &&
+      (this.mode === 'follow' || this.mode === 'experience') &&
+      this.phase === 'live' &&
+      this.follow.following
     );
   }
 
@@ -420,6 +451,10 @@ export class SceneRenderer {
       snap,
       boot: this.uniforms,
       barMix: this.bars.mix,
+      followMix: this.follow.mix,
+      hop: this.follow.hop,
+      halo: rectUniform(this.follow.rect),
+      haloFrom: rectUniform(this.follow.from),
       current: RIVER_CURRENT,
       hub: this.hub,
       tethers: this.tethers,
@@ -441,6 +476,7 @@ export class SceneRenderer {
         nameArea: this.nameArea,
         tetherLength: this.hub.tetherLength,
         barArea: this.bars.rects.reduce((sum, r) => sum + area(r), 0),
+        haloArea: haloArea(this.follow.rect),
         pocket: this.options.pocket,
       }),
     };

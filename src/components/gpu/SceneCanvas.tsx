@@ -7,10 +7,8 @@ import type { SceneRenderer } from './renderer';
 import styles from './SceneCanvas.module.css';
 import { useScene, useSceneHost } from './SceneProvider';
 import { onResizeSettled, useIdleSleep, useOnScreen, useSceneRenderer } from './sceneHooks';
-import { POCKET_MAX_WIDTH } from './sizing';
+import { DESKTOP_QUERY, POCKET_QUERY } from './sizing';
 
-const DESKTOP_QUERY = `(min-width: ${POCKET_MAX_WIDTH + 1}px)`;
-const POCKET_QUERY = `(max-width: ${POCKET_MAX_WIDTH}px)`;
 /** A press on any of these is meant for the page, not the wallpaper. */
 const INTERACTIVE =
   'a, button, input, select, textarea, label, summary, [role], [tabindex], [contenteditable]';

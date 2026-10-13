@@ -214,13 +214,16 @@ describe('inkPerPoint', () => {
     nameArea: 60_000,
     tetherLength: 1500,
     barArea: 20_000,
+    haloArea: 45_000,
     pocket: false,
   };
 
   it('spreads a formation’s tone across its points', () => {
     const ink = inkPerPoint(base);
     expect(ink.name).toBeCloseTo((0.95 * 60_000) / 9 / 262_144, 6);
+    expect(ink.halo).toBeCloseTo((0.85 * 45_000) / 9 / 262_144, 6);
     expect(inkPerPoint({ ...base, count: base.count / 2 }).name).toBeCloseTo(ink.name * 2, 6);
+    expect(inkPerPoint({ ...base, haloArea: 0 }).halo).toBe(0);
   });
 
   it('caps every budget and gives bars a faint default before they are measured', () => {
@@ -230,10 +233,12 @@ describe('inkPerPoint', () => {
       nameArea: 1e9,
       tetherLength: 1e9,
       barArea: 1e9,
+      haloArea: 1e9,
     });
     expect(huge.name).toBe(0.5);
     expect(huge.hub).toBe(0.08);
     expect(huge.bar).toBe(1);
+    expect(huge.halo).toBe(0.5);
     expect(inkPerPoint({ ...base, barArea: 0 }).bar).toBe(0.004);
   });
 

@@ -23,6 +23,13 @@ export interface SimFrame {
   boot: BootUniforms;
   /** 0 = points on the hub, 1 = points in the role bars. */
   barMix: number;
+  /** 0 = points on the hub, 1 = points in the halo round the followed window. */
+  followMix: number;
+  /** 0..1 through a hop from `haloFrom` to `halo`; 1 when there is none. */
+  hop: number;
+  /** The followed window and the one a hop is leaving: x, y, w, h page px. */
+  halo: Vec4;
+  haloFrom: Vec4;
   current: number;
   hub: HubScreen;
   tethers: TetherClock;
@@ -159,6 +166,10 @@ export class ParticleSystem {
     gl.uniform1f(u('u_intro'), f.boot.intro);
     gl.uniform1f(u('u_implode'), f.boot.implode);
     gl.uniform1f(u('u_bars'), f.barMix);
+    gl.uniform1f(u('u_follow'), f.followMix);
+    gl.uniform1f(u('u_hop'), f.hop);
+    gl.uniform4f(u('u_halo'), ...f.halo);
+    gl.uniform4f(u('u_haloFrom'), ...f.haloFrom);
     gl.uniform1f(u('u_snap'), f.snap ? 1 : 0);
     gl.uniform1f(u('u_current'), f.current);
     gl.uniform3f(u('u_core'), f.hub.core.x, f.hub.core.y, f.hub.core.radius);
@@ -175,6 +186,7 @@ export class ParticleSystem {
     gl.uniform2f(u('u_pointerVel'), ...f.pointerVelocity);
     gl.uniform4f(u('u_ripple'), ...f.ripple);
     gl.uniform4f(u('u_ink'), f.ink.name, f.ink.hub, f.ink.bar, f.ink.flight);
+    gl.uniform1f(u('u_inkHalo'), f.ink.halo);
   }
 
   /** Adds every point's ink into its cell of the density buffer (cleared first). */

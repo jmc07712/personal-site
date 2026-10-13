@@ -19,9 +19,11 @@ import {
   usePrefersStill,
   useWebGL2Support,
 } from './browser';
+import { sceneModeFor, type ModeInputs } from './modes';
+import type { Rect } from './rect';
 import { copyRegions } from './regions';
 import type { SceneMode, SceneRenderer } from './renderer';
-import { POCKET_MAX_WIDTH, sceneOptionsFor } from './sizing';
+import { POCKET_QUERY, sceneOptionsFor } from './sizing';
 
 export interface SceneState {
   /** The scene has drawn its first frame (or its CPU still). */
@@ -29,9 +31,15 @@ export interface SceneState {
   /** WebGL2 is available; assumed true until probed after first paint. */
   supported: boolean;
   paused: boolean;
+  /** The scene moves: false while paused, and for reduced motion or Save-Data (stills only). */
+  animated: boolean;
   togglePaused(): void;
+  /** The moment on show, decided here from what is on screen (see modes.ts). */
   mode: SceneMode;
-  setMode(mode: SceneMode): void;
+  /** Experience reports whether its career trace is open and on screen. */
+  setTraceVisible(visible: boolean): void;
+  /** The window the points follow, in viewport px, or null. SceneFollow calls it every frame. */
+  setFollow(rect: Rect | null): void;
   /** Points in the current variant's simulation, for the caption. */
   pointCount: number;
   /** A canvas inside a window that shows the scene beneath it (see GpuRegion). Null unregisters. */
@@ -70,21 +78,23 @@ export function useSceneHost(): SceneHost {
 
 /**
  * Owns the scene's lifecycle: whether it runs (paused, tab hidden, off screen, reduced motion),
- * which moment it shows (boot, wallpaper, experience), and the region copies that let windows
- * show the scene beneath them.
+ * which moment it shows (boot, wallpaper, experience, follow), and the region copies that let
+ * windows show the scene beneath them.
  */
 export function SceneProvider({ children }: { children: ReactNode }) {
   const [paused, setPaused] = usePausedPreference();
   const stillOnly = usePrefersStill();
   const hidden = useDocumentHidden();
   const supported = useWebGL2Support();
-  const pocket = useMediaQuery(`(max-width: ${POCKET_MAX_WIDTH}px)`);
+  const pocket = useMediaQuery(POCKET_QUERY);
   const [renderer, setRenderer] = useState<SceneRenderer | null>(null);
   const [active, setActive] = useState(true);
   const [mode, setModeState] = useState<SceneMode>('wallpaper');
   const [ready, setReady] = useState(false);
   const rendererRef = useRef<SceneRenderer | null>(null);
   const modeRef = useRef<SceneMode>('wallpaper');
+  // What the mode is decided from. A ref, as SceneFollow reports every frame.
+  const inputs = useRef<ModeInputs>({ booting: false, trace: false, following: false });
   const regionsRef = useRef(new Map<string, HTMLCanvasElement>());
   const readyRef = useRef(false);
   // Read by attach(), which must keep a stable identity while these change.
@@ -93,7 +103,11 @@ export function SceneProvider({ children }: { children: ReactNode }) {
     latest.current = { paused, stillOnly };
   }, [paused, stillOnly]);
 
-  const setMode = useCallback((next: SceneMode) => {
+  /** Folds a change in what's on screen into the mode, and tells the renderer if it changed. */
+  const arbitrate = useCallback((change: Partial<ModeInputs>) => {
+    Object.assign(inputs.current, change);
+    const next = sceneModeFor(inputs.current);
+    if (next === modeRef.current) return;
     modeRef.current = next;
     setModeState(next);
     rendererRef.current?.setMode(next);
@@ -114,19 +128,21 @@ export function SceneProvider({ children }: { children: ReactNode }) {
       };
       next.onBootDone = () => {
         markBooted();
-        if (modeRef.current === 'boot') setMode('wallpaper');
+        arbitrate({ booting: false });
       };
-      // The boot plays once a session, and only if it can run to the end.
+      // The boot plays once a session, from the top of the page, and only if it can run to the end.
       const { paused: isPaused, stillOnly: isStill } = latest.current;
-      if (isPaused || isStill || bootedThisSession() || modeRef.current !== 'wallpaper') {
+      const boots =
+        !isPaused && !isStill && !bootedThisSession() && modeRef.current === 'wallpaper';
+      if (!boots) {
         next.skipBoot();
         markBooted();
-        setMode(modeRef.current === 'boot' ? 'wallpaper' : modeRef.current);
-      } else {
-        setMode('boot');
       }
+      // A new renderer starts in 'wallpaper': catch it up, unless it is a boot it never began.
+      if (modeRef.current !== 'boot') next.setMode(modeRef.current);
+      arbitrate({ booting: boots });
     },
-    [setMode],
+    [arbitrate],
   );
 
   const host = useMemo<SceneHost>(
@@ -157,6 +173,17 @@ export function SceneProvider({ children }: { children: ReactNode }) {
   }, [renderer, mode]);
 
   const togglePaused = useCallback(() => setPaused(!paused), [paused, setPaused]);
+  const setTraceVisible = useCallback(
+    (visible: boolean) => arbitrate({ trace: visible }),
+    [arbitrate],
+  );
+  const setFollow = useCallback(
+    (rect: Rect | null) => {
+      rendererRef.current?.setFollow(rect);
+      arbitrate({ following: rect !== null });
+    },
+    [arbitrate],
+  );
   const registerRegion = useCallback((id: string, canvas: HTMLCanvasElement | null) => {
     if (canvas) regionsRef.current.set(id, canvas);
     else regionsRef.current.delete(id);
@@ -167,13 +194,26 @@ export function SceneProvider({ children }: { children: ReactNode }) {
       ready,
       supported,
       paused,
+      animated: !paused && !stillOnly,
       togglePaused,
       mode,
-      setMode,
+      setTraceVisible,
+      setFollow,
       pointCount: sceneOptionsFor(pocket, stillOnly).particles,
       registerRegion,
     }),
-    [ready, supported, paused, togglePaused, mode, setMode, pocket, stillOnly, registerRegion],
+    [
+      ready,
+      supported,
+      paused,
+      stillOnly,
+      togglePaused,
+      mode,
+      setTraceVisible,
+      setFollow,
+      pocket,
+      registerRegion,
+    ],
   );
 
   return (
