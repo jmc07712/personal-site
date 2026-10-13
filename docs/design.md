@@ -262,7 +262,7 @@ tests/
 
 ## 8. SEO and sharing
 
-- `metadata` sets title, description and canonical (Vercel URL for now; the custom domain later).
+- `metadata` sets title, description and canonical `https://jaredmchester.com`.
 - An Open Graph and Twitter image: a static dithered capture of the scene with the name.
 - `sitemap.ts`, `robots.ts`, and JSON-LD `Person` with `sameAs` GitHub and LinkedIn.
 - Vercel Web Analytics (`@vercel/analytics`): cookieless, no consent banner needed.
@@ -329,6 +329,4 @@ Recruiters and interviewers will read this code, so it is held to production sta
 
 ## 12. Open questions
 
-1. The custom domain name, to set `metadataBase` once it's attached.
-
-Resolved: the Amazon system dates (approximate years from Jared's impact summary) and LinkedIn (added).
+None. Resolved: Amazon system dates (approximate years), LinkedIn (added), domain (`jaredmchester.com`, registered at Wix, DNS pointed at Vercel).
