@@ -1,0 +1,67 @@
+.icons {
+  position: absolute;
+  top: 28px;
+  right: 20px;
+  z-index: 5;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 104px;
+  padding: 6px 0 4px;
+  border: 0;
+  background: none;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.label {
+  padding: 1px 5px 2px;
+  background: var(--paper);
+  font-size: 20px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.selected .label {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.icon:focus-visible {
+  outline: none;
+}
+
+.icon:focus-visible .label {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 5px var(--paper);
+}
+
+/* Medium screens: the icons become a dock along the bottom of the desktop. */
+@media (min-width: 769px) and (max-width: 1179px) {
+  .icons {
+    top: auto;
+    right: 14px;
+    bottom: 14px;
+    display: flex;
+    gap: 0;
+  }
+
+  .icon {
+    width: 94px;
+  }
+}
+
+@media (max-width: 768px) {
+  .icons {
+    display: none;
+  }
+}

@@ -1,0 +1,205 @@
+/**
+ * 1-bit icons as text: `#` is ink, `o` is opaque paper, `.` is transparent.
+ * Keeping them as strings makes each icon reviewable in a diff.
+ */
+export const BITMAPS = {
+  hub: [
+    '##........##',
+    '##........##',
+    '..#......#..',
+    '...######...',
+    '...######...',
+    '..########..',
+    '..########..',
+    '...######...',
+    '...######...',
+    '..#......#..',
+    '##........##',
+    '##........##',
+  ],
+  about: [
+    '................',
+    '.##############.',
+    '.#oooooooooooo#.',
+    '.#oooo####oooo#.',
+    '.#ooo#oooo#ooo#.',
+    '.#ooo#oooo#ooo#.',
+    '.#ooo#oooo#ooo#.',
+    '.#oooo####oooo#.',
+    '.#oooooooooooo#.',
+    '.#ooo######ooo#.',
+    '.#oo#oooooo#oo#.',
+    '.#o#oooooooo#o#.',
+    '.#o#oooooooo#o#.',
+    '.##############.',
+    '................',
+    '................',
+  ],
+  experience: [
+    '................',
+    '.##############.',
+    '.##############.',
+    '.#oooooooooooo#.',
+    '.#o#####oooooo#.',
+    '.#oooooooooooo#.',
+    '.#ooo#####oooo#.',
+    '.#oooooooooooo#.',
+    '.#oooooo#####o#.',
+    '.#oooooooooooo#.',
+    '.#oooooo#o#o#o#.',
+    '.#oooooooooooo#.',
+    '.#oooooooo###o#.',
+    '.#oooooooooooo#.',
+    '.##############.',
+    '................',
+  ],
+  writing: [
+    '................',
+    '..#.#.#.#.#.#...',
+    '.############...',
+    '.#oooooooooo#...',
+    '.#o########o#...',
+    '.#oooooooooo#...',
+    '.#o########o#...',
+    '.#oooooooooo#...',
+    '.#o#####oooo#...',
+    '.#oooooooooo#...',
+    '.#o#######oo#...',
+    '.#oooooooooo#...',
+    '.############...',
+    '................',
+    '................',
+    '................',
+  ],
+  // Your team of six above, the counter team (filled) below.
+  counterdex: [
+    '................',
+    '.####.####.####.',
+    '.#oo#.#oo#.#oo#.',
+    '.#oo#.#oo#.#oo#.',
+    '.####.####.####.',
+    '................',
+    '..############..',
+    '................',
+    '.####.####.####.',
+    '.####.####.####.',
+    '.####.####.####.',
+    '.####.####.####.',
+    '................',
+    '................',
+    '................',
+    '................',
+  ],
+  docly: [
+    '................',
+    '..#######.......',
+    '..#ooooo##......',
+    '..#ooooo#o#.....',
+    '..#ooooo####....',
+    '..#oooooooo#....',
+    '..#o######o#.##.',
+    '..#oooooooo#.##.',
+    '..#o#####oo#.##.',
+    '..#oooooooo#.##.',
+    '..#o######o#.##.',
+    '..#oooooooo#....',
+    '..#o####ooo#.##.',
+    '..#oooooooo#.##.',
+    '..##########....',
+    '................',
+  ],
+  dateescape: [
+    '................',
+    '..######........',
+    '.#oooooo#.......',
+    '.#o####o#..#....',
+    '.#o#oo#o#...#...',
+    '.#o#oo#o#.#..#..',
+    '.#o#oo#o#..#.#..',
+    '.#o#oo#o#..#.#..',
+    '.#o#oo#o#.#..#..',
+    '.#o####o#...#...',
+    '.#oooooo#..#....',
+    '.#oo##oo#.......',
+    '.#oooooo#.......',
+    '..######........',
+    '................',
+    '................',
+  ],
+  contact: [
+    '................',
+    '................',
+    '................',
+    '.##############.',
+    '.##oooooooooo##.',
+    '.#o#oooooooo#o#.',
+    '.#oo#oooooo#oo#.',
+    '.#ooo#oooo#ooo#.',
+    '.#oooo#oo#oooo#.',
+    '.#ooooo##ooooo#.',
+    '.#oooooooooooo#.',
+    '.#oooooooooooo#.',
+    '.##############.',
+    '................',
+    '................',
+    '................',
+  ],
+  caseFile: [
+    '................',
+    '................',
+    '.#####..........',
+    '.#ooo#########..',
+    '.#ooooooooooo#..',
+    '.#############..',
+    '.#ooooooooooo#..',
+    '.#ooooooooooo#..',
+    '.#ooooooooooo#..',
+    '.#ooooooooooo#..',
+    '.#ooooooooooo#..',
+    '.#ooooooooooo#..',
+    '.#############..',
+    '................',
+    '................',
+    '................',
+  ],
+  diamond: [
+    '....#....',
+    '...###...',
+    '..#####..',
+    '.#######.',
+    '#########',
+    '.#######.',
+    '..#####..',
+    '...###...',
+    '....#....',
+  ],
+  close: ['#.....#', '.#...#.', '..#.#..', '...#...', '..#.#..', '.#...#.', '#.....#'],
+} as const satisfies Record<string, readonly string[]>;
+
+export type BitmapName = keyof typeof BITMAPS;
+
+/**
+ * Converts bitmap rows into two SVG path strings (ink and paper), merging horizontal runs
+ * so a 16×16 icon becomes a handful of rectangles instead of 256.
+ */
+export function bitmapPaths(rows: readonly string[]): { ink: string; paper: string } {
+  let ink = '';
+  let paper = '';
+  rows.forEach((row, y) => {
+    let x = 0;
+    while (x < row.length) {
+      const cell = row[x];
+      let run = 1;
+      while (x + run < row.length && row[x + run] === cell) run++;
+      const rect = `M${x} ${y}h${run}v1h-${run}z`;
+      if (cell === '#') ink += rect;
+      else if (cell === 'o') paper += rect;
+      x += run;
+    }
+  });
+  return { ink, paper };
+}
+
+export function isBitmapName(name: string): name is BitmapName {
+  return Object.hasOwn(BITMAPS, name);
+}

@@ -1,0 +1,32 @@
+.page {
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 16px;
+}
+
+.window {
+  width: min(520px, 100%);
+  border: 1px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.bar {
+  height: 30px;
+  padding: 5px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.body {
+  padding: 24px 28px 28px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 400;
+}

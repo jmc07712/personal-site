@@ -1,0 +1,46 @@
+.figure {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--ink);
+  overflow-x: auto;
+}
+
+.svg {
+  display: block;
+  max-width: none;
+}
+
+.node {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.nodeLabel,
+.edgeLabel {
+  fill: var(--ink);
+  font-family: var(--font-chrome), monospace;
+  font-size: 20px;
+  -webkit-font-smoothing: none;
+}
+
+.edgeLabel {
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  /* A paper halo so a label stays readable where it crosses a line. */
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.edge {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.arrow {
+  fill: var(--ink);
+}

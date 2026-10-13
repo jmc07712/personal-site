@@ -1,0 +1,97 @@
+/* Long-form reading: a 68ch measure and a larger body size; headings in the chrome face. */
+.post {
+  max-width: 68ch;
+  margin: 0 auto;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.post-date {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.post-title {
+  margin: 4px 0 12px;
+  font-size: 50px;
+  line-height: 48px;
+  font-weight: 400;
+}
+
+.post-summary {
+  margin: 0 0 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--ink);
+  font-weight: 500;
+}
+
+.post-h2,
+.post-h3 {
+  margin: 36px 0 10px;
+  font-family: var(--font-chrome), monospace;
+  font-weight: 400;
+  -webkit-font-smoothing: none;
+}
+
+.post-h2 {
+  font-size: 40px;
+  line-height: 40px;
+}
+
+.post-h3 {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.post-p {
+  margin: 0 0 16px;
+}
+
+.post-ul,
+.post-ol {
+  margin: 0 0 16px;
+  padding-left: 1.2em;
+}
+
+.post-li + .post-li {
+  margin-top: 6px;
+}
+
+.post-blockquote {
+  margin: 0 0 16px;
+  padding-left: 16px;
+  border-left: 4px solid var(--ink);
+}
+
+.post-hr {
+  margin: 32px 0;
+  border: 0;
+  border-top: 1px solid var(--ink);
+}
+
+/* Code is framed in ink rather than tinted, so text never sits on a dither pattern. */
+.post-code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+}
+
+:not(pre) > .post-code {
+  padding: 0 4px;
+  border: 1px solid var(--ink);
+}
+
+.post-pre {
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--ink);
+  overflow-x: auto;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .post-title {
+    font-size: 40px;
+    line-height: 40px;
+  }
+}

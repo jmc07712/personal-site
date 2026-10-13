@@ -1,0 +1,139 @@
+/*
+ * The desktop: the hero is at least one screen tall and grows with the About window,
+ * so the icons never sit on top of it. Every other window sits in its own band below.
+ */
+.desk {
+  position: relative;
+  min-height: calc(100svh - var(--bar));
+  padding: 48px var(--gutter) 64px;
+}
+
+.slotAbout {
+  position: relative;
+  z-index: 4;
+  width: min(600px, 46vw);
+}
+
+.band {
+  position: relative;
+  padding: 88px var(--gutter) 0;
+}
+
+.slotWide {
+  max-width: 1248px;
+}
+
+.slotMedium {
+  max-width: 880px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: start;
+  gap: 32px;
+  max-width: 1248px;
+}
+
+.slot-counterdex {
+  grid-column: 1 / span 6;
+}
+
+.slot-docly {
+  grid-column: 7 / span 6;
+  margin-top: 64px;
+}
+
+.slot-dateescape {
+  grid-column: 2 / span 6;
+}
+
+.contact {
+  padding-bottom: 40px;
+}
+
+.slotContact {
+  max-width: 720px;
+  margin-left: calc(100% / 6);
+}
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  max-width: 1248px;
+  margin: 88px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--ink);
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.colophon a {
+  text-decoration: none;
+}
+
+.colophon a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1179px) {
+  /* Room for the icon dock along the bottom edge. */
+  .desk {
+    padding-bottom: 140px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .slotAbout {
+    width: min(560px, 54vw);
+  }
+
+  .products {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .slot-counterdex {
+    grid-column: 1 / -1;
+  }
+
+  .slot-docly,
+  .slot-dateescape {
+    grid-column: auto;
+    margin-top: 0;
+  }
+
+  .slotContact {
+    margin-left: 0;
+  }
+}
+
+/* Pocket mode: one calm column, name first; the dock replaces the icons. */
+@media (max-width: 768px) {
+  .desk {
+    min-height: 0;
+    padding: 24px 16px 0;
+  }
+
+  .slotAbout {
+    width: auto;
+  }
+
+  .band {
+    padding: 56px 16px 0;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .contact {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+
+  .colophon {
+    margin-top: 56px;
+  }
+}

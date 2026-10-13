@@ -99,6 +99,13 @@ describe('structure', () => {
     expect(caseFiles.filter((c) => !ids.has(c.spanId)).map((c) => c.slug)).toEqual([]);
   });
 
+  it('keeps diagram node labels short enough to fit their box', () => {
+    const long = caseFiles.flatMap((c) =>
+      c.diagram.nodes.filter((n) => n.label.length > 14).map((n) => `${c.slug}: ${n.label}`),
+    );
+    expect(long).toEqual([]);
+  });
+
   it('draws diagram edges between existing nodes inside the grid', () => {
     for (const c of caseFiles) {
       const ids = new Set(c.diagram.nodes.map((n) => n.id));

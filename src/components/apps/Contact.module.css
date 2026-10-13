@@ -1,0 +1,31 @@
+.intro {
+  margin: 0;
+}
+
+.mail {
+  display: inline-block;
+  margin: 6px 0 22px;
+  font-size: 40px;
+  line-height: 40px;
+  text-decoration: none;
+  border-bottom: 2px solid var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.mail:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+@media (max-width: 720px) {
+  .mail {
+    font-size: 30px;
+    line-height: 32px;
+  }
+}

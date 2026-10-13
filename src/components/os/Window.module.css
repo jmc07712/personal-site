@@ -1,0 +1,250 @@
+.window {
+  position: relative;
+  outline: none;
+}
+
+/* A hard 50% dither "shadow", the 1-bit equivalent of elevation. */
+.window::before {
+  content: '';
+  position: absolute;
+  inset: 6px -6px -6px 6px;
+  z-index: -1;
+  background: var(--ink);
+  mask: var(--dither-50);
+  pointer-events: none;
+}
+
+.frame {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+}
+
+.window:focus-visible .frame {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 5px 0 10px;
+  border-bottom: 1px solid var(--ink);
+  user-select: none;
+  touch-action: none;
+}
+
+.draggable .bar {
+  cursor: move;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.grip {
+  flex: 1;
+  align-self: stretch;
+  margin: 9px 0;
+  background: currentColor;
+  mask: var(--dither-25);
+}
+
+.active .bar {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: currentColor;
+}
+
+.close:hover svg {
+  color: var(--paper);
+}
+
+.active .close:hover svg {
+  color: var(--ink);
+}
+
+.active .close:focus-visible {
+  outline-color: var(--paper);
+}
+
+.back {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid currentColor;
+  background: transparent;
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.body {
+  padding: 24px 28px 28px;
+}
+
+.flush {
+  padding: 0;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  border-top: 1px solid var(--ink);
+  font-size: 20px;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ghost {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 58px;
+  padding: 10px 16px;
+  border: 1px dashed var(--ink);
+  background: var(--paper);
+  text-align: left;
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.reopen {
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid var(--ink);
+}
+
+.ghost:hover .reopen {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Case files float centred over the page; posts fill it like a reader app. */
+.overlay,
+.reader {
+  position: fixed;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.overlay {
+  top: calc(var(--bar) + 32px);
+  width: min(960px, calc(100vw - 48px));
+}
+
+.reader {
+  top: calc(var(--bar) + 16px);
+  width: min(960px, calc(100vw - 32px));
+}
+
+.overlay .body,
+.reader .body {
+  max-height: calc(100svh - var(--bar) - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Pocket mode: light chrome, nothing to drag, case files and posts become sheets. */
+@media (max-width: 768px) {
+  .window::before {
+    display: none;
+  }
+
+  .frame {
+    border: 0;
+    background: transparent;
+  }
+
+  .bar {
+    height: auto;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .active .bar {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .inflow .close,
+  .inflow .grip {
+    display: none;
+  }
+
+  .body {
+    padding: 20px 0 8px;
+  }
+
+  .status {
+    display: none;
+  }
+
+  .overlay,
+  .reader {
+    inset: 0;
+    translate: none;
+    width: auto;
+    z-index: 2000 !important;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+  }
+
+  .overlay .frame,
+  .reader .frame {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .overlay .bar,
+  .reader .bar {
+    position: sticky;
+    top: 0;
+    padding: calc(env(safe-area-inset-top) + 8px) 16px 8px;
+    background: var(--paper);
+    gap: 12px;
+  }
+
+  .overlay .close,
+  .reader .close {
+    display: none;
+  }
+
+  .overlay .body,
+  .reader .body {
+    flex: 1;
+    max-height: none;
+    padding: 20px 16px calc(env(safe-area-inset-bottom) + 32px);
+  }
+}

@@ -15,6 +15,9 @@ const body = Atkinson_Hyperlegible_Next({
   weight: ['400', '500', '700'],
   subsets: ['latin'],
   variable: '--font-body',
+  // Next has no metrics for this face to build a size-adjusted fallback, so name one directly.
+  adjustFontFallback: false,
+  fallback: ['system-ui', 'sans-serif'],
 });
 
 export const metadata: Metadata = {
@@ -61,7 +64,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             __html: JSON.stringify(personJsonLd).replace(/</g, '\\u003c'),
           }}
         />
-        <Analytics />
+        {/* The analytics script is served by Vercel's edge, so it only exists in Vercel builds. */}
+        {process.env.VERCEL === '1' && <Analytics />}
       </body>
     </html>
   );

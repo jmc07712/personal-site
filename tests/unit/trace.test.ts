@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Span } from '@/content/types';
-import { layoutTrace, yearTicks } from '@/lib/trace';
+import { layoutTrace, traceView, yearTicks } from '@/lib/trace';
 
 const now = new Date('2026-10-12T12:00:00Z');
 const span = (s: Partial<Span> & Pick<Span, 'id' | 'kind'>): Span => ({
@@ -57,4 +57,50 @@ describe('yearTicks', () => {
   });
   it('keeps ticks inside the axis', () =>
     expect(ticks.every((t) => t.pct > 0 && t.pct < 100)).toBe(true));
+});
+
+describe('traceView', () => {
+  const view = traceView(
+    [
+      span({ id: 'career', kind: 'root', from: '2018-09', to: 'now' }),
+      span({ id: 'lab', kind: 'role', parent: 'career', from: '2018-09', to: '2021-05' }),
+      span({ id: 'degree', kind: 'event', parent: 'career', at: '2021-05' }),
+      span({
+        id: 'x',
+        kind: 'system',
+        parent: 'lab',
+        from: '2019-01',
+        to: '2020-12',
+        approx: true,
+      }),
+      span({ id: 'job', kind: 'role', parent: 'career', from: '2022-08', to: 'now' }),
+    ],
+    '2018-09',
+    new Date('2026-10-12T12:00:00Z'),
+  );
+  const row = (id: string) => view.rows.find((r) => r.id === id)!;
+
+  it('labels exact spans with months and years', () => {
+    expect(row('lab').dates).toBe('Sep 2018 to May 2021');
+    expect(row('lab').duration).toBe('2 years 9 months');
+  });
+
+  it('labels open-ended spans as running to now', () => {
+    expect(row('job').dates).toBe('Aug 2022 to now');
+    expect(row('job').duration).toBe('4 years 3 months');
+  });
+
+  it('labels approximate spans with years only', () => {
+    expect(row('x').dates).toBe('2019 to 2020 (approx.)');
+    expect(row('x').duration).toBeNull();
+  });
+
+  it('labels events with their month and no duration', () => {
+    expect(row('degree').dates).toBe('May 2021');
+    expect(row('degree').duration).toBeNull();
+  });
+
+  it('records the month the view was computed for', () => expect(view.asOf).toBe('2026-10'));
+
+  it('includes year ticks up to now', () => expect(view.ticks.at(-1)?.year).toBe(2026));
 });

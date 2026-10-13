@@ -1,0 +1,106 @@
+.root {
+  border-top: 1px solid var(--ink);
+}
+
+.role {
+  border-bottom: 1px solid var(--ink);
+}
+
+.header {
+  margin: 0;
+  font: inherit;
+}
+
+.trigger {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline-offset: -2px;
+}
+
+.name {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.systemName {
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.dates {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+/* The role's share of the career, as a thin bar under its name. */
+.share {
+  grid-column: 1 / -1;
+  height: 6px;
+  background: var(--ink);
+  mask: var(--dither-12);
+}
+
+.share i {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.content {
+  padding: 0 0 16px;
+}
+
+.summary {
+  margin: 0 0 12px;
+}
+
+.systems {
+  border-top: 1px solid var(--ink);
+}
+
+.system {
+  padding-left: 12px;
+  border-bottom: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+
+.system:last-child {
+  border-bottom: 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 0 0 12px;
+}
+
+.metrics dd {
+  margin: 0;
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.metrics dt {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.event {
+  margin: 0;
+  padding: 14px 0;
+  font-size: 20px;
+  line-height: 20px;
+}

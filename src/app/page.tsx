@@ -1,3 +1,5 @@
-export default function Page() {
-  return <main>Jared Chester</main>;
+import { DesktopPage } from '@/components/os/DesktopPage';
+
+export default function Home() {
+  return <DesktopPage />;
 }

@@ -1,0 +1,32 @@
+.dock {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .dock {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 1500;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 4px 4px env(safe-area-inset-bottom);
+    background: var(--paper);
+    border-top: 1px solid var(--ink);
+  }
+
+  .item {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    min-height: 52px;
+    padding: 6px 0 4px;
+    font-size: 20px;
+    line-height: 20px;
+    text-decoration: none;
+  }
+
+  .item[aria-current='location'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}

@@ -29,7 +29,7 @@ export const caseFiles: CaseFile[] = [
       nodes: [
         { id: 'user', label: 'Seller', col: 0, row: 1 },
         { id: 'agent', label: 'Agent runtime', col: 1, row: 1 },
-        { id: 'llm', label: 'Claude on Bedrock', col: 2, row: 0 },
+        { id: 'llm', label: 'Claude', col: 2, row: 0 },
         { id: 'mcp', label: 'MCP gateway', col: 2, row: 2 },
         { id: 'api', label: 'Insights API', col: 3, row: 1 },
         { id: 'sql', label: 'SQL analysis', col: 3, row: 2 },
@@ -91,7 +91,7 @@ export const caseFiles: CaseFile[] = [
       cols: 5,
       rows: 4,
       nodes: [
-        { id: 'caller', label: 'Calling product', col: 0, row: 1 },
+        { id: 'caller', label: 'Calling app', col: 0, row: 1 },
         { id: 'core', label: 'Domain agent', col: 1, row: 1 },
         { id: 'registry', label: 'Contracts', col: 1, row: 3 },
         { id: 'research', label: 'Research', col: 3, row: 0 },
@@ -202,9 +202,9 @@ export const caseFiles: CaseFile[] = [
       rows: 3,
       nodes: [
         { id: 'upstream', label: 'Upstream data', col: 0, row: 1 },
-        { id: 'markers', label: 'Success markers', col: 1, row: 1 },
+        { id: 'markers', label: 'Ready markers', col: 1, row: 1 },
         { id: 'orch', label: 'Orchestrator', col: 2, row: 1 },
-        { id: 'retry', label: 'Retries, alarms', col: 2, row: 2 },
+        { id: 'retry', label: 'Retries/alarms', col: 2, row: 2 },
         { id: 'spark', label: 'Spark on EMR', col: 3, row: 1 },
         { id: 'metrics', label: 'Metric stores', col: 4, row: 1 },
       ],
@@ -258,11 +258,11 @@ export const caseFiles: CaseFile[] = [
       nodes: [
         { id: 'user', label: 'Requester', col: 0, row: 1 },
         { id: 'ui', label: 'React UI', col: 1, row: 1 },
-        { id: 'api', label: 'Recommendations', col: 2, row: 1 },
+        { id: 'api', label: 'Recommender', col: 2, row: 1 },
         { id: 'rules', label: 'Rules engine', col: 3, row: 0 },
-        { id: 'model', label: 'SageMaker model', col: 3, row: 1 },
-        { id: 'llm', label: 'LLM explanations', col: 3, row: 2 },
-        { id: 'vendors', label: 'Vendor metadata', col: 4, row: 0 },
+        { id: 'model', label: 'SageMaker', col: 3, row: 1 },
+        { id: 'llm', label: 'Explanations', col: 3, row: 2 },
+        { id: 'vendors', label: 'Vendor data', col: 4, row: 0 },
       ],
       edges: [
         { from: 'user', to: 'ui' },

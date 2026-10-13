@@ -1,5 +1,5 @@
 import type { Span, SpanKind, YM } from '@/content/types';
-import { monthOffset, resolveYM } from './dates';
+import { formatDuration, formatYM, monthOffset, monthsBetween, resolveYM } from './dates';
 
 /** A span positioned on the trace's time axis, in percent of the axis width. */
 export interface TraceRow {
@@ -66,4 +66,52 @@ export function yearTicks(start: YM, end: YM): { year: number; pct: number }[] {
     ticks.push({ year, pct: (monthOffset(start, `${year}-01`) / axisMonths) * 100 });
   }
   return ticks;
+}
+
+/** A trace row with the labels the UI shows next to it. */
+export interface TraceViewRow extends TraceRow {
+  name: string;
+  /** "Sep 2018 to May 2021", "Aug 2022 to now", "2023 to 2025 (approx.)", or an event's month. */
+  dates: string;
+  /** "2 years 9 months"; null for events and approximate spans. */
+  duration: string | null;
+}
+
+export interface TraceView {
+  rows: TraceViewRow[];
+  ticks: { year: number; pct: number }[];
+  /** The month "now" resolved to when this view was built. */
+  asOf: YM;
+}
+
+function spanLabels(span: Span, asOf: YM): Pick<TraceViewRow, 'dates' | 'duration'> {
+  if (span.kind === 'event') {
+    if (!span.at) throw new Error(`Event "${span.id}" needs an \`at\` month`);
+    return { dates: formatYM(span.at), duration: null };
+  }
+  if (!span.from || !span.to) throw new Error(`Span "${span.id}" needs from/to dates`);
+  const open = span.to === 'now';
+  if (span.approx) {
+    const end = open ? 'now' : span.to.slice(0, 4);
+    return { dates: `${span.from.slice(0, 4)} to ${end} (approx.)`, duration: null };
+  }
+  return {
+    dates: `${formatYM(span.from)} to ${open ? 'now' : formatYM(span.to)}`,
+    duration: formatDuration(monthsBetween(span.from, open ? asOf : span.to)),
+  };
+}
+
+/** Everything the Experience window renders: positioned rows, their labels, and year ticks. */
+export function traceView(spans: Span[], start: YM, now: Date): TraceView {
+  const asOf = resolveYM('now', now);
+  const rows = layoutTrace(spans, start, now);
+  return {
+    asOf,
+    ticks: yearTicks(start, asOf),
+    rows: spans.map((span, i) => {
+      const row = rows[i];
+      if (!row) throw new Error(`No layout for span "${span.id}"`);
+      return { ...row, name: span.name, ...spanLabels(span, asOf) };
+    }),
+  };
 }
