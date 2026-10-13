@@ -35,7 +35,7 @@ export function Clock({ className }: { className?: string }) {
   return (
     <span className={className}>
       <span aria-hidden="true">New York </span>
-      <time aria-label={`Local time in New York: ${time}`}>{time}</time>
+      <time aria-label={`Local time in New York, ${time}`}>{time}</time>
     </span>
   );
 }

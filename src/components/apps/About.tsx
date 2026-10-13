@@ -4,9 +4,9 @@ import styles from './About.module.css';
 import { OpenWindowButton } from './OpenWindowButton';
 
 const FACTS = [
-  { value: '5,000', label: 'sellers use the Pitching Agent' },
-  { value: '10s of PB', label: 'processed a month by 2,000+ Spark jobs' },
-  { value: '1.2B', label: 'records a month through the Insights API' },
+  { value: '5,000', label: 'sellers build pitches with the Pitching Agent' },
+  { value: '10s of PB', label: 'a month through 2,000+ Spark jobs I orchestrate' },
+  { value: '1.2B', label: 'records a month served by the Insights API' },
 ];
 
 export function About() {
@@ -51,7 +51,7 @@ export function AboutStatus() {
   return (
     <>
       <span>
-        Now: {identity.employer}, {identity.level}
+        {identity.employer}, {identity.level}
       </span>
       <a className={styles.source} href={identity.source}>
         Source

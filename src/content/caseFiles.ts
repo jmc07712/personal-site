@@ -12,16 +12,16 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect and tech lead',
     when: '2025 to now (approx.)',
     summary:
-      'A conversational agent that researches an advertiser’s account and drafts a pitch deck in about five minutes. By hand it took about two hours.',
+      'An AI agent that researches an advertiser’s account and drafts a full pitch deck in about five minutes. Sellers used to spend about two hours on each one. It now serves 5,000 sellers and saves more than 100,000 hours a year.',
     problem: [
-      'Building a pitch by hand took about two hours. Someone had to pull metrics from several tools, pick the insights that mattered, write the story and then make the slides.',
-      'The insights already existed in our platforms. Nothing could turn them into a narrative on demand.',
+      'A seller building a pitch spent about two hours pulling metrics from several tools, choosing the insights that mattered, writing the story and making the slides.',
+      'The insights already existed in our platforms. Nothing could turn them into a story on demand.',
     ],
     built: [
-      'A conversational agent on Claude through Amazon Bedrock. It runs in a container runtime that keeps session state, conversation history, and generated files.',
-      'An MCP gateway that gives the model more than 40 tools, including SQL analysis, insight lookups through the Insights API, charting, and analysis of customer feedback.',
-      'A generation flow that researches the account, chooses insights, writes the narrative, and renders a slide deck with charts and recommendations.',
-      'Runtime guardrails, and the governance review needed to put an AI agent in front of sellers.',
+      'A conversational agent on Claude through Amazon Bedrock. Its container runtime keeps session state, conversation history and generated files, so a conversation picks up where it left off.',
+      'An MCP gateway that gives the model more than 40 tools, including SQL analysis, insight lookups through the Insights API, charting and customer-feedback analysis.',
+      'A generation flow that researches the account, picks the insights, writes the narrative and renders a slide deck with charts and recommendations.',
+      'Runtime guardrails, plus the governance review it took to put an AI agent in front of sellers.',
     ],
     diagram: {
       cols: 5,
@@ -50,15 +50,15 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Tools behind MCP',
-        body: 'Each data team exposes its capability as MCP tools behind one gateway. Adding a capability doesn’t require changes to the agent.',
+        body: 'Each data team publishes its capability as MCP tools behind one gateway. A new capability reaches the agent without any change to the agent itself.',
       },
       {
         title: 'Load context per step',
-        body: 'The first version sent a 16,000-token system prompt on every call. Splitting it so each step loads only what it needs cut cost and latency.',
+        body: 'The first version sent a 16,000-token system prompt on every call. Splitting it so each step loads only what it needs made every call cheaper and faster.',
       },
       {
         title: 'Guardrails in code',
-        body: 'The runtime enforces the agent’s limits. They’re also stated in the prompt, but the code is what holds.',
+        body: 'The runtime enforces the agent’s limits. They’re in the prompt too, but a prompt can be talked around and code can’t.',
       },
     ],
     impact: [
@@ -77,16 +77,16 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect, with Principal Engineers',
     when: '2026 to now (approx.)',
     summary:
-      'A single domain agent that fronts four teams’ AI capabilities. Calling products integrate once. It’s live in production.',
+      'One domain agent in front of four teams’ AI capabilities. A product integrates once and gets research, charts, narrative and search through a single agent. It’s live in production.',
     problem: [
-      'Four teams were each building an agent. A product that wanted research, a chart, and a narrative had to know about all of them and stitch the answers together itself.',
-      'Each team was also solving routing, memory, and security on its own.',
+      'Four teams were each building their own agent. A product that wanted research, a chart and a narrative had to call all of them and stitch the answers together itself.',
+      'Each team was also solving routing, memory and security on its own.',
     ],
     built: [
-      'A three-layer design. Each capability is an MCP server. A domain agent routes requests by intent, chains capabilities together, and keeps session memory. A registration layer holds interface contracts and latency budgets.',
-      'Trust zones between capabilities, so one tool’s permissions never reach another’s.',
-      'A plan to grow the existing Pitching Agent into the domain agent, so the team writing narratives didn’t have to rebuild anything.',
-      'I set this direction with Principal Engineers and took it through review with org leadership.',
+      'A three-layer design. Each capability is an MCP server. A domain agent routes requests by intent, chains capabilities together and keeps session memory. A registration layer holds each capability’s interface contract and latency budget.',
+      'Trust zones between capabilities, so one tool’s permissions never leak into another’s.',
+      'A plan to grow the existing Pitching Agent into the domain agent, so nobody had to start from scratch.',
+      'I set the direction with Principal Engineers and took it through review with org leadership.',
     ],
     diagram: {
       cols: 5,
@@ -113,15 +113,15 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Integrate once',
-        body: 'Callers talk to one agent. Adding a capability means registering MCP tools; consumers don’t change.',
+        body: 'Callers talk to one agent. A team adds a capability by registering MCP tools, and nothing changes for the products that call it.',
       },
       {
         title: 'Contracts and latency budgets',
-        body: 'Each capability registers against an interface contract with a latency budget, so teams can ship on their own schedules.',
+        body: 'Each capability registers an interface contract and a latency budget, so teams ship on their own schedules without breaking each other.',
       },
       {
         title: 'Built on the Pitching Agent',
-        body: 'The domain agent runs on the Pitching Agent’s runtime rather than a new codebase.',
+        body: 'The domain agent runs on the Pitching Agent’s runtime, which was already serving sellers in production, instead of a new codebase.',
       },
     ],
     impact: [
@@ -137,15 +137,15 @@ export const caseFiles: CaseFile[] = [
     role: 'Organizer and co-author',
     when: '2025 to now (approx.)',
     summary:
-      'I started a GenAI talk series, co-wrote my org’s adoption plan, and shared an LLM code reviewer and a design-doc knowledge base for coding agents.',
+      'I started my org’s GenAI talk series and co-wrote its adoption plan. I also shared two AI tools across the org, an LLM code reviewer and a knowledge base that gives coding agents the team’s design docs.',
     problem: [
-      'Engineers wanted to use GenAI but had no shared practices, tools, or place to learn from each other.',
+      'Engineers wanted to use GenAI but had no shared practices, no shared tools and no place to learn from each other.',
     ],
     built: [
       'A recurring GenAI tech talk series that I started and run, with speakers from across the org.',
       'The org’s GenAI adoption plan, which I co-wrote, and the working group that carries it out.',
       'An LLM code reviewer that reads a git diff and comments on it.',
-      'A knowledge base that feeds the team’s existing design docs to coding agents.',
+      'A knowledge base that gives coding agents the team’s existing design docs, so the code they write follows decisions the team already made.',
     ],
     diagram: {
       cols: 3,
@@ -168,11 +168,11 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Reuse existing docs',
-        body: 'The knowledge base indexes the design docs the team already writes, so it needs no extra upkeep.',
+        body: 'The knowledge base indexes design docs the team already writes, so it stays current with no extra upkeep.',
       },
       {
         title: 'A talk series',
-        body: 'One talk reaches more people than one-on-one help, and it surfaces tools other teams can reuse.',
+        body: 'One talk reaches more people than one-on-one help, and it surfaces tools that other teams can pick up.',
       },
     ],
     impact: [
@@ -189,15 +189,15 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect',
     when: '2025 (approx.)',
     summary:
-      'A service that starts 2,000+ Spark jobs over tens of petabytes a month as soon as their inputs are ready. It replaced cron jobs and manual runs.',
+      'A service that starts 2,000+ Spark jobs over tens of petabytes a month the moment their inputs are ready. It replaced cron jobs and manual runs, cut compute cost by about 40% and took a full refresh from two weeks to under one.',
     problem: [
-      'Metric pipelines were started by a mix of cron jobs and manual runs. A full refresh took about two weeks.',
+      'Metric pipelines ran on a mix of cron jobs and manual runs, and a full refresh took about two weeks.',
       'When upstream data landed, nobody could easily tell which downstream jobs needed to run.',
     ],
     built: [
-      'An orchestration service on the company’s internal workflow engine, with dependency tracking, retries, and monitoring.',
-      'Dependency resolution from upstream success markers. When data lands, the service works out which jobs to run next.',
-      'A migration of every metric provider onto the service. It turned up jobs that wrote their success markers to the wrong place, which I fixed along the way.',
+      'An orchestration service on the company’s internal workflow engine, with dependency tracking, retries and monitoring.',
+      'Dependency resolution from upstream success markers. When data lands, the service works out which jobs can run next and starts them.',
+      'A migration of every metric provider onto the service. Along the way it caught jobs that wrote their success markers to the wrong place, and I fixed them.',
     ],
     diagram: {
       cols: 5,
@@ -221,11 +221,11 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Run on data, not on a schedule',
-        body: 'Jobs start when their inputs land. That’s also where most of the 40% compute saving came from: no duplicate or early runs, and no clusters idling while they wait.',
+        body: 'Jobs start when their inputs land. Most of the 40% compute saving came from this, because there are no duplicate or early runs and no clusters sitting idle while they wait.',
       },
       {
         title: 'Migrate every provider',
-        body: 'Leaving some jobs on cron would have meant two answers to whether data was ready, so every provider moved over.',
+        body: 'Leaving some jobs on cron would have meant two different answers to whether data was ready, so every provider moved over.',
       },
     ],
     impact: [
@@ -243,16 +243,16 @@ export const caseFiles: CaseFile[] = [
     role: 'Tech lead, team of four',
     when: '2024 to 2025 (approx.)',
     summary:
-      'Recommends a third-party measurement study in under two minutes. The manual process took about four hours.',
+      'Recommends the right third-party measurement study in under two minutes, with a plain-language reason for each pick. Doing it by hand took about four hours.',
     problem: [
-      'Choosing a third-party measurement study meant working through vendors and eligibility rules by hand, about four hours each time.',
+      'Choosing a third-party measurement study meant working through vendors and eligibility rules by hand, which took about four hours each time.',
       'The eligibility rules change often, so they couldn’t be hard-coded.',
     ],
     built: [
-      'A configurable rules engine for study eligibility, and a store for vendor metadata.',
+      'A configurable rules engine for study eligibility, plus a store for vendor metadata.',
       'A SageMaker model that ranks the eligible studies, with an LLM-written explanation for each recommendation.',
-      'React UIs. I designed the UX mocks myself, which is what got the partner org on board.',
-      'I led four engineers and worked with the UX, sales, and Salesforce teams on the product plan.',
+      'React UIs. I designed the UX mocks myself, and they’re what got the partner org on board.',
+      'I led four engineers and worked with the UX, sales and Salesforce teams on the product plan.',
     ],
     diagram: {
       cols: 5,
@@ -278,11 +278,11 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Rules as configuration',
-        body: 'Eligibility rules live in a rules engine the business can change without a deploy. The model only ranks what the rules allow.',
+        body: 'Eligibility rules live in a rules engine the business can change without a deploy. The model only ranks what the rules allow, so it can never recommend an ineligible study.',
       },
       {
         title: 'Explain each pick',
-        body: 'Every recommendation comes with a plain-language reason people can check.',
+        body: 'Every recommendation comes with a plain-language reason, so people can check it instead of trusting a score.',
       },
       {
         title: 'Mocks first',
@@ -302,16 +302,16 @@ export const caseFiles: CaseFile[] = [
     role: 'Architect and tech lead',
     when: '2023 to 2025 (approx.)',
     summary:
-      'A shared API for advertising insights, used by product UIs, backend services and AI agents.',
+      'One API for advertising insights, shared by product UIs, backend services and AI agents. It serves 1.2 billion records a month, and moving search to OpenSearch made it 1,000 times faster.',
     problem: [
-      'Insights came out of many pipelines and were served in many one-off ways. Every new product rebuilt the same plumbing.',
+      'Insights came out of many pipelines and were served in many one-off ways, so every new product rebuilt the same plumbing.',
       'Search over a billion records was too slow for interactive use or for agents.',
     ],
     built: [
-      'A layered model where metrics combine into insight types and types group into families. Consumers ask for an insight, not a table.',
-      'Signals with dependency resolution. When upstream data refreshes, the API works out which insights are now stale and starts the pipelines that rebuild them.',
-      'OpenSearch indexes for search over 1.2 billion records, 1,000 times faster than before.',
-      'It grew into a shared platform for three UIs, more than 12 backend services, recommendation systems, and GenAI workflows. I then handed ownership to the team.',
+      'A layered model where metrics combine into insight types and types group into families. Consumers ask for an insight instead of a table.',
+      'Freshness signals with dependency resolution. When upstream data refreshes, the API works out which insights are stale and starts the pipelines that rebuild them.',
+      'OpenSearch indexes over 1.2 billion records, which made search 1,000 times faster.',
+      'It grew into a shared platform for three UIs, more than 12 backend services, recommendation systems and GenAI workflows. I then handed ownership to the team.',
     ],
     diagram: {
       cols: 4,
@@ -343,11 +343,11 @@ export const caseFiles: CaseFile[] = [
       },
       {
         title: 'Signals for freshness',
-        body: 'When upstream data refreshes, the API works out what’s stale and triggers rebuilds. Consumers don’t poll.',
+        body: 'When upstream data refreshes, the API works out what’s stale and triggers rebuilds, so consumers never have to poll.',
       },
       {
         title: 'Index for search',
-        body: 'Moving search to OpenSearch made it 1,000 times faster, fast enough for interactive use.',
+        body: 'Moving search to OpenSearch made it 1,000 times faster, which is what made it usable in interactive UIs and by agents.',
       },
     ],
     impact: [
@@ -366,15 +366,15 @@ export const caseFiles: CaseFile[] = [
     role: 'Designer and owner',
     when: '2023 to 2024 (approx.)',
     summary:
-      'The storage and serving layer behind the Insights API. New insights are onboarded with a config file.',
+      'The storage and serving layer behind the Insights API. A team adds a new insight with a config file instead of writing code, and the data stays fresh on its own.',
     problem: [
-      'The old store had grown around one-off integrations. Adding a new insight meant writing custom code, and stale data was hard to trace.',
+      'The old store had grown around one-off integrations. Every new insight meant custom code, and stale data was hard to trace.',
     ],
     built: [
       'A redesign of the store and its serving layer, based on the failures we had seen in the old one.',
-      'Onboarding through configuration. An insight owner registers new content with a config file instead of writing code.',
+      'Config-based onboarding for new insights.',
       'An ingestion layer for several upstream data providers, with dependency signals that keep data fresh.',
-      'Runbooks and operational tools so other engineers could troubleshoot it themselves.',
+      'Runbooks and operational tools so other engineers can troubleshoot it themselves.',
     ],
     diagram: {
       cols: 5,
@@ -398,11 +398,11 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'Config over code',
-        body: 'Owners describe an insight in a config file. No code changes and no wait on the store team.',
+        body: 'Owners describe an insight in a config file. There are no code changes and no waiting on the store team.',
       },
       {
-        title: 'Redesign',
-        body: 'I started from what had gone wrong in the legacy store and documented the new design for the team.',
+        title: 'Start from what broke',
+        body: 'I started from what had gone wrong in the old store and documented the new design for the team.',
       },
     ],
     impact: [],
@@ -415,15 +415,15 @@ export const caseFiles: CaseFile[] = [
     role: 'Designer and builder',
     when: '2022 to 2023 (approx.)',
     summary:
-      'A DynamoDB cache for pseudonymized identity lookups, shared by pipelines across VPCs. Hit rates are 97–99% in three regions.',
+      'A DynamoDB cache that let pipelines in any VPC look up pseudonymized identities after a privacy change. It handles more than 3 billion records a month with a 97–99% hit rate in three regions.',
     problem: [
       'A privacy change moved our advertising pipelines to pseudonymized identifiers.',
-      'The default cache was a Redis cluster inside one VPC. Our pipelines run across many.',
+      'The standard cache was a Redis cluster inside one VPC, and our pipelines run across many.',
     ],
     built: [
       'A DynamoDB cache shared across VPCs, built with another team by extending their implementation.',
-      'A warm-up order. Smaller jobs fill the cache first, and the largest jobs then read from it on staggered schedules so the table is never overloaded.',
-      'A shadow test, then a gradual dial-up to 100% of traffic, then removal of the old path. All traffic moved in 3.5 weeks.',
+      'A warm-up order. Smaller jobs fill the cache first, and the largest jobs then read from it on staggered schedules so the table never gets overloaded.',
+      'A shadow test, then a gradual dial-up to 100% of traffic, then removal of the old path. All traffic moved over in 3.5 weeks.',
       'Support for GDPR deletion.',
     ],
     diagram: {
@@ -446,15 +446,15 @@ export const caseFiles: CaseFile[] = [
     decisions: [
       {
         title: 'DynamoDB over Redis',
-        body: 'DynamoDB access is controlled by IAM, not network placement, so pipelines in any VPC could share one table without peering.',
+        body: 'DynamoDB access is controlled by IAM rather than network placement, so pipelines in any VPC could share one table without peering.',
       },
       {
         title: 'Warm first, then stagger',
-        body: 'Filling the cache with the smaller jobs and staggering the large ones kept hit rates high without overloading the table.',
+        body: 'Filling the cache with the smaller jobs first and staggering the large ones kept hit rates high without overloading the table.',
       },
       {
         title: 'Shadow before switching',
-        body: 'The new path ran in shadow, and we compared its output with the old path’s before any customer-facing report used it.',
+        body: 'The new path ran in shadow, and we compared its output with the old path before any customer-facing report depended on it.',
       },
     ],
     impact: [
@@ -471,12 +471,12 @@ export const caseFiles: CaseFile[] = [
     role: 'Full-stack developer',
     when: 'Jul 2021 to Jul 2022',
     summary:
-      'Internal security apps at AT&T, and a move from per-app logins to OAuth 2.0 and OpenID Connect.',
+      'Internal security apps for AT&T, and a move from each app’s own login to one shared OAuth 2.0 and OpenID Connect sign-in.',
     problem: [
       'Every internal security app carried its own legacy login flow. They were hard to maintain and behind current security standards.',
     ],
     built: [
-      'Full-stack security applications in AngularJS, Express, and MySQL, built from what the stakeholder teams asked for.',
+      'Full-stack security applications in AngularJS, Express and MySQL, built from what the stakeholder teams asked for.',
       'A shared OAuth 2.0 and OpenID Connect sign-in that replaced the per-app login flows.',
     ],
     diagram: {
@@ -510,9 +510,9 @@ export const caseFiles: CaseFile[] = [
     role: 'Lead developer and data analyst',
     when: 'Sep 2018 to May 2021',
     summary:
-      'Computer-vision tools for a Tourette syndrome study. An autoregressive hidden Markov model splits recorded behavior into discrete “syllables”.',
+      'Computer-vision tools for a Tourette syndrome study that turn hours of video into measurable behavior. An autoregressive hidden Markov model splits what it sees into discrete “syllables” researchers can count.',
     problem: [
-      'Researchers needed to turn hours of video into behavior they could measure. Doing it by eye was slow and subjective.',
+      'Researchers needed to turn hours of video into behavior they could measure, and doing it by eye was slow and subjective.',
     ],
     built: [
       'I led five developers across four universities building tools for the lab’s researchers in Electron and Python.',
@@ -543,7 +543,7 @@ export const caseFiles: CaseFile[] = [
       },
       {
         title: 'Tools researchers run',
-        body: 'Desktop apps let researchers run the pipeline without a developer.',
+        body: 'Desktop apps let researchers run the pipeline themselves without waiting on a developer.',
       },
     ],
     impact: [
