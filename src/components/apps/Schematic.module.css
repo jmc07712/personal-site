@@ -44,3 +44,54 @@
 .arrow {
   fill: var(--ink);
 }
+
+.group {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.groupLabel {
+  fill: var(--ink);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badgePaper {
+  fill: var(--paper);
+}
+
+.badgeInk {
+  fill: var(--ink);
+}
+
+.packet {
+  fill: var(--ink);
+}
+
+/* Moving packets are decoration; reduced motion shows the diagram still. */
+@media (prefers-reduced-motion: reduce) {
+  .packet {
+    display: none;
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend svg {
+  shape-rendering: crispEdges;
+}

@@ -48,6 +48,25 @@ describe('layoutSchematic', () => {
     expect(layout.edges[2]).toMatchObject({ d: 'M330 60V40', arrow: 'up', tip: { x: 330, y: 40 } });
   });
 
+  it('draws a group as a padded box around its members', () => {
+    const grouped = layoutSchematic(
+      {
+        cols: 3,
+        rows: 2,
+        nodes: [
+          { id: 'a', label: 'A', col: 0, row: 0 },
+          { id: 'b', label: 'B', col: 2, row: 0 },
+          { id: 'c', label: 'C', col: 2, row: 1 },
+        ],
+        edges: [],
+        groups: [{ label: 'Tools', nodes: ['b', 'c'] }],
+      },
+      grid,
+    );
+    // b and c span x 280–380, y 0–100; the group pads that by 12 and adds room for its label.
+    expect(grouped.groups).toEqual([{ label: 'Tools', x: 268, y: -28, w: 124, h: 140 }]);
+  });
+
   it('rejects edges to unknown nodes', () =>
     expect(() =>
       layoutSchematic(

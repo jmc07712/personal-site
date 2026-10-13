@@ -1,4 +1,4 @@
-import type { Diagram } from '@/content/types';
+import type { Diagram, NodeKind } from '@/content/types';
 
 export interface SchematicGrid {
   cellWidth: number;
@@ -18,6 +18,7 @@ interface Point {
 export interface PlacedNode {
   id: string;
   label: string;
+  kind?: NodeKind;
   x: number;
   y: number;
   w: number;
@@ -38,12 +39,27 @@ export interface RoutedEdge {
   labelAnchor: 'start' | 'end';
 }
 
+export interface PlacedGroup {
+  label: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 export interface SchematicLayout {
   width: number;
   height: number;
   nodes: PlacedNode[];
   edges: RoutedEdge[];
+  groups: PlacedGroup[];
+  /** Everything drawn, groups included, for the SVG viewBox. */
+  bounds: { x: number; y: number; w: number; h: number };
 }
+
+/** Space between a group's boundary and its members, plus room above them for its label. */
+const GROUP_PAD = 12;
+const GROUP_LABEL = 16;
 
 function toPath(points: Point[]): string {
   return points
@@ -67,6 +83,7 @@ export function layoutSchematic(diagram: Diagram, grid: SchematicGrid): Schemati
     return {
       id: n.id,
       label: n.label,
+      kind: n.kind,
       x: n.col * (cellWidth + gapX),
       y: n.row * (cellHeight + gapY),
       w: span * cellWidth + (span - 1) * gapX,
@@ -135,10 +152,27 @@ export function layoutSchematic(diagram: Diagram, grid: SchematicGrid): Schemati
     };
   });
 
-  return {
-    width: diagram.cols * cellWidth + (diagram.cols - 1) * gapX,
-    height: diagram.rows * cellHeight + (diagram.rows - 1) * gapY,
-    nodes,
-    edges,
-  };
+  const groups = (diagram.groups ?? []).map((group): PlacedGroup => {
+    const members = group.nodes.map(find);
+    const x0 = Math.min(...members.map((n) => n.x));
+    const y0 = Math.min(...members.map((n) => n.y));
+    const x1 = Math.max(...members.map((n) => n.x + n.w));
+    const y1 = Math.max(...members.map((n) => n.y + n.h));
+    return {
+      label: group.label,
+      x: x0 - GROUP_PAD,
+      y: y0 - GROUP_PAD - GROUP_LABEL,
+      w: x1 - x0 + GROUP_PAD * 2,
+      h: y1 - y0 + GROUP_PAD * 2 + GROUP_LABEL,
+    };
+  });
+
+  const width = diagram.cols * cellWidth + (diagram.cols - 1) * gapX;
+  const height = diagram.rows * cellHeight + (diagram.rows - 1) * gapY;
+  const boxes = [{ x: 0, y: 0, w: width, h: height }, ...groups];
+  const x = Math.min(...boxes.map((b) => b.x));
+  const y = Math.min(...boxes.map((b) => b.y));
+  const right = Math.max(...boxes.map((b) => b.x + b.w));
+  const bottom = Math.max(...boxes.map((b) => b.y + b.h));
+  return { width, height, nodes, edges, groups, bounds: { x, y, w: right - x, h: bottom - y } };
 }

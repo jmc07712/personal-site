@@ -40,6 +40,9 @@ export interface Product {
   stack: string[];
 }
 
+/** What a box in a diagram is; each kind gets its own 1-bit badge. */
+export type NodeKind = 'actor' | 'agent' | 'model' | 'service' | 'store' | 'doc';
+
 /** A node in a case-file schematic, placed on a coarse grid. */
 export interface DiagramNode {
   id: string;
@@ -48,6 +51,13 @@ export interface DiagramNode {
   row: number;
   /** Width in grid columns (default 1). */
   w?: number;
+  kind?: NodeKind;
+}
+
+/** A dashed boundary drawn around related nodes, such as the tools behind one gateway. */
+export interface DiagramGroup {
+  label: string;
+  nodes: string[];
 }
 
 export interface DiagramEdge {
@@ -61,6 +71,7 @@ export interface Diagram {
   rows: number;
   nodes: DiagramNode[];
   edges: DiagramEdge[];
+  groups?: DiagramGroup[];
 }
 
 export interface Decision {
