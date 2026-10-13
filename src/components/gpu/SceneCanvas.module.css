@@ -1,0 +1,60 @@
+/*
+ * The desktop layer sits at z-index 0 under the page. Content meant to appear above it must be
+ * positioned with a higher z-index (e.g. main { position: relative; z-index: 1 }).
+ */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* The CPU still is drawn once, so it scrolls with the top of the page instead of staying fixed. */
+.still {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100vh;
+}
+
+/* Cells are drawn 1:1 into the canvas and scaled up whole, so they must not be smoothed. */
+.canvas {
+  display: block;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  will-change: transform;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wake {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  translate: -50% 0;
+  padding: 3px 8px 4px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font:
+    20px/20px var(--font-chrome),
+    ui-monospace,
+    monospace;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-font-smoothing: none;
+}
+
+.wake:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
