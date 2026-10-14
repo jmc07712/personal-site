@@ -13,7 +13,7 @@ export const identity = {
   positioning:
     'I’m a senior software engineer at Amazon Ads in New York, where I build AI agents and the data infrastructure that supports them.',
   about: [
-    'I love hard problems, especially the ones between a promising idea and something people rely on every day. Right now that means AI agents. I find it exciting to watch a model become a dependable tool once it has good data and firm guardrails around it.',
+    'I enjoy working on hard problems, and right now that means AI agents. I’m most interested in the work it takes to make them reliable enough for people to use every day.',
     'I designed and serve as tech lead for the Pitching Agent, which turns an advertiser’s account data into a complete pitch deck in about five minutes. It serves 5,000 Amazon Ads sellers and saves more than 100,000 hours a year. I also designed the domain agent that brings four teams’ AI capabilities behind a single interface.',
     'Before agents, I spent years on data infrastructure. I led the Insights API, which serves 1.2 billion records a month, and built the orchestration service behind more than 2,000 Spark jobs. That work taught me that an agent is only as good as the data beneath it.',
     'I love to speak and teach, so I founded my organization’s GenAI talk series and mentor new graduates. I learn best by building, which is why I keep shipping my own apps, most recently Counterdex, a Pokémon team builder.',
