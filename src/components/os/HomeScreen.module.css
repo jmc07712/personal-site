@@ -1,0 +1,93 @@
+/* The desktop has no home screen, since its icons sit beside the About window. */
+.home {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /*
+   * At least one screen tall. The plate starts below the agent, which the wallpaper draws in the
+   * upper part of the screen (see hubFraming), and the icons sit low, where a thumb can reach.
+   */
+  .home {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--bar));
+    padding: calc(43lvh - var(--bar)) 16px calc(72px + env(safe-area-inset-bottom));
+  }
+
+  /* Spare height goes either side of the plate, so the agent, the name and the icons space out. */
+  .plate {
+    margin: auto 0;
+  }
+
+  /* Paper behind the type, so it reads over the particles. */
+  .name,
+  .title {
+    width: fit-content;
+    margin: 0 auto;
+    background: var(--paper);
+  }
+
+  .name {
+    padding: 0 10px;
+    font-size: 60px;
+    line-height: 52px;
+  }
+
+  /* The narrowest phones take the name a size down, so it never runs off the screen. */
+  @media (max-width: 359px) {
+    .name {
+      font-size: 50px;
+      line-height: 44px;
+    }
+  }
+
+  .title {
+    padding: 2px 8px 4px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  .apps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px 0;
+    margin: 0;
+    padding: 16px 0 0;
+    list-style: none;
+  }
+
+  /* Flex rather than grid, so a label wider than its column overhangs both sides evenly. */
+  .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0 2px;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .label {
+    padding: 1px 4px 2px;
+    background: var(--paper);
+    font-size: 20px;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+
+  .app:active .label {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .app:focus-visible {
+    outline: none;
+  }
+
+  .app:focus-visible .label {
+    outline: 2px solid var(--ink);
+    outline-offset: 1px;
+    box-shadow: 0 0 0 5px var(--paper);
+  }
+}

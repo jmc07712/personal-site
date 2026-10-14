@@ -1,5 +1,5 @@
 /*
- * The desktop layer sits at z-index 0 under the page. Content meant to appear above it must be
+ * The wallpaper layer sits at z-index 0 under the page. Content meant to appear above it must be
  * positioned with a higher z-index (e.g. main { position: relative; z-index: 1 }).
  */
 .layer {
@@ -25,36 +25,35 @@
   will-change: transform;
 }
 
-.screen {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border: 1px solid var(--ink);
-  background: var(--paper);
-  touch-action: pan-y;
-  -webkit-tap-highlight-color: transparent;
-}
-
+/* Shown while the phone wallpaper sleeps, just above the dock. */
 .wake {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  bottom: 14px;
+  bottom: calc(72px + env(safe-area-inset-bottom));
+  z-index: 1400;
   translate: -50% 0;
   padding: 3px 8px 4px;
   border: 1px solid var(--ink);
   background: var(--paper);
   color: var(--ink);
-  font:
-    20px/20px var(--font-chrome),
-    ui-monospace,
-    monospace;
+  font-size: 20px;
+  line-height: 20px;
   white-space: nowrap;
   cursor: pointer;
-  -webkit-font-smoothing: none;
 }
 
 .wake:hover {
   background: var(--ink);
   color: var(--paper);
+}
+
+@media (max-width: 768px) {
+  /*
+   * The large viewport height, so the layer and the hub keep their size while the browser's
+   * toolbars slide in and out during a scroll.
+   */
+  .layer {
+    bottom: auto;
+    height: 100lvh;
+  }
 }

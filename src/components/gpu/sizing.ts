@@ -6,9 +6,22 @@ export const PARTICLES_DESKTOP = 262_144;
 export const PARTICLES_POCKET = 32_768;
 /** The widest viewport that gets Pocket mode, matching the CSS breakpoint. */
 export const POCKET_MAX_WIDTH = 768;
-/** Which variant runs: the pocket screen at that width and below, the desktop layer above. */
+/** The calm pocket scene runs at that width and below, the full desktop scene above it. */
 export const POCKET_QUERY = `(max-width: ${POCKET_MAX_WIDTH}px)`;
 export const DESKTOP_QUERY = `(min-width: ${POCKET_MAX_WIDTH + 1}px)`;
+
+/**
+ * A phone shows one column, read a window at a time, and the window being read is the one
+ * crossing this band of the screen (fractions of its height). The dock marks that window's
+ * section and the points follow it, so a short window scrolled to the top doesn't lose them to a
+ * long one below.
+ */
+export const READING_BAND = { top: 0.35, bottom: 0.45 } as const;
+
+const percent = (fraction: number): string => `${Math.round(fraction * 100)}%`;
+
+/** READING_BAND as an IntersectionObserver rootMargin, so the observer sees only that band. */
+export const READING_BAND_MARGIN = `-${percent(READING_BAND.top)} 0px -${percent(1 - READING_BAND.bottom)} 0px`;
 
 /** Records a month served by the Insights API: the number each point stands in for. */
 const RECORDS_PER_MONTH = 1.2e9;
@@ -24,8 +37,8 @@ export function recordsPerPoint(count: number): string {
 }
 
 /**
- * Renderer settings per variant. The desktop runs uncapped with the full raymarch; the pocket
- * screen is capped at 30fps with fewer points and steps so it stays cool on a phone.
+ * Renderer settings per tier. The desktop runs uncapped and raymarches in full; the phone
+ * wallpaper is capped at 30fps with fewer points and steps so it stays cool in the hand.
  */
 export function sceneOptionsFor(pocket: boolean, reducedMotion: boolean): SceneOptions {
   return pocket

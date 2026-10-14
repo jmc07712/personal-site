@@ -44,8 +44,9 @@ export function inkPerPoint(p: InkInputs): InkBudget {
     name: Math.min(0.5, (0.95 * cells(p.nameArea)) / p.count),
     hub: Math.min(0.08, cells(p.tetherLength * TETHER_WIDTH) / tetherPoints),
     bar: p.barArea > 0 ? Math.min(1, (2.2 * cells(p.barArea)) / p.count) : 0.004,
-    // Nearly solid at the frame; the dither takes it out to paper as the points thin.
-    halo: Math.min(0.5, (0.85 * cells(p.haloArea)) / p.count),
+    // Nearly solid at the frame; the dither takes it out to paper as the points thin. A phone's
+    // gutters show only that dense band, so there it's inked lighter to keep reading calm.
+    halo: Math.min(0.5, ((p.pocket ? 0.45 : 0.85) * cells(p.haloArea)) / p.count),
     flight: p.pocket ? 0.12 : Math.min(0.5, 0.075 * Math.sqrt(262_144 / p.count)),
   };
 }

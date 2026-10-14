@@ -78,11 +78,9 @@ export class CanvasStage {
       this.canvas.style.transform = transform;
       this.transform = transform;
     }
-    // The pocket screen scrolls with the page, and its hub with it. The desktop layer is fixed
-    // to the viewport, but its hub belongs to the top of the page and scrolls away with it.
-    const hub = this.pocket
-      ? { x: left, y: top, w: box.width, h: box.height }
-      : { x: box.left, y: box.top, w: box.width, h: box.height };
+    // The layer is fixed to the viewport, but the hub belongs to the top of the page (the
+    // desktop's first screen, the phone's home screen) and scrolls away with it.
+    const hub = { x: box.left, y: box.top, w: box.width, h: box.height };
     this.latest = {
       scrollX,
       scrollY,

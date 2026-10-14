@@ -12,10 +12,23 @@ async function expectNoHorizontalScroll(page: Page) {
   expect(overflow).toBeLessThanOrEqual(0);
 }
 
-test('the name comes first and nothing scrolls sideways', async ({ page }) => {
+test('the home screen comes first and nothing scrolls sideways', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Jared Chester' })).toBeInViewport();
+  const home = page.getByRole('region', { name: 'Home screen' });
+  await expect(home.getByText('Jared Chester')).toBeInViewport();
+  await expect(home.getByRole('link')).toHaveCount(7);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expectNoHorizontalScroll(page);
+});
+
+test('a home screen icon scrolls to its window and focuses it', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .getByRole('region', { name: 'Home screen' })
+    .getByRole('link', { name: 'Writing' })
+    .click();
+  await expect(page.locator('#win-writing')).toBeFocused();
+  await expect(page.locator('#win-writing')).toBeInViewport();
 });
 
 for (const size of [

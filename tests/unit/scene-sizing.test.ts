@@ -3,6 +3,7 @@ import {
   PARTICLES_DESKTOP,
   PARTICLES_POCKET,
   particlesFor,
+  READING_BAND_MARGIN,
   recordsPerPoint,
   sceneOptionsFor,
 } from '@/components/gpu/sizing';
@@ -51,5 +52,11 @@ describe('sceneOptionsFor', () => {
     expect(pocket.steps).toBeLessThan(140);
     expect(pocket.pocket).toBe(true);
     expect(pocket.reducedMotion).toBe(true);
+  });
+});
+
+describe('READING_BAND_MARGIN', () => {
+  it('lets an observer see only the band 35 to 45% down the screen', () => {
+    expect(READING_BAND_MARGIN).toBe('-35% 0px -55% 0px');
   });
 });

@@ -25,11 +25,29 @@ describe('hubFraming', () => {
     expect(core.x).toBeGreaterThan(stage.w * 0.6);
   });
 
-  it('centres the hub in the pocket screen', () => {
-    const square = { x: 0, y: 0, w: 360, h: 360 };
-    const core = project(CORE, hubCamera(0), hubFraming(square, 360, true), square);
-    expect(core.x).toBeGreaterThan(150);
-    expect(core.x).toBeLessThan(210);
+  it('sets the hub large in the upper part of a phone, clear of the menubar and the edges', () => {
+    for (const [w, h] of [
+      [390, 844],
+      [375, 812],
+      [360, 640],
+    ] as const) {
+      const phone = { x: 0, y: 0, w, h };
+      const framing = hubFraming(phone, w, true);
+      const core = project(CORE, hubCamera(0), framing, phone);
+      expect(core.x).toBeCloseTo(w / 2, 0);
+      expect(core.y).toBeLessThan(h * 0.3);
+      const xs: number[] = [];
+      for (let t = 0; t < 90; t += 0.5) {
+        for (let i = 0; i < TOOL_COUNT; i++) {
+          const tool = project(toolPosition(i, t, 1, 0), hubCamera(t), framing, phone);
+          expect(tool.y).toBeGreaterThan(40);
+          xs.push(tool.x);
+        }
+      }
+      expect(Math.min(...xs)).toBeGreaterThan(0);
+      expect(Math.max(...xs)).toBeLessThan(w);
+      expect(Math.max(...xs) - Math.min(...xs)).toBeGreaterThan(w * 0.7);
+    }
   });
 });
 

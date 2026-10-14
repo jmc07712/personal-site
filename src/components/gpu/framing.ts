@@ -14,8 +14,9 @@ export interface Framing {
 /**
  * Framing per layout tier, keyed by viewport width like the CSS breakpoints. On wide desktops the
  * About window covers the left of the screen, so the hub moves right into the open space;
- * narrower desktops push it further right with a wider lens; Pocket mode centres it in its
- * square screen. Shifts scale with the stage's aspect so the hub keeps its place on any shape.
+ * narrower desktops push it further right with a wider lens. On a phone the hub sits large in
+ * the upper part of the home screen, above the name and the icons, as wide as the screen allows.
+ * Shifts scale by the stage's aspect so the hub keeps its place on any shape.
  */
 export function hubFraming(
   stage: { w: number; h: number },
@@ -23,7 +24,9 @@ export function hubFraming(
   pocket: boolean,
 ): Framing {
   const aspect = stage.w / Math.max(1, stage.h);
-  if (pocket) return { shiftX: 0, shiftY: 0.035, focal: 2.3 };
+  // At focal 1 the hub spans about 0.4 stage heights, so this fills most of a portrait phone's
+  // width; the cap keeps it in the upper half of a squarer screen.
+  if (pocket) return { shiftX: 0, shiftY: 0.22, focal: Math.min(2.3 * aspect, 1.2) };
   if (viewportWidth >= 1180) return { shiftX: 0.175 * aspect, shiftY: 0, focal: 1.72 };
   if (viewportWidth >= 900) return { shiftX: 0.28 * aspect, shiftY: 0, focal: 1.3 };
   return { shiftX: 0, shiftY: -0.05, focal: aspect < 1 ? 1.78 : 2 };

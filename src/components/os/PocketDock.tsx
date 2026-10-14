@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { READING_BAND_MARGIN } from '@/components/gpu/sizing';
 import type { BitmapName } from './bitmaps';
 import { PixelIcon } from './PixelIcon';
 import styles from './PocketDock.module.css';
@@ -14,12 +15,15 @@ const SECTIONS: { id: string; label: string; icon: BitmapName }[] = [
   { id: 'contact', label: 'Contact', icon: 'contact' },
 ];
 
+/** The home screen above the sections. While it's current, the dock marks nothing. */
+const HOME = 'home';
+
 /**
  * Pocket mode's navigation, in the thumb zone. Plain anchor links, so it works before
  * JavaScript loads; an IntersectionObserver marks the section you're reading.
  */
 export function PocketDock() {
-  const [current, setCurrent] = useState('about');
+  const [current, setCurrent] = useState(HOME);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,10 +31,10 @@ export function PocketDock() {
         const visible = entries.find((entry) => entry.isIntersecting);
         if (visible) setCurrent(visible.target.id);
       },
-      // A section counts as current while it crosses the middle of the screen.
-      { rootMargin: '-45% 0px -50% 0px' },
+      // A section counts as current while it crosses the reading band, where the points gather.
+      { rootMargin: READING_BAND_MARGIN },
     );
-    for (const { id } of SECTIONS) {
+    for (const id of [HOME, ...SECTIONS.map((section) => section.id)]) {
       const section = document.getElementById(id);
       if (section) observer.observe(section);
     }

@@ -8,7 +8,6 @@ import { Product } from '@/components/apps/Product';
 import { Writing } from '@/components/apps/Writing';
 import { SceneCanvas } from '@/components/gpu/SceneCanvas';
 import { SceneCaption } from '@/components/gpu/SceneCaption';
-import { SceneFollow } from '@/components/gpu/SceneFollow';
 import { SceneProvider } from '@/components/gpu/SceneProvider';
 import { caseFiles } from '@/content/caseFiles';
 import { identity, products } from '@/content/resume';
@@ -20,6 +19,7 @@ import { bootCurtainScript } from './bootCurtain';
 import { BootLog } from './BootLog';
 import styles from './DesktopPage.module.css';
 import { DesktopIcons } from './DesktopIcons';
+import { HomeScreen } from './HomeScreen';
 import { MenuBar } from './MenuBar';
 import { PocketDock } from './PocketDock';
 import { BootCurtainLifter } from './SceneChrome';
@@ -55,13 +55,13 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
         {/* Runs during HTML parsing, before first paint, so the hero never flashes before the boot. */}
         <script dangerouslySetInnerHTML={{ __html: bootCurtainScript() }} />
         <BootCurtainLifter />
-        <SceneCanvas variant="desktop" />
+        <SceneCanvas />
         <BootLog />
-        <SceneFollow />
         <MenuBar />
         <main className={styles.main}>
+          <HomeScreen />
           <section id="about" className={styles.desk} aria-label="Desktop">
-            <div className={styles.slotAbout} data-boot="hide">
+            <div className={styles.slotAbout} data-boot="hide" data-scene-follow="about">
               <Window
                 id="about"
                 title="About"
@@ -71,9 +71,6 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
               >
                 <About />
               </Window>
-            </div>
-            <div className={styles.pocketScreen}>
-              <SceneCanvas variant="pocket" />
             </div>
             <div data-boot="hide">
               <DesktopIcons />

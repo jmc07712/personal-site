@@ -36,6 +36,11 @@
     color: var(--paper);
   }
 
+  /* Invert the icon too. Its paper pixels are drawn in --paper, so that becomes ink here. */
+  .item[aria-current='location'] svg {
+    --paper: var(--ink);
+  }
+
   /* The narrowest phones keep the icons; the labels stay for screen readers. */
   @media (max-width: 359px) {
     .item span {

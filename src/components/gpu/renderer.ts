@@ -43,7 +43,7 @@ export interface SceneOptions {
   pixel: number;
   /** Raymarch step budget per cell. */
   steps: number;
-  /** Pocket mode: the canvas is a square screen in the page flow, not a fixed desktop layer. */
+  /** Pocket mode, for phones, with a short inflow boot, a softer ripple and no role bars. */
   pocket: boolean;
   /** Never animate: still frames only, no boot. */
   reducedMotion: boolean;
@@ -400,7 +400,6 @@ export class SceneRenderer {
    */
   private wantsHalo(): boolean {
     return (
-      !this.options.pocket &&
       (this.mode === 'follow' || this.mode === 'experience') &&
       this.phase === 'live' &&
       this.follow.following

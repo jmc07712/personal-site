@@ -92,9 +92,12 @@ export function Window({
   const closeAndRestoreFocus = () => {
     const opener = openerOf(id);
     close(id);
+    // On a phone a window in the page folds to its title bar where the reader is, so focus
+    // stays on that bar rather than scrolling back up to whatever opened the window.
+    const stayPut = pocket && variant === 'inflow';
     // Wait a frame so the placeholder or opener is visible before it takes focus.
     requestAnimationFrame(() => {
-      if (opener?.isConnected) opener.focus({ preventScroll: variant !== 'inflow' });
+      if (opener?.isConnected && !stayPut) opener.focus({ preventScroll: variant !== 'inflow' });
       else ghostRef.current?.focus();
     });
   };
@@ -169,7 +172,10 @@ export function Window({
           onClick={(e) => open(id, e.currentTarget)}
         >
           <PixelIcon name={icon} scale={2} />
-          <span>{title} is closed</span>
+          <span className={styles.ghostTitle}>
+            {title}
+            <span className={styles.closedNote}> is closed</span>
+          </span>
           <span className={styles.reopen}>Reopen</span>
         </button>
       )}

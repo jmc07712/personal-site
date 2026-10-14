@@ -173,39 +173,104 @@
   overscroll-behavior: contain;
 }
 
-/* Pocket mode: light chrome, nothing to drag, case files and posts become sheets. */
+/*
+ * In Pocket mode windows keep the full chrome, a little heavier on a small screen, full width
+ * and never dragged. A closed window folds to its title bar, and case files and posts become
+ * full-screen sheets.
+ */
 @media (max-width: 768px) {
-  .window::before {
-    display: none;
-  }
-
-  .frame {
-    border: 0;
-    background: transparent;
+  .inflow .frame {
+    border-width: 2px;
   }
 
   .bar {
-    height: auto;
-    padding: 0 0 8px;
-    border-bottom: 1px solid var(--ink);
+    height: 36px;
+    padding: 0 6px 0 12px;
+    /* Dragging is off, so a swipe that starts on a title bar scrolls the page. */
+    touch-action: auto;
   }
 
-  .active .bar {
-    background: transparent;
-    color: var(--ink);
+  .close {
+    position: relative;
+    width: 26px;
+    height: 26px;
   }
 
-  .inflow .close,
-  .inflow .grip {
-    display: none;
+  /* A 44px target round the drawn box. */
+  .close::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+  }
+
+  .close svg {
+    width: 14px;
+    height: 14px;
   }
 
   .body {
-    padding: 20px 0 8px;
+    padding: 20px 16px 24px;
+  }
+
+  .flush {
+    padding: 12px 16px 8px;
   }
 
   .status {
     display: none;
+  }
+
+  /* A closed window keeps its title bar, and a tap anywhere on the bar reopens it. */
+  .ghost {
+    position: relative;
+    gap: 10px;
+    min-height: 40px;
+    padding: 0 6px 0 12px;
+    border: 2px solid var(--ink);
+  }
+
+  .ghost::before {
+    content: '';
+    position: absolute;
+    inset: 6px -6px -6px 6px;
+    z-index: -1;
+    background: var(--ink);
+    mask: var(--dither-50);
+  }
+
+  .ghost svg {
+    display: none;
+  }
+
+  .ghostTitle {
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ghostTitle::after {
+    content: '';
+    flex: 1;
+    align-self: stretch;
+    margin: 12px 0;
+    background: currentColor;
+    mask: var(--dither-25);
+  }
+
+  .closedNote {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .reopen {
+    margin-left: 0;
+    padding: 2px 8px 3px;
   }
 
   .overlay,
@@ -219,20 +284,28 @@
     background: var(--paper);
   }
 
+  .overlay::before,
+  .reader::before {
+    display: none;
+  }
+
   .overlay .frame,
   .reader .frame {
     display: flex;
     flex-direction: column;
     min-height: 0;
     height: 100%;
+    border: 0;
   }
 
   .overlay .bar,
   .reader .bar {
     position: sticky;
     top: 0;
+    height: auto;
     padding: calc(env(safe-area-inset-top) + 8px) 16px 8px;
     background: var(--paper);
+    color: var(--ink);
     gap: 12px;
   }
 
