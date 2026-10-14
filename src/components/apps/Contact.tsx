@@ -22,7 +22,7 @@ export function Contact() {
   return (
     <>
       <p className={styles.intro}>
-        I’m happy to talk about AI agents or data infrastructure. Email reaches me fastest.
+        For opportunities or questions about my work, please reach out by email.
       </p>
       <a className={clsx(styles.mail, 'pix')} href={`mailto:${identity.email}`}>
         {identity.email}

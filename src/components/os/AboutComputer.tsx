@@ -21,7 +21,7 @@ export function AboutComputer() {
           <h2 id="computer-name" className="pix">
             jaredmchester.com
           </h2>
-          <p>Version 2, drawn in two inks.</p>
+          <p>Version 2.0</p>
         </div>
       </header>
       <ComputerFacts nextVersion={nextPackage.version} />
