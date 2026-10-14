@@ -13,11 +13,11 @@ export const identity = {
   positioning:
     'I’m a senior software engineer at Amazon Ads in New York, where I build AI agents and the data infrastructure that supports them.',
   about: [
-    'I designed and serve as tech lead for the Pitching Agent, an AI agent that turns an advertiser’s account data into a complete pitch deck. It cut pitch preparation from two hours to about five minutes. Today it serves 5,000 Amazon Ads sellers and saves more than 100,000 hours a year.',
-    'I also designed the domain agent that places four teams’ AI capabilities behind a single interface, so products integrate once to reach all of them. It is now live in production.',
-    'Earlier at Amazon, I focused on data infrastructure. I led the Insights API, which serves 1.2 billion records a month. I also built an orchestration service that runs more than 2,000 Spark jobs over tens of petabytes a month and cut their compute costs by about 40%.',
-    'Before Amazon, I built internal security applications at AT&T. At Rutgers, I led five developers building computer-vision tools for a Tourette syndrome study.',
-    'Within my organization, I mentor new graduates and serve on promotion panels. I also founded its GenAI talk series. Outside of work, I build independent apps, most recently Counterdex, a Pokémon team builder.',
+    'I love hard problems, especially the ones between a promising idea and something people rely on every day. Right now that means AI agents. I find it exciting to watch a model become a dependable tool once it has good data and firm guardrails around it.',
+    'I designed and serve as tech lead for the Pitching Agent, which turns an advertiser’s account data into a complete pitch deck in about five minutes. It serves 5,000 Amazon Ads sellers and saves more than 100,000 hours a year. I also designed the domain agent that brings four teams’ AI capabilities behind a single interface.',
+    'Before agents, I spent years on data infrastructure. I led the Insights API, which serves 1.2 billion records a month, and built the orchestration service behind more than 2,000 Spark jobs. That work taught me that an agent is only as good as the data beneath it.',
+    'I love to speak and teach, so I founded my organization’s GenAI talk series and mentor new graduates. I learn best by building, which is why I keep shipping my own apps, most recently Counterdex, a Pokémon team builder.',
+    'My goal is to lead agent platforms that entire organizations rely on, with reliability and data quality in place from day one. Ultimately, I want AI agents to earn the trust people already place in their databases.',
   ],
   education:
     'B.S. Computer Science, minor in mathematics, Rutgers University, summa cum laude, 2021',
