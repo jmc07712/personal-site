@@ -119,7 +119,7 @@
 }
 
 .rows:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--ink);
+  box-shadow: inset 0 0 0 round(down, 2px, var(--dot)) var(--ink);
 }
 
 .gridlines {

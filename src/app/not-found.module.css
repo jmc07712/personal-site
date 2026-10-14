@@ -8,7 +8,7 @@
 .window {
   width: min(520px, 100%);
   border: 1px solid var(--ink);
-  box-shadow: 6px 6px 0 var(--ink);
+  box-shadow: round(down, 6px, var(--dot)) round(down, 6px, var(--dot)) 0 var(--ink);
 }
 
 .bar {

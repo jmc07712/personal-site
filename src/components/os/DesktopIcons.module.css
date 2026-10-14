@@ -42,7 +42,7 @@
 .icon:focus-visible .label {
   outline: 2px solid var(--ink);
   outline-offset: 1px;
-  box-shadow: 0 0 0 5px var(--paper);
+  box-shadow: 0 0 0 round(down, 5px, var(--dot)) var(--paper);
 }
 
 /* Medium screens: the icons become a dock along the bottom of the desktop. */

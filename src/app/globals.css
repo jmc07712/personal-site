@@ -125,7 +125,8 @@ button {
   border: 1px solid var(--ink);
   background: var(--paper);
   color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
+  /* Snapped to whole dots so the hard edge stays crisp at every interface scale. */
+  box-shadow: round(down, 3px, var(--dot)) round(down, 3px, var(--dot)) 0 var(--ink);
   font: 20px/20px var(--font-chrome);
   -webkit-font-smoothing: none;
   text-decoration: none;
