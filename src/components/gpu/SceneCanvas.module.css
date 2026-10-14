@@ -10,6 +10,15 @@
   pointer-events: none;
 }
 
+/* A faint LCD grid over the scene and under the windows, fixed to the screen. */
+.layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  mask: var(--lcd-grid);
+}
+
 /* The CPU still is drawn once, so it scrolls with the top of the page instead of staying fixed. */
 .still {
   position: absolute;

@@ -84,7 +84,7 @@ Doing the hub and the points in one dither is what keeps the scene one image: pa
 - **Reduced motion.** `prefers-reduced-motion` or Save-Data gives a still frame and no boot. View > Pause scene stops the scene and remembers the choice in `localStorage`.
 - **Lifecycle.** The renderer starts once the browser is idle after first paint, stops while the tab is hidden, and rebuilds its GPU resources if the WebGL context is lost and restored.
 
-The caption under the desktop icons is computed from the live point count: 1.2 billion Insights API records a month divided by the points, so each point stands for about 4,578 records on desktop and 36,621 in Pocket mode.
+A visually hidden caption describes the scene for screen readers, computed from the live point count: 1.2 billion Insights API records a month divided by the points, so each point stands for about 4,578 records on desktop and 36,621 in Pocket mode.
 
 ### Windows and routes
 

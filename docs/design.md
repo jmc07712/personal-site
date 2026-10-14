@@ -368,3 +368,8 @@ This replaces 4a's light chrome and square screen. The calm GPU budget from 4a s
 3. Shut Down closes the windows one after another and pulls every particle into the agent's core. The screen then goes dark like an old CRT switching off, shrinking to a line and then a dot. Last comes the line "It's now safe to turn off your computer." with a Power on button, and any key works too. Power on runs Restart, which replays the particle boot. With reduced motion it goes straight to the last screen.
 4. During the existing particle boot, a short BIOS-style log types out in the bottom-left corner and fades when the desktop appears. It never delays or changes the particle boot.
 5. New copy follows the site's style rules, including plain sentences and the banned-word list in the copy test.
+
+### 13d. LCD grid and a quieter footer
+
+1. A faint grid of 16-dot cells, outlined in every other dot of ink, sits over the wallpaper and under the windows, fixed to the screen like the pixel grid of an LCD.
+2. The footer holds only my name, my city and the source link. The scene's text description stays for screen readers and is hidden visually.

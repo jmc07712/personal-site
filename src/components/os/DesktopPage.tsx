@@ -130,7 +130,8 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
               <span>
                 {identity.name}, {identity.location}
               </span>
-              <SceneCaption />
+              {/* The canvas is aria-hidden, so screen readers get the scene in words here. */}
+              <SceneCaption className="sr-only" />
               <a href={identity.source}>Source</a>
             </footer>
           </section>
