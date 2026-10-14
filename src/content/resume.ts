@@ -11,12 +11,13 @@ export const identity = {
   linkedin: 'https://www.linkedin.com/in/jared-chester-52b76a190/',
   source: 'https://github.com/jmc07712/personal-site',
   positioning:
-    'Senior software engineer at Amazon Ads in New York. I build AI agents and the data infrastructure they run on.',
+    'I’m a senior software engineer at Amazon Ads in New York. I build AI agents and the data infrastructure underneath them.',
   about: [
-    'I designed and lead the Pitching Agent. It turns an advertiser’s account data into a pitch deck in about five minutes, down from two hours. It serves 5,000 Amazon Ads sellers and saves more than 100,000 hours a year.',
-    'I now lead the design of a domain agent that puts four teams’ AI capabilities behind one interface. A product integrates once to reach all four.',
-    'Before agents I built data infrastructure. The Insights API I led serves 1.2 billion records a month. My orchestration service runs 2,000+ Spark jobs over tens of petabytes a month and cut their compute cost by about 40%.',
-    'I also mentor new grads and sit on promotion panels. I run my org’s GenAI talk series and ship apps on the side.',
+    'A lot of my work takes a job people did by hand and gets it down to minutes. I designed the Pitching Agent and I’m its tech lead. It turns an advertiser’s account data into a pitch deck in about five minutes, down from two hours. It serves 5,000 Amazon Ads sellers and saves more than 100,000 hours a year.',
+    'I also designed the domain agent that now sits in front of four teams’ AI tools. A product integrates once and gets all four.',
+    'Before agents, I worked on data infrastructure. I led the Insights API, which serves 1.2 billion records a month. I also built the service that runs 2,000+ Spark jobs over tens of petabytes a month, which cut their compute cost by about 40%.',
+    'I started out in a Rutgers research lab, turning video of behavior into data for a Tourette syndrome study. Then I built security apps at AT&T, and I joined Amazon Ads in 2022.',
+    'At Amazon I mentor new grads and sit on promotion panels, and I started my org’s GenAI talk series. On the side I build small apps. The latest is Counterdex, a Pokémon team builder.',
   ],
   education:
     'B.S. Computer Science, minor in mathematics, Rutgers University, summa cum laude, 2021',
@@ -129,7 +130,7 @@ export const spans: Span[] = [
     to: '2023-12',
     approx: true,
     summary:
-      'A DynamoDB cache that let pipelines in any VPC look up pseudonymized IDs after a privacy change. It hits 97–99% of the time in three regions.',
+      'Built a DynamoDB cache so pipelines in any VPC could look up pseudonymized IDs after a privacy change. It hits 97–99% of the time in three regions.',
     metrics: [
       { value: '97–99%', label: 'cache hit rate in 3 regions' },
       { value: '3B+', label: 'pseudonymized records a month' },
@@ -146,7 +147,7 @@ export const spans: Span[] = [
     to: '2024-12',
     approx: true,
     summary:
-      'The storage and serving layer behind the Insights API. Teams add a new insight by writing a config file.',
+      'Redesigned the storage and serving layer behind the Insights API. Teams now add a new insight by writing a config file.',
     metrics: [],
     stack: ['Java', 'Lambda', 'DynamoDB', 'S3'],
   },
@@ -159,7 +160,7 @@ export const spans: Span[] = [
     to: '2025-12',
     approx: true,
     summary:
-      'One API for advertising insights that product UIs, backend services and AI agents all share. It serves 1.2 billion records a month.',
+      'Designed and led one API for advertising insights, shared by product UIs, backend services and AI agents. It serves 1.2 billion records a month.',
     metrics: [
       { value: '1.2B', label: 'records a month' },
       { value: '10M+', label: 'requests a month' },
@@ -177,7 +178,7 @@ export const spans: Span[] = [
     to: '2025-12',
     approx: true,
     summary:
-      'Picks a third-party measurement study in under two minutes, down from four hours. A rules engine and a ranking model choose the study, and an LLM explains the pick.',
+      'Led a team of four building a tool that picks a third-party measurement study in under two minutes, down from four hours. An LLM explains each pick.',
     metrics: [
       { value: '4h → <2m', label: 'to choose a study' },
       { value: '4', label: 'engineers led' },
@@ -193,7 +194,7 @@ export const spans: Span[] = [
     to: '2025-12',
     approx: true,
     summary:
-      'Starts each of 2,000+ Spark jobs the moment its input data lands. That cut compute cost by about 40% and took a full refresh from two weeks to under one.',
+      'Built a service that starts each of 2,000+ Spark jobs the moment its input data lands. Compute cost fell by about 40%, and a full refresh went from two weeks to under one.',
     metrics: [
       { value: '2,000+', label: 'Spark/EMR jobs' },
       { value: '~40%', label: 'lower compute cost' },
@@ -210,7 +211,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'An AI agent on Claude and Amazon Bedrock that turns account data into a pitch deck in five minutes, down from two hours. It serves 5,000 sellers.',
+      'Designed an AI agent on Claude and Amazon Bedrock that turns account data into a pitch deck in five minutes, down from two hours. It serves 5,000 sellers.',
     metrics: [
       { value: '5,000', label: 'sellers served' },
       { value: '2h → 5m', label: 'to build a pitch' },
@@ -241,7 +242,7 @@ export const spans: Span[] = [
     to: 'now',
     approx: true,
     summary:
-      'One agent in front of four teams’ AI capabilities, so a product integrates once to reach all of them. It’s live in production.',
+      'Designed one agent in front of four teams’ AI tools, so a product integrates once to reach all of them. It’s live in production.',
     metrics: [
       { value: '4', label: 'teams behind one agent' },
       { value: '50', label: 'engineers in the org it covers' },
