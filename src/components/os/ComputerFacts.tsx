@@ -3,6 +3,7 @@
 import clsx from 'clsx';
 import { useEffect, useState, version as reactVersion } from 'react';
 import { useScene } from '@/components/gpu/SceneProvider';
+import { uiScale } from '@/lib/uiScale';
 import styles from './AboutComputer.module.css';
 import { gpuLabel, uptimeLabel } from './machine';
 import { useWindowManager } from './WindowManager';
@@ -16,12 +17,6 @@ interface Readings {
   display: string;
   scale: string;
   uptime: string;
-}
-
-/** The interface's scale factor, which large screens set in the --ui custom property. */
-function uiScale(): number {
-  const value = getComputedStyle(document.documentElement).getPropertyValue('--ui');
-  return Number.parseFloat(value) || 1;
 }
 
 /** The frame rate, or why there isn't one yet. */
