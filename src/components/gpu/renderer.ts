@@ -7,16 +7,16 @@
  *   2. splat      each point adds its ink to one cell of a half-float buffer (splat.glsl.ts)
  *   3. composite  raymarch the hub, multiply the ink in, dither once (compositor.ts)
  *
- * This class is the scene's state machine: boot, wallpaper, experience, follow. It knows nothing
- * about React: callers feed it the pointer, the role-bar rects, the followed window and a mode, and
- * get pixels back. All simulation coordinates are page px, so formations stay attached to the
- * document as it scrolls.
+ * This class is the scene's state machine: boot, wallpaper, experience, follow, shutdown. It knows
+ * nothing about React: callers feed it the pointer, the role-bar rects, the followed window and a
+ * mode, and get pixels back. All simulation coordinates are page px, so formations stay attached
+ * to the document as it scrolls.
  */
 import { identity } from '@/content/resume';
 import { BarFormation, barsInView, MAX_BARS, packBars, writeBarSlots } from './bars';
 import { BootClock, DESKTOP_BOOT, POCKET_BOOT, SETTLED, type BootUniforms } from './boot';
 import { CompositePass, type CompositeFrame } from './compositor';
-import { RIVER_CURRENT, seedInflow, seedMeta, seedRiver } from './formations';
+import { RIVER_CURRENT, seedInflow, seedMeta, seedRiver, writeCoreTargets } from './formations';
 import { clearTarget, createDensityTarget, deleteDensityTarget, type DensityTarget } from './gl';
 import { loadFont, rasterizeName } from './glyphs';
 import { FollowFormation, haloArea } from './halo';
@@ -32,7 +32,7 @@ import { writeTextTargets, type InkedPixels } from './text';
 
 export type { Rect } from './rect';
 
-export type SceneMode = 'boot' | 'wallpaper' | 'experience' | 'follow';
+export type SceneMode = 'boot' | 'wallpaper' | 'experience' | 'follow' | 'shutdown';
 
 export interface SceneOptions {
   /** How many points to simulate (see sizing.ts). */
@@ -47,6 +47,15 @@ export interface SceneOptions {
   pocket: boolean;
   /** Never animate: still frames only, no boot. */
   reducedMotion: boolean;
+}
+
+/** Live numbers about the scene, for About This Computer and the boot log. */
+export interface SceneStats {
+  /** The GPU as the browser reports it, or "WebGL2" when it keeps that private. */
+  gpu: string;
+  particles: number;
+  /** Frames drawn per second over the last second of animation; 0 while stopped. */
+  fps: number;
 }
 
 /** GPU resources, rebuilt from scratch if the context is lost and restored. */
@@ -67,16 +76,29 @@ const RIPPLE_SECONDS = 2.5;
 /** Adaptive quality: after this many slow frames in a row, use bigger pixels, up to MAX_PIXEL. */
 const SLOW_FRAME_LIMIT = 45;
 const MAX_PIXEL = 5;
+/** Shut Down sweeps the points into the core over this many seconds... */
+const SHUTDOWN_SWEEP = 1.2;
+/** ...and reports them all in once this many have passed. */
+const SHUTDOWN_DONE = 1.9;
 
 /** A rect as a shader vec4 (x, y, w, h), zeros for none. */
 const rectUniform = (r: Rect | null): [number, number, number, number] =>
   r ? [r.x, r.y, r.w, r.h] : [0, 0, 0, 0];
+
+/** The GPU's name from WEBGL_debug_renderer_info, where the browser shares it. */
+function rendererName(gl: WebGL2RenderingContext): string {
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const name: unknown = info && gl.getParameter(info.UNMASKED_RENDERER_WEBGL);
+  return typeof name === 'string' && name ? name : 'WebGL2';
+}
 
 export class SceneRenderer {
   /** Called once per boot, when the hub has resolved and the page can reveal its windows. */
   onBootDone: (() => void) | null = null;
   /** Called after every drawn frame, while the drawing buffer is still readable (region copies). */
   onFrame: ((canvas: HTMLCanvasElement) => void) | null = null;
+  /** Called once Shut Down has pulled every point into the core. */
+  onShutDown: (() => void) | null = null;
 
   private static support: boolean | undefined;
 
@@ -94,6 +116,8 @@ export class SceneRenderer {
   private mode: SceneMode = 'wallpaper';
   private phase: Phase = 'unseeded';
   private boot: BootClock | null = null;
+  /** Seconds into Shut Down, or null while the machine is on. */
+  private shutdownTime: number | null = null;
   /** Bumped to cancel a boot still waiting for its font. */
   private bootRequest = 0;
   private uniforms: BootUniforms = SETTLED;
@@ -113,6 +137,8 @@ export class SceneRenderer {
   private nameArea = 0;
   private pixel: number;
   private slowFrames = 0;
+  private readonly frameRate = { fps: 0, frames: 0, seconds: 0 };
+  private readonly gpuName: string;
   private disposed = false;
 
   /** Whether this browser can run the scene. Cached: probing creates a WebGL context. */
@@ -146,6 +172,7 @@ export class SceneRenderer {
     this.targets = new Float32Array(options.particles * 4);
     this.stage.resize(this.pixel);
     this.gpu = this.createGpu();
+    this.gpuName = rendererName(gl);
     canvas.addEventListener('webglcontextlost', this.handleContextLost);
     canvas.addEventListener('webglcontextrestored', this.handleContextRestored);
   }
@@ -192,7 +219,17 @@ export class SceneRenderer {
     if (this.disposed) return;
     this.mode = mode;
     if (mode === 'boot') this.beginBoot();
+    else if (mode === 'shutdown') this.beginShutdown();
     else this.renderStill();
+  }
+
+  /** What About This Computer and the boot log report. */
+  get stats(): SceneStats {
+    return {
+      gpu: this.gpuName,
+      particles: this.options.particles,
+      fps: this.loop.running ? this.frameRate.fps : 0,
+    };
   }
 
   /** Jumps to the end of the boot (any input during it, or a repeat visit). */
@@ -244,6 +281,7 @@ export class SceneRenderer {
     this.gpu = null;
     this.onBootDone = null;
     this.onFrame = null;
+    this.onShutDown = null;
   }
 
   // ---------------------------------------------------------------- frames
@@ -255,6 +293,7 @@ export class SceneRenderer {
     this.advance(dt, place);
     this.draw(dt, place, this.takeSnap());
     this.adaptQuality(dt);
+    this.countFrame(dt);
   };
 
   private readonly drawStill = (): void => {
@@ -271,6 +310,7 @@ export class SceneRenderer {
   private advance(dt: number, place: Placement): void {
     this.time += dt;
     if (this.boot) this.advanceBoot(dt);
+    if (this.shutdownTime !== null) this.advanceShutdown(dt);
     this.pointer.step(dt);
     this.cursor.step(dt);
     this.rippleState.age += dt;
@@ -313,6 +353,16 @@ export class SceneRenderer {
       this.slowFrames = 0;
       this.relayout();
     }
+  }
+
+  private countFrame(dt: number): void {
+    const rate = this.frameRate;
+    rate.frames += 1;
+    rate.seconds += dt;
+    if (rate.seconds < 1) return;
+    rate.fps = rate.frames / rate.seconds;
+    rate.frames = 0;
+    rate.seconds = 0;
   }
 
   private relayout(): void {
@@ -431,6 +481,39 @@ export class SceneRenderer {
     this.tethers.settle();
     this.phase = 'live';
     this.snapNext = true;
+  }
+
+  // ---------------------------------------------------------------- shutdown
+
+  /**
+   * The boot's implosion run backwards: the name formation becomes a ball in the core and takes
+   * every point back, from the tethers, the bars and the halo alike. A stopped scene jumps
+   * straight to the end.
+   */
+  private beginShutdown(): void {
+    if (this.phase !== 'live') this.skipBoot();
+    const place = this.stage.place();
+    this.updateHub(place);
+    const { x, y, radius } = this.hub.core;
+    const ball = { x, y, radius: radius * 0.85 };
+    writeCoreTargets(this.targets, ball, this.rng);
+    this.nameSpan = [ball.x - ball.radius, 2 * ball.radius];
+    this.nameArea = Math.PI * ball.radius ** 2;
+    this.gpu?.particles.uploadTargets(this.targets);
+    this.shutdownTime = 0;
+    if (!this.loop.running) {
+      this.snapNext = true;
+      this.advanceShutdown(SHUTDOWN_DONE);
+      this.renderStill();
+    }
+  }
+
+  private advanceShutdown(dt: number): void {
+    if (this.shutdownTime === null) return;
+    const before = this.shutdownTime;
+    const t = (this.shutdownTime += dt);
+    this.uniforms = { ...SETTLED, implode: 1 - Math.min(1, t / SHUTDOWN_SWEEP) };
+    if (before < SHUTDOWN_DONE && t >= SHUTDOWN_DONE) this.onShutDown?.();
   }
 
   /** The pixel font's family as next/font registered it on the root element. */

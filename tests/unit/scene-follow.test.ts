@@ -192,6 +192,12 @@ describe('scene mode', () => {
       following: followTarget(new Map(windows), heroArea(scrollY, viewport)) !== null,
     });
 
+  it('lets Shut Down override everything, even the boot', () => {
+    expect(sceneModeFor({ shutdown: true, booting: true, trace: true, following: true })).toBe(
+      'shutdown',
+    );
+  });
+
   it('lets the boot play undisturbed', () => {
     expect(sceneModeFor({ booting: true, trace: true, following: true })).toBe('boot');
   });

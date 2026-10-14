@@ -19,6 +19,9 @@ interface WindowManagerValue {
   close: (id: string) => void;
   focus: (id: string) => void;
   move: (id: string, x: number, y: number) => void;
+  closeAll: () => void;
+  /** Puts every dragged window back where it started. */
+  cleanUp: () => void;
   /** The element that opened a window, so focus can return there when it closes. */
   openerOf: (id: string) => HTMLElement | null;
 }
@@ -33,7 +36,20 @@ export const DESKTOP_WINDOWS = [
   'docly',
   'dateescape',
   'contact',
+  'computer',
 ] as const;
+
+/**
+ * Leaves a routed window's URL as it closes. Undo our own push when we made it; after a direct
+ * visit there's nothing to go back to, so replace the URL with the desktop's instead.
+ */
+function leaveRoute(id: string) {
+  const path = pathForWindow(id);
+  if (!path || window.location.pathname !== path) return;
+  const pushedByUs = (window.history.state as { window?: string } | null)?.window === id;
+  if (pushedByUs) window.history.back();
+  else window.history.replaceState(null, '', '/');
+}
 
 interface WindowManagerProps {
   /** Windows open on first render, in stacking order. A route like /work/x adds `case:x`. */
@@ -66,13 +82,13 @@ export function WindowManager({ initialOpen, children }: WindowManagerProps) {
 
   const close = useCallback((id: string) => {
     dispatch({ type: 'close', id });
-    const path = pathForWindow(id);
-    if (!path || window.location.pathname !== path) return;
-    // Undo our own push when we made it. After a direct visit there's nothing to go back to,
-    // so replace the URL with the desktop's instead.
-    const pushedByUs = (window.history.state as { window?: string } | null)?.window === id;
-    if (pushedByUs) window.history.back();
-    else window.history.replaceState(null, '', '/');
+    leaveRoute(id);
+  }, []);
+
+  const closeAll = useCallback(() => {
+    dispatch({ type: 'closeAll' });
+    const routed = windowForPath(window.location.pathname);
+    if (routed) leaveRoute(routed);
   }, []);
 
   const focus = useCallback((id: string) => dispatch({ type: 'focus', id }), []);
@@ -80,6 +96,7 @@ export function WindowManager({ initialOpen, children }: WindowManagerProps) {
     (id: string, x: number, y: number) => dispatch({ type: 'move', id, x, y }),
     [],
   );
+  const cleanUp = useCallback(() => dispatch({ type: 'cleanUp' }), []);
   const openerOf = useCallback((id: string) => openers.current.get(id) ?? null, []);
 
   // Back and forward: make the routed windows match the URL.
@@ -98,8 +115,8 @@ export function WindowManager({ initialOpen, children }: WindowManagerProps) {
   }, []);
 
   const value = useMemo(
-    () => ({ state, open, close, focus, move, openerOf }),
-    [state, open, close, focus, move, openerOf],
+    () => ({ state, open, close, focus, move, closeAll, cleanUp, openerOf }),
+    [state, open, close, focus, move, closeAll, cleanUp, openerOf],
   );
   return <WindowManagerContext value={value}>{children}</WindowManagerContext>;
 }

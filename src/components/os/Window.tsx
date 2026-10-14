@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { motion, useDragControls, useMotionValue } from 'motion/react';
+import { animate, motion, useDragControls, useMotionValue } from 'motion/react';
 import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { CAN_DRAG_QUERY, POCKET_QUERY, REDUCED_MOTION_QUERY, useMedia } from '@/lib/useMedia';
 import type { BitmapName } from './bitmaps';
@@ -53,6 +53,17 @@ export function Window({
   const dragControls = useDragControls();
   const x = useMotionValue(win?.pos?.x ?? 0);
   const y = useMotionValue(win?.pos?.y ?? 0);
+
+  // Clean up forgets where the window was dragged: slide it back to its slot.
+  const dragged = win?.pos !== undefined;
+  useEffect(() => {
+    if (dragged || (x.get() === 0 && y.get() === 0)) return;
+    const transition = reducedMotion
+      ? { duration: 0 }
+      : { duration: 0.3, ease: 'easeOut' as const };
+    const slides = [animate(x, 0, transition), animate(y, 0, transition)];
+    return () => slides.forEach((slide) => slide.stop());
+  }, [dragged, x, y, reducedMotion]);
 
   // Each open request after the first render (even for a window that's already open) brings the
   // window into view and moves focus into it.

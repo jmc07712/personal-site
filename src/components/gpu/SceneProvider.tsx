@@ -22,7 +22,7 @@ import {
 import { sceneModeFor, type ModeInputs } from './modes';
 import type { Rect } from './rect';
 import { copyRegions } from './regions';
-import type { SceneMode, SceneRenderer } from './renderer';
+import type { SceneMode, SceneRenderer, SceneStats } from './renderer';
 import { POCKET_QUERY, sceneOptionsFor } from './sizing';
 
 export interface SceneState {
@@ -44,6 +44,13 @@ export interface SceneState {
   pointCount: number;
   /** A canvas inside a window that shows the scene beneath it (see GpuRegion). Null unregisters. */
   registerRegion(id: string, canvas: HTMLCanvasElement | null): void;
+  /** Live numbers from the running renderer, or null before it starts (or without WebGL2). */
+  stats(): SceneStats | null;
+  /**
+   * Shut Down: pulls every point into the hub's core. Resolves once they are all in, and the
+   * scene stops for good; only a reload starts it again.
+   */
+  shutDown(): Promise<void>;
 }
 
 /** The channel between the provider and whichever SceneCanvas variant is running. */
@@ -91,12 +98,20 @@ export function SceneProvider({ children }: { children: ReactNode }) {
   const [active, setActive] = useState(true);
   const [mode, setModeState] = useState<SceneMode>('wallpaper');
   const [ready, setReady] = useState(false);
+  const [poweredOff, setPoweredOff] = useState(false);
   const rendererRef = useRef<SceneRenderer | null>(null);
   const modeRef = useRef<SceneMode>('wallpaper');
   // What the mode is decided from. A ref, as SceneFollow reports every frame.
-  const inputs = useRef<ModeInputs>({ booting: false, trace: false, following: false });
+  const inputs = useRef<ModeInputs>({
+    shutdown: false,
+    booting: false,
+    trace: false,
+    following: false,
+  });
   const regionsRef = useRef(new Map<string, HTMLCanvasElement>());
   const readyRef = useRef(false);
+  /** Set while a shutdown waits for the points to reach the core. */
+  const shutDownDone = useRef<(() => void) | null>(null);
   // Read by attach(), which must keep a stable identity while these change.
   const latest = useRef({ paused, stillOnly });
   useEffect(() => {
@@ -130,6 +145,7 @@ export function SceneProvider({ children }: { children: ReactNode }) {
         markBooted();
         arbitrate({ booting: false });
       };
+      next.onShutDown = () => shutDownDone.current?.();
       // The boot plays once a session, from the top of the page, and only if it can run to the end.
       const { paused: isPaused, stillOnly: isStill } = latest.current;
       const boots =
@@ -150,7 +166,7 @@ export function SceneProvider({ children }: { children: ReactNode }) {
     [stillOnly, attach],
   );
 
-  const running = renderer !== null && !stillOnly && !paused && !hidden && active;
+  const running = renderer !== null && !stillOnly && !paused && !hidden && active && !poweredOff;
   useEffect(() => {
     if (!renderer) return;
     if (running) {
@@ -188,6 +204,21 @@ export function SceneProvider({ children }: { children: ReactNode }) {
     if (canvas) regionsRef.current.set(id, canvas);
     else regionsRef.current.delete(id);
   }, []);
+  const stats = useCallback(() => rendererRef.current?.stats ?? null, []);
+  const shutDown = useCallback(
+    () =>
+      new Promise<void>((resolve) => {
+        shutDownDone.current = () => {
+          shutDownDone.current = null;
+          setPoweredOff(true);
+          resolve();
+        };
+        // Without a renderer there are no points to gather. A stopped one reports at once.
+        if (!rendererRef.current) shutDownDone.current();
+        arbitrate({ shutdown: true });
+      }),
+    [arbitrate],
+  );
 
   const scene = useMemo<SceneState>(
     () => ({
@@ -201,6 +232,8 @@ export function SceneProvider({ children }: { children: ReactNode }) {
       setFollow,
       pointCount: sceneOptionsFor(pocket, stillOnly).particles,
       registerRegion,
+      stats,
+      shutDown,
     }),
     [
       ready,
@@ -213,6 +246,8 @@ export function SceneProvider({ children }: { children: ReactNode }) {
       setFollow,
       pocket,
       registerRegion,
+      stats,
+      shutDown,
     ],
   );
 

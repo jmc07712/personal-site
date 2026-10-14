@@ -1,0 +1,125 @@
+/* Above everything, the menubar and menus included, and it swallows clicks while it plays. */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  cursor: wait;
+}
+
+.crt {
+  overflow: hidden;
+}
+
+/*
+ * The CRT switching off. The beam starts as the whole screen; its huge ink shadow covers
+ * everything outside it. It squashes to a line across the middle, the line shrinks to a dot,
+ * and the dot goes out. Inside, the picture flares to paper as the beam narrows.
+ */
+.beam {
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 0 100vmax var(--ink);
+  animation: switch-off 1000ms ease-in forwards;
+}
+
+.beam::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  animation: flare 1000ms step-end forwards;
+}
+
+@keyframes switch-off {
+  0% {
+    inset: 0;
+  }
+  28% {
+    inset: calc(50% - 2px) 0;
+  }
+  52% {
+    inset: calc(50% - 2px) calc(50% - 2px);
+  }
+  82% {
+    inset: calc(50% - 2px) calc(50% - 2px);
+  }
+  100% {
+    inset: 50%;
+  }
+}
+
+/* Steps through the dither, never an in-between colour. */
+@keyframes flare {
+  0% {
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+    mask: var(--dither-25);
+  }
+  20% {
+    mask: var(--dither-50);
+  }
+  25% {
+    mask: none;
+  }
+  88% {
+    mask: var(--dither-50);
+  }
+  100% {
+    mask: var(--dither-50);
+  }
+}
+
+.off {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 28px;
+  height: 100%;
+  padding: 24px;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  cursor: default;
+}
+
+.off h2 {
+  max-width: 16em;
+  margin: 0;
+  font-size: 40px;
+  line-height: 40px;
+}
+
+.off p {
+  margin: 0;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.power {
+  height: 38px;
+  padding: 0 18px 1px;
+  border: 1px solid var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--paper);
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.power:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.power:active {
+  translate: 3px 3px;
+  box-shadow: none;
+}
+
+.power:focus-visible {
+  outline-color: var(--paper);
+  outline-offset: 4px;
+}

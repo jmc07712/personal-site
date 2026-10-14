@@ -14,13 +14,16 @@ import { caseFiles } from '@/content/caseFiles';
 import { identity, products } from '@/content/resume';
 import { getCareerTrace } from '@/lib/careerTrace';
 import { listPosts } from '@/lib/posts';
+import { AboutComputer } from './AboutComputer';
 import { isBitmapName } from './bitmaps';
 import { bootCurtainScript } from './bootCurtain';
+import { BootLog } from './BootLog';
 import styles from './DesktopPage.module.css';
 import { DesktopIcons } from './DesktopIcons';
 import { MenuBar } from './MenuBar';
 import { PocketDock } from './PocketDock';
 import { BootCurtainLifter } from './SceneChrome';
+import { ShutDown } from './ShutDown';
 import { Window } from './Window';
 import { WindowManager } from './WindowManager';
 
@@ -53,6 +56,7 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
         <script dangerouslySetInnerHTML={{ __html: bootCurtainScript() }} />
         <BootCurtainLifter />
         <SceneCanvas variant="desktop" />
+        <BootLog />
         <SceneFollow />
         <MenuBar />
         <main className={styles.main}>
@@ -159,7 +163,9 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
             <Post post={post} />
           </Window>
         ))}
+        <AboutComputer />
         <PocketDock />
+        <ShutDown />
       </SceneProvider>
     </WindowManager>
   );

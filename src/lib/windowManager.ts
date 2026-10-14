@@ -27,7 +27,10 @@ export type WMAction =
   | { type: 'open'; id: string }
   | { type: 'close'; id: string }
   | { type: 'focus'; id: string }
-  | { type: 'move'; id: string; x: number; y: number };
+  | { type: 'move'; id: string; x: number; y: number }
+  | { type: 'closeAll' }
+  /** Forgets every dragged position, so each window goes back to its slot. */
+  | { type: 'cleanUp' };
 
 export function createWM(ids: string[], open: string[]): WM {
   const wins: Record<string, Win> = {};
@@ -46,12 +49,35 @@ export function topOpen(state: WM): string | null {
   return top?.id ?? null;
 }
 
+/** Whether any window sits somewhere the user dragged it. */
+export function anyMoved(state: WM): boolean {
+  return Object.values(state.wins).some((win) => win.pos);
+}
+
 function raise(state: WM, win: Win): WM {
   const z = state.z + 1;
   return { wins: { ...state.wins, [win.id]: { ...win, z } }, z, focused: win.id };
 }
 
+/** A copy of the state with `change` applied to every window, or the same state if none changed. */
+function eachWindow(state: WM, change: (win: Win) => Win): WM {
+  let changed = false;
+  const wins: Record<string, Win> = {};
+  for (const [id, win] of Object.entries(state.wins)) {
+    wins[id] = change(win);
+    changed ||= wins[id] !== win;
+  }
+  return changed ? { ...state, wins } : state;
+}
+
 export function wmReducer(state: WM, action: WMAction): WM {
+  if (action.type === 'closeAll') {
+    const next = eachWindow(state, (win) => (win.open ? { ...win, open: false } : win));
+    return next === state ? state : { ...next, focused: null };
+  }
+  if (action.type === 'cleanUp') {
+    return eachWindow(state, (win) => (win.pos ? { ...win, pos: undefined } : win));
+  }
   const win = state.wins[action.id];
   switch (action.type) {
     case 'open': {

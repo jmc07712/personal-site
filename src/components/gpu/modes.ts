@@ -1,12 +1,14 @@
 /**
  * Which moment the scene shows, decided from what is on screen. Pure, so the rules can be tested:
- * the boot plays undisturbed; then the role bars win while the career trace is on screen; then a
- * halo round whichever window covers the most of the viewport, if it covers more than the hero;
- * otherwise the wallpaper.
+ * Shut Down overrides everything; the boot plays undisturbed; then the role bars win while the
+ * career trace is on screen; then a halo round whichever window covers the most of the viewport,
+ * if it covers more than the hero; otherwise the wallpaper.
  */
 import type { SceneMode } from './renderer';
 
 export interface ModeInputs {
+  /** Shut Down was chosen. Only a reload brings the scene back. */
+  shutdown?: boolean;
   booting: boolean;
   /** The career trace is open and on screen. */
   trace: boolean;
@@ -14,7 +16,8 @@ export interface ModeInputs {
   following: boolean;
 }
 
-export function sceneModeFor({ booting, trace, following }: ModeInputs): SceneMode {
+export function sceneModeFor({ shutdown, booting, trace, following }: ModeInputs): SceneMode {
+  if (shutdown) return 'shutdown';
   if (booting) return 'boot';
   if (trace) return 'experience';
   return following ? 'follow' : 'wallpaper';

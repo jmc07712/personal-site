@@ -16,17 +16,6 @@ export function BootCurtainLifter() {
   return null;
 }
 
-/** The menubar's pause control for the wallpaper scene. */
-export function ScenePauseButton({ className }: { className?: string }) {
-  const { paused, togglePaused, supported } = useScene();
-  if (!supported) return null;
-  return (
-    <button type="button" className={className} aria-pressed={paused} onClick={togglePaused}>
-      {paused ? 'Play scene' : 'Pause scene'}
-    </button>
-  );
-}
-
 /**
  * Replays the boot: forget that it played this session (and any pause), then reload at the top,
  * so the inline curtain script and the scene start fresh exactly as on a first visit.

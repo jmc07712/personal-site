@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createWM, topOpen, wmReducer } from '@/lib/windowManager';
+import { anyMoved, createWM, topOpen, wmReducer } from '@/lib/windowManager';
 
 describe('windowManager', () => {
   const initial = createWM(['about', 'experience', 'contact'], ['about']);
@@ -68,5 +68,21 @@ describe('windowManager', () => {
     s = wmReducer(s, { type: 'close', id: 'about' });
     s = wmReducer(s, { type: 'open', id: 'about' });
     expect(s.wins.about?.pos).toEqual({ x: 10, y: 20 });
+  });
+
+  it('closes every window at once and leaves nothing focused', () => {
+    const s = wmReducer(wmReducer(initial, { type: 'open', id: 'contact' }), { type: 'closeAll' });
+    expect(topOpen(s)).toBeNull();
+    expect(s.focused).toBeNull();
+    expect(wmReducer(s, { type: 'closeAll' })).toBe(s);
+  });
+
+  it('puts every dragged window back in its slot on clean up', () => {
+    const moved = wmReducer(initial, { type: 'move', id: 'about', x: 10, y: 20 });
+    expect(anyMoved(moved)).toBe(true);
+    const s = wmReducer(moved, { type: 'cleanUp' });
+    expect(s.wins.about?.pos).toBeUndefined();
+    expect(anyMoved(s)).toBe(false);
+    expect(wmReducer(s, { type: 'cleanUp' })).toBe(s);
   });
 });

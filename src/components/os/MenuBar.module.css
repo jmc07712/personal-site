@@ -4,109 +4,115 @@
   z-index: 1000;
   height: var(--bar);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   gap: 12px;
-  padding: 0 8px 0 12px;
+  padding: 0 8px 0 6px;
   background: var(--paper);
   border-bottom: 1px solid var(--ink);
 }
 
-.left,
+.menus,
 .right {
   display: flex;
   align-items: center;
-  gap: 2px;
   min-width: 0;
 }
 
-.glyph {
-  display: grid;
-  flex: none;
-  place-items: center;
-  margin-right: 8px;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
+.menus {
+  align-items: stretch;
 }
 
-.glyph:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.name {
-  margin-right: 14px;
-  font-size: 20px;
-  line-height: 20px;
-  white-space: nowrap;
-}
-
-.nav {
-  display: flex;
-  gap: 2px;
-}
-
-.item {
+/* Menu titles invert while their menu is open, as on a classic Mac. */
+.trigger {
   display: inline-flex;
   align-items: center;
-  height: 26px;
-  padding: 0 9px;
+  padding: 0 10px;
   border: 0;
   background: none;
   font-size: 20px;
   line-height: 20px;
-  text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
 }
 
-.item:hover,
-.item[aria-current='true'],
-.item[aria-pressed='true'] {
+.trigger:hover,
+.trigger[data-state='open'] {
   background: var(--ink);
   color: var(--paper);
 }
 
-.item:focus-visible {
-  outline-offset: -2px;
-  outline-color: var(--paper);
+.trigger:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: -4px;
   background: var(--ink);
   color: var(--paper);
+}
+
+.trigger svg {
+  display: block;
+}
+
+.name,
+.clock {
+  font-size: 20px;
+  line-height: 20px;
+  white-space: nowrap;
 }
 
 .clock {
-  padding: 0 6px 0 12px;
+  padding: 0 6px 0 18px;
+}
+
+/* Hangs from the bar, its top border on the bar's own rule. */
+.content {
+  z-index: 1100;
+  min-width: 200px;
+  padding: 4px 0;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
   font-size: 20px;
   line-height: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 28px 0 16px;
+  color: inherit;
+  text-decoration: none;
   white-space: nowrap;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
 }
 
-.sep {
-  width: 1px;
-  height: 16px;
-  margin: 0 6px;
+.item[data-highlighted] {
   background: var(--ink);
+  color: var(--paper);
 }
 
-/* Pocket mode: name and clock only; the dock handles navigation. */
-@media (max-width: 899px) {
-  .nav,
-  .sep {
-    display: none;
-  }
+/* Unavailable items are drawn in a 50% dither, the 1-bit grey. */
+.item[data-disabled] {
+  mask: var(--dither-50);
+  cursor: default;
 }
 
+.separator {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--ink);
+  mask: var(--dither-50);
+}
+
+/* Phones: the hub menu and the clock. The hub menu takes on the Go items. */
 @media (max-width: 768px) {
-  /* Pocket mode's screen has its own tap-to-wake control. */
-  .source,
-  .pause {
-    display: none;
-  }
-
+  .wide,
   .name {
-    margin-right: 0;
+    display: none;
   }
 }
 

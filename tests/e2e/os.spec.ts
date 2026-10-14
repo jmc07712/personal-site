@@ -10,11 +10,9 @@ test('About is open and focused on arrival', async ({ page }) => {
   await expect(page.locator('#win-about')).toBeVisible();
 });
 
-test('the menubar opens a window and brings it into view', async ({ page }) => {
-  await page
-    .getByRole('navigation', { name: 'Windows' })
-    .getByRole('button', { name: 'Experience' })
-    .click();
+test('the Go menu opens a window and brings it into view', async ({ page }) => {
+  await page.getByRole('menuitem', { name: 'Go' }).click();
+  await page.getByRole('menuitem', { name: 'Experience' }).click();
   await expect(page.locator('#win-experience')).toBeInViewport();
   await expect(page.locator('#win-experience')).toBeFocused();
 });
@@ -45,14 +43,13 @@ test('a window can be dragged by its title bar', async ({ page }) => {
 });
 
 test('Escape closes the focused window and returns focus to what opened it', async ({ page }) => {
-  const menuItem = page
-    .getByRole('navigation', { name: 'Windows' })
-    .getByRole('button', { name: 'Contact' });
-  await menuItem.click();
+  const go = page.getByRole('menuitem', { name: 'Go' });
+  await go.click();
+  await page.getByRole('menuitem', { name: 'Contact' }).click();
   await expect(page.locator('#win-contact')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator('#win-contact')).toBeHidden();
-  await expect(menuItem).toBeFocused();
+  await expect(go).toBeFocused();
 });
 
 test('selecting a span shows its numbers in the inspector', async ({ page }) => {

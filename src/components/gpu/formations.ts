@@ -1,7 +1,8 @@
 /**
- * Initial particle states. Positions are page px; `position.w` is the time (s into the boot) at
- * which a point leaves the stream and starts homing on its target, and `velocity.w` is the ink it
- * lays down, which the simulation computes, so seeds leave it at 0.
+ * Initial particle states, and the ball in the core that Shut Down pulls them into. Positions are
+ * page px; `position.w` is the time (s into the boot) at which a point leaves the stream and
+ * starts homing on its target, and `velocity.w` is the ink it lays down, which the simulation
+ * computes, so seeds leave it at 0.
  */
 import { TOOL_COUNT } from './hub';
 import type { Rect } from './rect';
@@ -95,4 +96,22 @@ export function seedInflow(count: number, stage: Rect, rng: Rng): PointState {
     state.velocities.set([-Math.sin(angle) * 90, Math.cos(angle) * 90, 0, 0], i * 4);
   }
   return state;
+}
+
+/**
+ * Shut Down: deals every point a spot inside the core's disk (page px, spread evenly over its
+ * area) as its name target, so the boot's name formation becomes a ball in the core. The bar
+ * slots in z and w are left as they are.
+ */
+export function writeCoreTargets(
+  targets: Float32Array,
+  core: { x: number; y: number; radius: number },
+  rng: Rng,
+): void {
+  for (let i = 0; i < targets.length / 4; i++) {
+    const angle = rng() * 2 * Math.PI;
+    const r = core.radius * Math.sqrt(rng());
+    targets[i * 4] = core.x + Math.cos(angle) * r;
+    targets[i * 4 + 1] = core.y + Math.sin(angle) * r;
+  }
 }

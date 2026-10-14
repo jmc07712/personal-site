@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { MAX_BARS, barShares, barsInView, packBars, writeBarSlots } from '@/components/gpu/bars';
-import { RIVER_CURRENT, seedInflow, seedMeta, seedRiver } from '@/components/gpu/formations';
+import {
+  RIVER_CURRENT,
+  seedInflow,
+  seedMeta,
+  seedRiver,
+  writeCoreTargets,
+} from '@/components/gpu/formations';
 import { inkPerPoint } from '@/components/gpu/ink';
 import { gaussian, pick, xorshift32 } from '@/components/gpu/rng';
 import { fitName, inkedPixels, writeTextTargets } from '@/components/gpu/text';
@@ -208,6 +214,15 @@ describe('seeds', () => {
     for (let i = 0; i < COUNT; i++) {
       const d = Math.hypot(positions[i * 4]! - 180, positions[i * 4 + 1]! - 1180);
       expect(d).toBeGreaterThan(180 * 0.9);
+    }
+  });
+
+  it('gathers every shutdown target inside the core and keeps the bar slots', () => {
+    const targets = new Float32Array(COUNT * 4).fill(7);
+    writeCoreTargets(targets, { x: 500, y: 300, radius: 40 }, xorshift32());
+    for (let i = 0; i < COUNT; i++) {
+      expect(Math.hypot(targets[i * 4]! - 500, targets[i * 4 + 1]! - 300)).toBeLessThanOrEqual(40);
+      expect([targets[i * 4 + 2], targets[i * 4 + 3]]).toEqual([7, 7]);
     }
   });
 });

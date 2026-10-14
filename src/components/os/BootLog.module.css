@@ -1,0 +1,40 @@
+/*
+ * In the bottom-left corner, clear of the name the particles spell. It sits on the wallpaper
+ * (it follows the canvas in the page) and under the windows, so they cover it as it fades.
+ */
+.log {
+  position: fixed;
+  left: 20px;
+  bottom: 16px;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: 110px auto;
+  font-size: 20px;
+  line-height: 22px;
+  white-space: pre;
+  pointer-events: none;
+}
+
+/* As the curtain lifts it fades out through the dither, never through an in-between colour. */
+:global(html:not(.booting)) .log {
+  animation: dither-out 600ms step-end forwards;
+}
+
+@keyframes dither-out {
+  0% {
+    mask: var(--dither-75);
+  }
+  33% {
+    mask: var(--dither-50);
+  }
+  66% {
+    mask: var(--dither-25);
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+
+.message {
+  grid-column: 1 / -1;
+}

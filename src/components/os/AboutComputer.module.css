@@ -1,0 +1,50 @@
+/* A small window; on phones it becomes a sheet like any other overlay. */
+@media (min-width: 769px) {
+  section.window {
+    width: min(460px, calc(100vw - 48px));
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.header svg {
+  flex: none;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.header p {
+  margin: 4px 0 0;
+}
+
+.facts {
+  margin: 14px 0 0;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  padding: 6px 0;
+}
+
+.fact + .fact {
+  border-top: 1px dotted var(--ink);
+}
+
+.fact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
