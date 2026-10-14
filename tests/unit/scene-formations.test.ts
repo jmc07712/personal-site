@@ -133,6 +133,11 @@ describe('name sampling', () => {
     expect(fitName('Jared Chester', 1440, 300, measure).size).toBeLessThanOrEqual(120);
   });
 
+  it('grows the width cap with the interface scale on a big screen', () => {
+    const at4k = (ui: number) => fitName('Jared Chester', 3840, 2160, measure, ui).size;
+    expect(at4k(2.5)).toBeGreaterThan(at4k(1) * 2);
+  });
+
   it('wraps to one word per line below 640px', () => {
     expect(fitName('Jared Chester', 600, 900, measure).lines).toEqual(['Jared', 'Chester']);
   });

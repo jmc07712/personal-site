@@ -13,19 +13,21 @@ export interface NameLayout {
 
 /**
  * Sizes the name to about 78% of the viewport (wrapping to one word per line, at 86%, below
- * 640px), no taller than 40% of the stage, snapped to a multiple of 10px so the pixel font stays
- * on its grid. `measure` returns a line's width at 100px.
+ * 640px), no wider than 1180px at laptop size (grown with the interface scale `ui`) and no taller
+ * than 40% of the stage, snapped to a multiple of 10px so the pixel font stays on its grid.
+ * `measure` returns a line's width at 100px.
  */
 export function fitName(
   name: string,
   viewportWidth: number,
   stageHeight: number,
   measure: (line: string) => number,
+  ui = 1,
 ): NameLayout {
   const wrap = viewportWidth < 640;
   const lines = wrap ? name.split(' ') : [name];
   const width100 = Math.max(...lines.map(measure)) || 500;
-  const byWidth = (100 * Math.min(viewportWidth * (wrap ? 0.86 : 0.78), 1180)) / width100;
+  const byWidth = (100 * Math.min(viewportWidth * (wrap ? 0.86 : 0.78), 1180 * ui)) / width100;
   const byHeight = stageHeight * (wrap ? 0.34 : 0.4);
   const size = Math.max(10, Math.round(Math.min(byWidth, byHeight) / 10) * 10);
   return { lines, size, lineHeight: size * 0.86 };

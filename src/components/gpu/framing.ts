@@ -35,11 +35,12 @@ export function cappedDpr(devicePixelRatio: number): number {
 }
 
 /**
- * CSS px per bitmap pixel ("cell"). Rounded so a cell is a whole number of device pixels, which
- * keeps every cell the same size and the dither crisp at any DPR.
+ * CSS px per bitmap pixel ("cell"): `pixel` at laptop size, grown with the interface scale `ui`
+ * so the scene's dither matches the windows on a big screen. Rounded so a cell is a whole number
+ * of device pixels, which keeps every cell the same size and the dither crisp at any DPR.
  */
-export function cellSize(pixel: number, dpr: number): number {
-  return Math.max(1, Math.round(pixel * dpr)) / dpr;
+export function cellSize(pixel: number, dpr: number, ui = 1): number {
+  return Math.max(1, Math.round(pixel * ui * dpr)) / dpr;
 }
 
 /**

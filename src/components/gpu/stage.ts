@@ -2,6 +2,7 @@
  * The canvas on the page: sized in whole cells for the box it fills, locked to the page's cell
  * grid every frame, and the conversions from page px to the canvas's GL cells.
  */
+import { uiScale } from '@/lib/uiScale';
 import { cappedDpr, cellSize, gridSize, hubFraming, pageLock, type Framing } from './framing';
 import type { Rect } from './rect';
 
@@ -47,15 +48,15 @@ export class CanvasStage {
   }
 
   /**
-   * Sizes the canvas in whole cells of `pixel` CSS px. Its CSS size is set to match exactly, so
-   * each cell is scaled up by a whole number of device pixels; it overhangs its frame by up to a
-   * cell, which the frame clips.
+   * Sizes the canvas in whole cells of `pixel` px at laptop size, scaled with the interface. Its
+   * CSS size is set to match exactly, so each cell is scaled up by a whole number of device
+   * pixels; it overhangs its frame by up to a cell, which the frame clips.
    */
   resize(pixel: number): void {
     const frame = this.frame();
     const width = frame.clientWidth;
     const height = frame.clientHeight;
-    this.cell = cellSize(pixel, cappedDpr(window.devicePixelRatio));
+    this.cell = cellSize(pixel, cappedDpr(window.devicePixelRatio), uiScale());
     const { cols, rows } = gridSize(width, height, this.cell);
     this.canvas.width = cols;
     this.canvas.height = rows;

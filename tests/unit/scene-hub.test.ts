@@ -42,6 +42,14 @@ describe('grid and page lock', () => {
     expect(cellSize(3, 1.5) * 1.5).toBe(Math.round(3 * 1.5));
   });
 
+  it('grows cells with the interface scale, still in whole device pixels', () => {
+    expect(cellSize(3, 1, 1.25)).toBe(4);
+    expect(cellSize(3, 1, 1.5)).toBe(5);
+    expect(cellSize(3, 1, 2)).toBe(6);
+    expect(cellSize(3, 1, 2.5)).toBe(8);
+    expect(cellSize(3, 2, 1.5)).toBe(4.5);
+  });
+
   it('covers the frame with a spare row and column for the page-lock shift', () => {
     const { cols, rows } = gridSize(1440, 900, 3);
     expect(cols * 3).toBeGreaterThanOrEqual(1440 + 3);

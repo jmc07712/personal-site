@@ -1,4 +1,5 @@
 /** Rasterises the boot name in the site's pixel font, so the particles can sample its pixels. */
+import { uiScale } from '@/lib/uiScale';
 import { fitName, inkedPixels, type InkedPixels } from './text';
 
 /** How long the boot waits for the pixel font before spelling the name anyway. */
@@ -25,7 +26,8 @@ export function rasterizeName(
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
   if (!ctx) return null;
   ctx.font = `100px ${family}`;
-  const layout = fitName(name, viewportWidth, stageHeight, (line) => ctx.measureText(line).width);
+  const measure = (line: string) => ctx.measureText(line).width;
+  const layout = fitName(name, viewportWidth, stageHeight, measure, uiScale());
   const widest = Math.max(...layout.lines.map((line) => ctx.measureText(line).width));
   canvas.width = Math.ceil((widest * layout.size) / 100) + 8;
   canvas.height = Math.ceil(layout.lineHeight * layout.lines.length + layout.size * 0.3);

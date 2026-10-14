@@ -4,6 +4,10 @@ import { layoutSchematic, SCHEMATIC_GRID, type RoutedEdge } from '@/lib/schemati
 import styles from './Schematic.module.css';
 
 const PAD = 8;
+/** Label sizes in the diagram's own units, so they scale with the drawing rather than the rem. */
+const NODE_FONT = 20;
+const EDGE_FONT = 13;
+const GROUP_FONT = 12;
 
 /** Pixel arrowheads, drawn as a few 2px squares so they stay 1-bit. */
 const ARROWS: Record<RoutedEdge['arrow'], string> = {
@@ -52,15 +56,19 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
     .join(', ');
   const kinds = [...new Set(layout.nodes.flatMap((n) => (n.kind ? [n.kind] : [])))];
   const { x, y, w, h } = layout.bounds;
+  const width = w + PAD * 2;
+  const height = h + PAD * 2;
 
   return (
     // A wide diagram scrolls sideways on small screens, so it can take keyboard focus.
     <figure className={styles.figure} tabIndex={0}>
       <svg
         className={styles.svg}
-        width={w + PAD * 2}
-        height={h + PAD * 2}
-        viewBox={`${x - PAD} ${y - PAD} ${w + PAD * 2} ${h + PAD * 2}`}
+        width={width}
+        height={height}
+        // Drawn in px at laptop size and scaled whole with the interface.
+        style={{ width: `calc(${width}px * var(--ui))`, height: `calc(${height}px * var(--ui))` }}
+        viewBox={`${x - PAD} ${y - PAD} ${width} ${height}`}
         role="img"
         aria-label={`Diagram of ${title}, showing ${description}.`}
         shapeRendering="crispEdges"
@@ -74,7 +82,12 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
               height={group.h}
               className={styles.group}
             />
-            <text x={group.x + 8} y={group.y + 13} className={styles.groupLabel}>
+            <text
+              x={group.x + 8}
+              y={group.y + 13}
+              className={styles.groupLabel}
+              fontSize={GROUP_FONT}
+            >
               {group.label}
             </text>
           </g>
@@ -103,6 +116,7 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
                 x={edge.labelX}
                 y={edge.labelY}
                 className={styles.edgeLabel}
+                fontSize={EDGE_FONT}
                 textAnchor={edge.labelAnchor}
               >
                 {edge.label}
@@ -124,6 +138,7 @@ export function Schematic({ diagram, title }: { diagram: Diagram; title: string 
               x={node.x + node.w / 2}
               y={node.y + node.h / 2 + 2}
               className={styles.nodeLabel}
+              fontSize={NODE_FONT}
               textAnchor="middle"
               dominantBaseline="central"
             >

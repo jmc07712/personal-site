@@ -1,0 +1,40 @@
+/*
+ * The interface scale (docs/design.md §13a). --ui is the largest step that still leaves at least
+ * 1440×860 CSS px of room, so a big monitor shows the laptop layout, only larger. Every other
+ * stylesheet is written in px and becomes rem at build time; this one sets the rem, so
+ * postcss.config.mjs leaves it in px.
+ */
+:root {
+  --ui: 1;
+  /* One dot of the dither masks: a CSS px, doubled from the 2x step so tints keep pace. */
+  --dot: 1px;
+}
+
+@media (min-width: 1800px) and (min-height: 1075px) {
+  :root {
+    --ui: 1.25;
+  }
+}
+
+@media (min-width: 2160px) and (min-height: 1290px) {
+  :root {
+    --ui: 1.5;
+  }
+}
+
+@media (min-width: 2880px) and (min-height: 1720px) {
+  :root {
+    --ui: 2;
+    --dot: 2px;
+  }
+}
+
+@media (min-width: 3600px) and (min-height: 2150px) {
+  :root {
+    --ui: 2.5;
+  }
+}
+
+html {
+  font-size: calc(16px * var(--ui));
+}

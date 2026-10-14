@@ -1,7 +1,10 @@
+@import './scale.css';
+
 /*
  * Two inks, nothing else: paper (an unlit reflective LCD) and ink (deep olive).
  * Every grey on the site is a 1-bit dither pattern applied as a mask, so tones work
- * in either ink and never introduce a third colour.
+ * in either ink and never introduce a third colour. Each token is a whole mask layer that tiles
+ * in dots of --dot, so the pattern stays crisp when the interface scales.
  */
 :root {
   --paper: #c9cebb;
@@ -10,11 +13,16 @@
   --bar: 32px;
   --gutter: clamp(16px, 5vw, 96px);
 
-  --dither-12: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0 0h1v1H0zM2 2h1v1H2z'/%3E%3C/svg%3E");
-  --dither-25: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M0 0h1v1H0z'/%3E%3C/svg%3E");
-  --dither-50: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z'/%3E%3C/svg%3E");
-  --dither-75: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1 0h1v2H0V1h1z'/%3E%3C/svg%3E");
-  --hatch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M3 0h1v1H3zM2 1h1v1H2zM1 2h1v1H1zM0 3h1v1H0z'/%3E%3C/svg%3E");
+  --dither-12: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0 0h1v1H0zM2 2h1v1H2z'/%3E%3C/svg%3E")
+    0 0 / calc(4 * var(--dot));
+  --dither-25: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M0 0h1v1H0z'/%3E%3C/svg%3E")
+    0 0 / calc(2 * var(--dot));
+  --dither-50: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z'/%3E%3C/svg%3E")
+    0 0 / calc(2 * var(--dot));
+  --dither-75: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1 0h1v2H0V1h1z'/%3E%3C/svg%3E")
+    0 0 / calc(2 * var(--dot));
+  --hatch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M3 0h1v1H3zM2 1h1v1H2zM1 2h1v1H1zM0 3h1v1H0z'/%3E%3C/svg%3E")
+    0 0 / calc(4 * var(--dot));
 }
 
 @media (max-width: 768px) {

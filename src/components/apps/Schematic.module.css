@@ -5,6 +5,10 @@
   overflow-x: auto;
 }
 
+/*
+ * The diagram is drawn in its own px and scaled whole with the interface, so lengths inside it
+ * are unitless or set on the SVG elements: a px here would become a rem and scale twice.
+ */
 .svg {
   display: block;
   max-width: none;
@@ -20,18 +24,16 @@
 .edgeLabel {
   fill: var(--ink);
   font-family: var(--font-chrome), monospace;
-  font-size: 20px;
   -webkit-font-smoothing: none;
 }
 
 .edgeLabel {
   font-family: var(--font-body), sans-serif;
-  font-size: 13px;
   -webkit-font-smoothing: antialiased;
   /* A paper halo so a label stays readable where it crosses a line. */
   paint-order: stroke;
   stroke: var(--paper);
-  stroke-width: 4px;
+  stroke-width: 4;
   stroke-linejoin: round;
 }
 
@@ -55,7 +57,6 @@
 .groupLabel {
   fill: var(--ink);
   font-family: var(--font-body), sans-serif;
-  font-size: 12px;
   font-weight: 500;
 }
 
@@ -93,5 +94,7 @@
 }
 
 .legend svg {
+  width: 12px;
+  height: 12px;
   shape-rendering: crispEdges;
 }

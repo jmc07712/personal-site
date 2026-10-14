@@ -4,6 +4,7 @@
  * a lighter light model (diffuse and sky on the hub, one soft shadow on the floor), so the one
  * frame it draws takes tens of milliseconds on a laptop.
  */
+import { uiScale } from '@/lib/uiScale';
 import { dither } from './bayer';
 import { cappedDpr, cellSize, hubFraming, type Framing } from './framing';
 import {
@@ -22,7 +23,7 @@ import { hexToRgb, INK, PAPER } from './inks';
 import { normalize, type Vec3 } from './math';
 import { POCKET_MAX_WIDTH } from './sizing';
 
-/** CSS px per pixel: coarser than the GPU's 3px, to keep the CPU work small. */
+/** Px per pixel at laptop size: coarser than the GPU's 3px, to keep the CPU work small. */
 const PIXEL = 4;
 const MAX_STEPS = 90;
 const LIGHT = normalize([-0.42, 1, 0.36]);
@@ -155,7 +156,7 @@ export function drawFallback(canvas: HTMLCanvasElement): void {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const frame = canvas.parentElement ?? canvas;
-  const cell = cellSize(PIXEL, cappedDpr(window.devicePixelRatio));
+  const cell = cellSize(PIXEL, cappedDpr(window.devicePixelRatio), uiScale());
   const cols = Math.max(8, Math.ceil(frame.clientWidth / cell));
   const rows = Math.max(8, Math.ceil(frame.clientHeight / cell));
   canvas.width = cols;
