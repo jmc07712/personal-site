@@ -1,5 +1,5 @@
 /**
- * The agent hub's geometry on the CPU: a breathing core, six tool nodes orbiting it on tethers,
+ * The agent hub's geometry on the CPU: the OpenAI knot, six tool nodes orbiting it on tethers,
  * and the camera that films them. The composite shader raymarches the same shapes
  * (shaders/hub.glsl.ts mirrors these formulas); this copy tells the particle simulation where
  * each tether lands on screen, and draws the no-WebGL still.
@@ -77,12 +77,12 @@ export function toolPosition(i: number, t: number, grow: number, dive: number): 
 }
 
 export const toolRadius = (i: number, grow: number): number =>
-  (0.14 + 0.035 * ((i * 7) % 3)) * smoothstep(0.15, 0.7, grow);
+  (0.084 + 0.021 * ((i * 7) % 3)) * smoothstep(0.15, 0.7, grow);
 
-/** The core breathes, grows in with the boot, and rings briefly after a click (`sincePing` s). */
+/** Outer bound of the knot. It grows with the boot and rings after a click (`sincePing` s). */
 export const coreRadius = (t: number, grow: number, sincePing: number): number =>
-  (0.72 + 0.025 * Math.sin(t * 0.9)) * mix(0.25, 1, grow) +
-  0.09 * Math.exp(-sincePing * 2.6) * Math.sin(sincePing * 13);
+  (1.18 + 0.016 * Math.sin(t * 0.9)) * mix(0.25, 1, grow) +
+  0.06 * Math.exp(-sincePing * 2.6) * Math.sin(sincePing * 13);
 
 /**
  * The point in the hub the cursor reaches for: its ray, cut by the plane through the core facing

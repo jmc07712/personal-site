@@ -1,5 +1,6 @@
 /** The raymarch-and-dither pass that turns the hub and the splatted ink into the final two inks. */
 import { MAX_BARS } from './bars';
+import { BLOSSOM_SIZE, blossomPixels } from './blossom';
 import { createProgram, type DensityTarget, type Program } from './gl';
 import { hexToRgb, INK, PAPER } from './inks';
 import { COMPOSITE_FRAGMENT, COMPOSITE_VERTEX } from './shaders/composite.glsl';
@@ -31,11 +32,30 @@ export class CompositePass {
   private readonly program: Program;
   /** The full-screen triangle needs no attributes, but WebGL2 still wants a vertex array bound. */
   private readonly emptyVao: WebGLVertexArrayObject;
+  private readonly blossom: WebGLTexture;
 
   constructor(gl: WebGL2RenderingContext) {
     this.gl = gl;
     this.program = createProgram(gl, COMPOSITE_VERTEX, COMPOSITE_FRAGMENT);
     this.emptyVao = gl.createVertexArray();
+    this.blossom = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.blossom);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.R8,
+      BLOSSOM_SIZE,
+      BLOSSOM_SIZE,
+      0,
+      gl.RED,
+      gl.UNSIGNED_BYTE,
+      blossomPixels(),
+    );
   }
 
   /** Draws the frame into the canvas, which is the same size as the density buffer. */
@@ -63,6 +83,9 @@ export class CompositePass {
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, density.texture);
     gl.uniform1i(u('u_density'), 0);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.blossom);
+    gl.uniform1i(u('u_blossom'), 1);
     gl.bindVertexArray(this.emptyVao);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     gl.bindVertexArray(null);
@@ -70,6 +93,7 @@ export class CompositePass {
 
   dispose(): void {
     this.gl.deleteVertexArray(this.emptyVao);
+    this.gl.deleteTexture(this.blossom);
     this.gl.deleteProgram(this.program.handle);
   }
 }

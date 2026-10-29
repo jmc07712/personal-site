@@ -2,21 +2,21 @@ import type { Product, Span, YM } from './types';
 
 export const identity = {
   name: 'Jared Chester',
-  title: 'Senior Software Engineer',
-  level: 'L6',
-  employer: 'Amazon Ads',
-  location: 'New York',
+  title: 'Member of Forward Deployed Staff',
+  employer: 'OpenAI',
+  vertical: 'Legal Vertical',
+  location: 'New York City',
   email: 'jared.m.chester516@gmail.com',
   github: 'https://github.com/jmc07712',
   linkedin: 'https://www.linkedin.com/in/jared-chester-52b76a190/',
   source: 'https://github.com/jmc07712/personal-site',
   positioning:
-    'I’m a senior software engineer at Amazon Ads in New York, where I build AI agents and the data infrastructure that supports them.',
+    'I’m a Member of Forward Deployed Staff at OpenAI in the Legal Vertical, based in New York City.',
   about: [
     'I’m a software engineer who loves solving hard problems. Today most of my work is on AI agents, and I’m excited about building agents that people can rely on in their daily work.',
-    'At Amazon Ads, I designed and lead the Pitching Agent, which creates a complete pitch deck from an advertiser’s account data in about five minutes. It serves 5,000 sellers and saves more than 100,000 hours a year. I also designed the domain agent that brings four teams’ AI capabilities together behind one interface.',
+    'Previously at Amazon Ads, I designed and led the Pitching Agent, which created a complete pitch deck from an advertiser’s account data in about five minutes. It served 5,000 sellers and saved more than 100,000 hours a year. I also designed the domain agent that brought four teams’ AI capabilities together behind one interface.',
     'Before working on agents, I spent several years on data infrastructure. I led the Insights API, which serves 1.2 billion records a month, and built the orchestration service that runs more than 2,000 Spark jobs.',
-    'I love speaking and teaching. I founded my organization’s GenAI talk series, and I mentor new graduates. I’m always learning, and I build my own apps in my spare time, most recently Counterdex.',
+    'I love speaking and teaching. At Amazon, I founded my organization’s GenAI talk series and mentored new graduates. I’m always learning, and I build my own apps in my spare time, most recently Counterdex.',
     'Going forward, I want to keep building AI platforms that large organizations can depend on, and to keep helping engineers adopt AI in their work.',
   ],
   education:
@@ -34,7 +34,7 @@ export const spans: Span[] = [
     from: '2018-09',
     to: 'now',
     summary:
-      'I began in a research lab at Rutgers and worked at AT&T before joining Amazon Ads in 2022.',
+      'I began in a research lab at Rutgers, worked at AT&T and Amazon Ads, and now work at OpenAI in the Legal Vertical in New York City.',
     metrics: [],
   },
   {
@@ -111,14 +111,14 @@ export const spans: Span[] = [
     kind: 'role',
     parent: 'career',
     from: '2022-08',
-    to: 'now',
+    to: '2026-10',
     org: 'Amazon Ads',
     title: 'Senior software engineer (L6)',
     location: 'New York',
     summary:
-      'I build AI agents, recommendation services, APIs and data pipelines, and I was promoted to L6 in 2025.',
+      'Built AI agents, recommendation services, APIs and data pipelines. I was promoted to Senior Software Engineer (L6) in 2025.',
     metrics: [
-      { value: '5,000', label: 'sellers use the Pitching Agent' },
+      { value: '5,000', label: 'sellers served by the Pitching Agent' },
       { value: '1.2B', label: 'records a month through the Insights API' },
     ],
   },
@@ -209,7 +209,7 @@ export const spans: Span[] = [
     kind: 'system',
     parent: 'amazon-ads',
     from: '2025-01',
-    to: 'now',
+    to: '2026-10',
     approx: true,
     summary:
       'Designed an AI agent on Claude and Amazon Bedrock that builds pitch decks from account data, reducing a two-hour task to about five minutes. It serves 5,000 sellers.',
@@ -227,7 +227,7 @@ export const spans: Span[] = [
     kind: 'system',
     parent: 'amazon-ads',
     from: '2025-01',
-    to: 'now',
+    to: '2026-10',
     approx: true,
     summary:
       'Founded my organization’s GenAI talk series and co-wrote its adoption plan. I also shared two internal AI tools across the organization.',
@@ -240,7 +240,7 @@ export const spans: Span[] = [
     kind: 'system',
     parent: 'amazon-ads',
     from: '2026-01',
-    to: 'now',
+    to: '2026-10',
     approx: true,
     summary:
       'Designed a single agent that fronts four teams’ AI capabilities, so products integrate once. It is live in production.',
@@ -249,6 +249,20 @@ export const spans: Span[] = [
       { value: '50', label: 'engineers in the org it covers' },
     ],
     stack: ['MCP', 'Claude', 'Amazon Bedrock', 'Python'],
+  },
+  {
+    id: 'openai',
+    name: 'OpenAI',
+    kind: 'role',
+    parent: 'career',
+    from: '2026-10',
+    to: 'now',
+    org: 'OpenAI',
+    title: 'Member of Forward Deployed Staff',
+    location: 'New York City',
+    summary:
+      'Member of Forward Deployed Staff in the Legal Vertical at OpenAI, based in New York City.',
+    metrics: [],
   },
 ];
 

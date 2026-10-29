@@ -61,6 +61,7 @@ test('selecting a span shows its numbers in the inspector', async ({ page }) => 
 test('arrow keys move through the trace', async ({ page }) => {
   const list = page.getByRole('listbox', { name: /Career spans/ });
   await list.focus();
+  await page.keyboard.press('Home');
   const before = await list.getAttribute('aria-activedescendant');
   await page.keyboard.press('ArrowDown');
   await expect(list).not.toHaveAttribute('aria-activedescendant', before ?? '');

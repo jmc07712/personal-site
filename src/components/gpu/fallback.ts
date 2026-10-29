@@ -6,6 +6,7 @@
  */
 import { uiScale } from '@/lib/uiScale';
 import { dither } from './bayer';
+import { knotAngles, knotDistance } from './blossom';
 import { cappedDpr, cellSize, hubFraming, type Framing } from './framing';
 import {
   CORE,
@@ -52,32 +53,45 @@ function stillField(): (x: number, y: number, z: number) => number {
     const [x, y, z] = toolPosition(i, STILL_TIME, 1, diveAmount(toolCycle(i, STILL_TIME)));
     return { x, y, z, r: toolRadius(i, 1) };
   });
-  const ringTilt = -0.62 + 0.06 * Math.sin(STILL_TIME * 0.2);
-  const [c1, s1, c2, s2] = [Math.cos(0.42), Math.sin(0.42), Math.cos(ringTilt), Math.sin(ringTilt)];
+  const [tiltX, tiltY, spin] = knotAngles(STILL_TIME);
+  const [cxr, sxr, cyr, syr, czr, szr] = [
+    Math.cos(tiltX),
+    Math.sin(tiltX),
+    Math.cos(tiltY),
+    Math.sin(tiltY),
+    Math.cos(spin),
+    Math.sin(spin),
+  ];
   return (x, y, z) => {
     const qx = x - cx;
     const qy = y - cy;
     const qz = z - cz;
     const r = len3(qx, qy, qz);
     if (r - 2.35 > 0.25) return r - 2.35;
-    let d = r - coreR;
+    const ly0 = cxr * qy + sxr * qz;
+    const lz0 = -sxr * qy + cxr * qz;
+    const lx0 = cyr * qx + syr * lz0;
+    const lz = -syr * qx + cyr * lz0;
+    const lx = czr * lx0 + szr * ly0;
+    const ly = -szr * lx0 + czr * ly0;
+    let d = knotDistance(lx, ly, lz, coreR);
     for (const t of tools) {
       const bx = t.x - cx;
       const by = t.y - cy;
       const bz = t.z - cz;
-      const h = Math.max(
-        0,
-        Math.min(1, (qx * bx + qy * by + qz * bz) / (bx * bx + by * by + bz * bz)),
-      );
-      const tether = len3(qx - bx * h, qy - by * h, qz - bz * h) - 0.019;
-      d = smin(d, smin(len3(x - t.x, y - t.y, z - t.z) - t.r, tether, 0.09), 0.17);
+      const reach = len3(bx, by, bz);
+      const start = coreR * 1.02;
+      let tether = 1e3;
+      if (reach > start) {
+        const h = Math.max(
+          start / reach,
+          Math.min(1, (qx * bx + qy * by + qz * bz) / (reach * reach)),
+        );
+        tether = len3(qx - bx * h, qy - by * h, qz - bz * h) - 0.012;
+      }
+      d = Math.min(d, smin(len3(x - t.x, y - t.y, z - t.z) - t.r, tether, 0.035));
     }
-    // The gateway ring: a thin torus, tilted twice.
-    const rx = c1 * qx + s1 * qy;
-    const ry0 = -s1 * qx + c1 * qy;
-    const ry = c2 * ry0 + s2 * qz;
-    const rz = -s2 * ry0 + c2 * qz;
-    return Math.min(d, Math.hypot(Math.hypot(rx, rz) - 1.3, ry) - 0.026);
+    return d;
   };
 }
 

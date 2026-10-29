@@ -19,7 +19,7 @@ interface ExperienceProps {
   trace: TraceView;
 }
 
-const DEFAULT_SELECTION = 'pitching-agent';
+const DEFAULT_SELECTION = 'openai';
 
 /** The Experience window: a trace waterfall on desktop, an accordion in Pocket mode. */
 export function Experience({ trace }: ExperienceProps) {

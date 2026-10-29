@@ -5,13 +5,13 @@
 }
 
 /*
- * The desktop: the hero is at least one screen tall and grows with the About window,
- * so the icons never sit on top of it. Every other window sits in its own band below.
+ * The desktop grows with the About window. Its minimum fits the icon column even with About
+ * closed, without reserving a full viewport on tall monitors. Other windows sit in bands below.
  */
 .desk {
   position: relative;
-  min-height: calc(100svh - var(--bar));
-  padding: 48px var(--gutter) 64px;
+  min-height: 672px;
+  padding: 48px var(--gutter) 32px;
 }
 
 .slotAbout {
@@ -23,6 +23,12 @@
 .band {
   position: relative;
   padding: 88px var(--gutter) 0;
+}
+
+@media (min-width: 769px) {
+  .desk + .band {
+    padding-top: 32px;
+  }
 }
 
 .slotWide {

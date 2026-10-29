@@ -1,9 +1,10 @@
 import { TOOL_COUNT } from '../hub';
+import { BLOSSOM_BOUND, BLOSSOM_EXTENT, BLOSSOM_RANGE, KNOT_BEVEL, KNOT_DEPTH } from '../blossom';
 
 /**
- * The agent hub as a signed distance field, raymarched per cell. The core, six tools and their
- * tethers are blended with a smooth minimum so tethers flow into the spheres like liquid; a thin
- * torus is the gateway ring. Lighting is a key light with soft shadows (penumbra estimated from
+ * The OpenAI knot as a rounded, extruded signed distance field, raymarched per cell with six
+ * small tools on tethers. The exact official SVG silhouette is sampled from one R8 texture.
+ * Lighting is a key light with soft shadows (penumbra estimated from
  * the closest miss along the shadow ray), five-tap ambient occlusion, a rim and a specular, all
  * reduced to one luminance for the dither. Mirrors the CPU geometry in hub.ts.
  */
@@ -15,6 +16,7 @@ uniform vec2 u_shift;
 uniform float u_time, u_grow, u_ping, u_focal, u_cursorOn;
 uniform vec2 u_cursor;
 uniform int u_steps;
+uniform sampler2D u_blossom;
 
 mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, s, -s, c); }
 // Polynomial smooth minimum: blends two distances over a band of width k, like liquid joining.
@@ -24,17 +26,23 @@ float smin(float a, float b, float k) {
 }
 float sdCapsule(vec3 p, vec3 a, vec3 b, float r) {
   vec3 pa = p - a, ba = b - a;
-  float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+  float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-6), 0.0, 1.0);
   return length(pa - ba * h) - r;
 }
-float sdTorus(vec3 p, vec2 t) { return length(vec2(length(p.xz) - t.x, p.y)) - t.y; }
+float sdBlossom(vec2 p) {
+  vec2 uv = vec2(p.x, -p.y) / ${2 * BLOSSOM_EXTENT} + 0.5;
+  float d = (texture(u_blossom, uv).r - 0.5) * ${2 * BLOSSOM_RANGE};
+  float outside = length(max(abs(p) - ${BLOSSOM_EXTENT}, 0.0));
+  return outside > 0.0 ? max(outside, d) : d;
+}
 
 const vec3 CORE = vec3(0.0, 0.05, 0.0);
 const float FLOOR_Y = -1.42;
 vec3 gTool[TOOLS];
 float gToolR[TOOLS];
 float gCoreR;
-bool gRing = true;
+mat2 gTiltX, gTiltY, gSpin;
+bool gDetails = true;
 
 // Pose the tools for this frame: orbit, dive, and lean toward the cursor.
 void setup(float t, vec3 ro, vec3 right, vec3 up, vec3 forward) {
@@ -58,30 +66,40 @@ void setup(float t, vec3 ro, vec3 right, vec3 up, vec3 forward) {
     vec3 np = CORE + p;
     float lean = exp(-dot(np - target, np - target) * 0.42) * u_cursorOn * g;
     gTool[i] = np + (target - np) * 0.7 * lean;
-    gToolR[i] = (0.14 + 0.035 * mod(fi * 7.0, 3.0)) * smoothstep(0.15, 0.7, g);
+    gToolR[i] = (0.084 + 0.021 * mod(fi * 7.0, 3.0)) * smoothstep(0.15, 0.7, g);
   }
-  float ring = 0.09 * exp(-u_ping * 2.6) * sin(u_ping * 13.0);   // a click rings the core
-  gCoreR = (0.72 + 0.025 * sin(t * 0.9)) * mix(0.25, 1.0, g) + ring;
+  float ring = 0.06 * exp(-u_ping * 2.6) * sin(u_ping * 13.0);
+  gCoreR = (1.18 + 0.016 * sin(t * 0.9)) * mix(0.25, 1.0, g) + ring;
+  gTiltX = rot(0.13 + 0.10 * sin(t * 0.17));
+  gTiltY = rot(-0.16 + 0.14 * sin(t * 0.13));
+  gSpin = rot(t * 0.1);
 }
 
 float mapHub(vec3 p) {
   vec3 q = p - CORE;
   float bound = length(q) - 2.35;
   if (bound > 0.25) return bound;   // cheap bounding sphere: most rays never enter it
-  float t = u_time;
-  float wobble = 0.038 * sin(2.1 * q.x + t * 0.9) * sin(1.9 * q.y - t * 0.7)
-    * sin(2.3 * q.z + t * 1.1);
-  float d = length(q) - gCoreR + wobble;
-  if (!gRing) return d;
+  vec3 local = q;
+  local.yz *= gTiltX;
+  local.xz *= gTiltY;
+  local.xy *= gSpin;
+  float scale = gCoreR / ${BLOSSOM_BOUND};
+  float bevel = ${KNOT_BEVEL} * scale;
+  vec2 w = vec2(sdBlossom(local.xy / scale) * scale + bevel,
+    abs(local.z) - (${KNOT_DEPTH} * scale - bevel));
+  float d = min(max(w.x, w.y), 0.0) + length(max(w, 0.0)) - bevel;
+  if (!gDetails) return d;
   for (int i = 0; i < TOOLS; i++) {
     float sphere = length(p - gTool[i]) - gToolR[i];
-    float tether = sdCapsule(p, CORE, gTool[i], 0.019 * u_grow);
-    d = smin(d, smin(sphere, tether, 0.09), 0.17);
+    vec3 direction = gTool[i] - CORE;
+    float reach = max(length(direction), 1e-3);
+    float start = gCoreR * 1.02;
+    // Tethers stop at the knot's outer bound, leaving its negative spaces open. During a
+    // dive a tool can enter the bound, but its tether never cuts across the knot's face.
+    float tether = reach > start ? sdCapsule(p, CORE + direction * (start / reach), gTool[i], 0.012 * u_grow) : 1e3;
+    d = min(d, smin(sphere, tether, 0.035));
   }
-  vec3 r = q;
-  r.xy *= rot(0.42);
-  r.yz *= rot(-0.62 + 0.06 * sin(t * 0.2));
-  return min(d, sdTorus(r, vec2(1.3 * mix(0.4, 1.0, u_grow), 0.026)));
+  return d;
 }
 float mapScene(vec3 p) { return min(mapHub(p), p.y - FLOOR_Y); }
 
@@ -150,10 +168,10 @@ float hub(vec2 fc, vec2 res) {
   if (hit == 1) {
     vec3 n = hubNormal(p);
     float diffuse = max(dot(n, light), 0.0);
-    gRing = false;   // the thin ring would only add speckle to shadows and occlusion
+    gDetails = false;   // thin tethers would only add speckle to shadows and occlusion
     float shadow = softShadow(p + n * 0.012, light, 9.0);
     float ao = occlusion(p, n);
-    gRing = true;
+    gDetails = true;
     float spec = pow(max(dot(reflect(rd, n), light), 0.0), 30.0);
     float fresnel = 1.0 - max(dot(n, -rd), 0.0);
     float sky = 0.5 + 0.5 * n.y;

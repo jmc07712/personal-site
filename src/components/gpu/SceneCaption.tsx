@@ -6,7 +6,7 @@ import { useScene } from './SceneProvider';
 export function SceneCaption({ className }: { className?: string }) {
   const { pointCount, supported } = useScene();
   const text = supported
-    ? `The wallpaper is rendered live on your GPU, with ${pointCount.toLocaleString('en-US')} particles moving between an agent and its six tools.`
-    : 'The wallpaper shows an agent and its six tools, drawn in two colors.';
+    ? `The wallpaper is rendered on your GPU, with an OpenAI knot, six orbiting tools, and ${pointCount.toLocaleString('en-US')} surrounding particles.`
+    : 'The wallpaper shows an OpenAI knot surrounded by six tools, drawn in two colors.';
   return <span className={className}>{text}</span>;
 }

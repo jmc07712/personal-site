@@ -14,6 +14,13 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
     // Local tooling state, including agent worktrees with their own builds.
     '.claude/**',
+    '.omc/**',
+    '.remember/**',
+    '.playwright-mcp/**',
+    // Generated browser-test reports.
+    'playwright-report/**',
+    'test-results/**',
+    'blob-report/**',
   ]),
 ]);
 

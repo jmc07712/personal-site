@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import { Atkinson_Hyperlegible_Next, Jersey_10 } from 'next/font/google';
+import { bootCurtainScript } from '@/components/os/bootCurtain';
 import { identity } from '@/content/resume';
 import { alternates, SITE_URL } from '@/lib/site';
 import './globals.css';
@@ -44,14 +45,18 @@ const personJsonLd = {
   '@type': 'Person',
   name: identity.name,
   jobTitle: identity.title,
-  worksFor: { '@type': 'Organization', name: 'Amazon' },
+  worksFor: { '@type': 'Organization', name: identity.employer },
   url: SITE_URL,
   sameAs: [identity.github, identity.linkedin],
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${chrome.variable} ${body.variable}`}>
+    // The pre-paint boot script intentionally adds a browser-only class to this element.
+    <html lang="en" className={`${chrome.variable} ${body.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: bootCurtainScript() }} />
+      </head>
       <body>
         <a className="skip-link" href="#about">
           Skip to content

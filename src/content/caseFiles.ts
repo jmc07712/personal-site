@@ -10,7 +10,7 @@ export const caseFiles: CaseFile[] = [
     spanId: 'pitching-agent',
     title: 'Pitching Agent',
     role: 'Architect and tech lead',
-    when: '2025 to now (approx.)',
+    when: '2025 to 2026 (approx.)',
     summary:
       'I designed an AI agent that researches an advertiser’s account and drafts a complete pitch deck in about five minutes. The same work previously took sellers about two hours. It now serves 5,000 sellers and saves more than 100,000 hours a year.',
     problem: [
@@ -58,7 +58,7 @@ export const caseFiles: CaseFile[] = [
       },
       {
         title: 'Guardrails in code',
-        body: 'I enforce the agent’s limits in the runtime as well as the prompt. Prompts can be circumvented, so the runtime provides the guarantee.',
+        body: 'I enforced the agent’s limits in the runtime as well as the prompt. Prompts can be circumvented, so the runtime provides the guarantee.',
       },
     ],
     impact: [
@@ -75,7 +75,7 @@ export const caseFiles: CaseFile[] = [
     spanId: 'domain-agent',
     title: 'Domain agent',
     role: 'Architect, with Principal Engineers',
-    when: '2026 to now (approx.)',
+    when: '2026 (approx.)',
     summary:
       'I designed a single agent that sits in front of four teams’ AI capabilities. Products integrate once to access research, charts, narrative and search, and the agent is live in production.',
     problem: [
@@ -135,12 +135,12 @@ export const caseFiles: CaseFile[] = [
     spanId: 'genai-adoption',
     title: 'GenAI adoption',
     role: 'Organizer and co-author',
-    when: '2025 to now (approx.)',
+    when: '2025 to 2026 (approx.)',
     summary:
       'I founded my organization’s GenAI talk series and co-wrote its adoption plan. I also shared two AI tools across the organization, an LLM code reviewer and a design-doc knowledge base for coding agents.',
     problem: ['Engineers were eager to adopt GenAI, but each team was experimenting in isolation.'],
     built: [
-      'A recurring GenAI tech talk series, which I founded and run, featuring speakers from across the organization.',
+      'A recurring GenAI tech talk series, which I founded and ran, featuring speakers from across the organization.',
       'The organization’s GenAI adoption plan, which I co-wrote, and the working group that executes it.',
       'An LLM code reviewer that reads a git diff and leaves review comments.',
       'A knowledge base that gives coding agents access to the team’s existing design docs, so generated code follows decisions the team has already made.',

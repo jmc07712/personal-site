@@ -15,7 +15,6 @@ import { getCareerTrace } from '@/lib/careerTrace';
 import { listPosts } from '@/lib/posts';
 import { AboutComputer } from './AboutComputer';
 import { isBitmapName } from './bitmaps';
-import { bootCurtainScript } from './bootCurtain';
 import { BootLog } from './BootLog';
 import styles from './DesktopPage.module.css';
 import { DesktopIcons } from './DesktopIcons';
@@ -52,8 +51,6 @@ export async function DesktopPage({ open = [] }: DesktopPageProps) {
   return (
     <WindowManager initialOpen={initialOpen}>
       <SceneProvider>
-        {/* Runs during HTML parsing, before first paint, so the hero never flashes before the boot. */}
-        <script dangerouslySetInnerHTML={{ __html: bootCurtainScript() }} />
         <BootCurtainLifter />
         <SceneCanvas />
         <BootLog />
