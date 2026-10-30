@@ -17,7 +17,7 @@
 .slotAbout {
   position: relative;
   z-index: 4;
-  width: min(600px, 46vw);
+  width: min(800px, 60vw);
 }
 
 .band {
