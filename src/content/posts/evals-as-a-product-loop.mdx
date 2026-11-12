@@ -1,0 +1,58 @@
+import { EvalWorkbench } from '@/components/posts/EvalWorkbench';
+
+export const metadata = {
+  title: 'Evals are how I steer an AI product',
+  date: '2026-11-11',
+  summary:
+    'A practical approach to improving an AI product by reviewing its outputs and using what you learn to guide the next change.',
+  tags: ['ai', 'evals', 'product'],
+  draft: false,
+};
+
+I think evaluations are one of the easiest and most effective ways to steer an AI product toward a good outcome. Reviewing what the product actually does helps you understand where it needs work and gives you a way to tell whether your changes are helping.
+
+The approach I believe in is the loop Hamel Husain and Shreya Shankar describe in [their conversation on Lenny's Podcast](https://www.youtube.com/watch?v=BsWxPI9UM4c). You start with real interactions, work out what is going wrong, and build checks around those failures. As you improve the application, those checks help you see what changed and decide where to focus next.
+
+What appeals to me is how straightforward it is to begin. A small set of examples and someone who understands the task can teach you a lot about your product, even before you have automated any of the evaluation.
+
+## Understand what happened
+
+An evaluation assesses whether the system did something you care about, so it helps to start with a clear view of what happened. In an AI application, a trace records the request, the information retrieved, any tools called, and the final response. Reading that sequence gives you more context than looking at the answer alone, as Hamel explains in his [guide to product evals](https://hamel.dev/blog/posts/evals/).
+
+For example, a support assistant might tell a user that their subscription has been canceled even though the cancellation tool timed out. The response sounds reasonable until you see the tool result. Similarly, an answer can include a citation while applying the policy to the wrong subscription plan, so the presence of a link tells you very little about whether the answer is supported.
+
+Looking through examples like these helps you identify what needs to improve. You can distinguish a problem with the information the assistant used from a problem with how it handled an action, and choose a fix that addresses the actual cause.
+
+The exercise below uses six fictional support conversations to walk through this process. You can review the evidence, label the responses, and inspect the results of a proposed change without running a model.
+
+<EvalWorkbench />
+
+## Turn observations into useful checks
+
+The [error-analysis walkthrough in the podcast](https://www.youtube.com/watch?v=BsWxPI9UM4c&t=1011s) is a good place to start. As you read traces, write down what went wrong in plain language and group similar observations together. A note such as “the assistant applied the monthly-plan policy to an annual plan” gives you a specific behavior to investigate and eventually check for.
+
+Once you can see the patterns, you can decide which ones deserve attention. How often a failure happens is useful context, but its effect on the user matters too. An occasional false confirmation that an account was changed could be more damaging than a frequent formatting problem, even if it occupies a much smaller part of your chart.
+
+For me, this is where evaluations become part of deciding what the product should do. Working through the examples helps the team agree on what an acceptable response looks like, and a clear check makes that expectation something you can return to as the application changes.
+
+You can automate some checks with ordinary code, such as verifying that a required field is present or that a tool reported success. Other checks need judgment about the meaning of an answer. A model can help with those, provided you first compare its decisions with human judgments and understand where it gets them wrong.
+
+Hamel's [guide to LLM judges](https://hamel.dev/blog/posts/llm-judge/) recommends starting with clear pass/fail decisions and specific explanations. For this example, a check for unsupported policy claims gives the team an understandable result to act on. Validate the judge on examples it was not tuned against, including both good answers and failures, so you can see whether it is missing problems or rejecting acceptable responses.
+
+You can also fix an obvious issue as soon as you understand it. An automated check becomes useful when you want to measure the failure across more examples or catch it returning after a later change.
+
+## Look at what changed
+
+In the exercise, the candidate improves from three passing traces to four, but the details make the decision more complicated. It fixes two unsupported claims, leaves the cancellation failure unresolved, and introduces a new error about team plans. Looking at the individual cases makes those tradeoffs visible so you can decide what still needs work.
+
+For a real application, you would use a broader set of cases and keep some separate from the examples used to develop the fix. Model outputs can vary between runs, so repeat important cases and keep track of the inputs, system version, and grading criteria when comparing results. That gives you a more reliable basis for deciding whether the change helped.
+
+I would also want to know whether the improvement carries through to the customer's workflow. If the goal is to help a support team respond faster, we should check whether people actually spend less time preparing and correcting answers. The eval results help guide the work, while feedback from users tells us whether we are improving the experience they care about.
+
+## Start with one workflow
+
+If a team asked me how to begin, I would choose one workflow and review a small set of representative interactions with someone who understands it well. From there, we could pick a recurring problem, make a change, and compare the results. That is enough to start learning without having to design an entire evaluation platform first.
+
+Hamel and Shreya's [minimum viable evaluation setup](https://hamel.dev/blog/posts/evals-faq/whats-a-minimum-viable-evaluation-setup.html) suggests a short manual review of 20–50 outputs with a domain expert. Treat that as a starting point for finding problems rather than evidence that the system is reliable. If you do not have users yet, begin with realistic examples of the work you expect and expand them as you learn from actual use.
+
+The value of the loop comes from continuing to use it as the product develops. Each round of review helps you understand the application better and gives you evidence for the next decision. That is why I see evals as such a practical way to guide an AI product toward the outcome you want.

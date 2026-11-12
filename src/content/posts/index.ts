@@ -1,5 +1,7 @@
 import type { MDXModule } from 'mdx/types';
 import * as howThisSiteWorks from './how-this-site-works.mdx';
+import * as forwardDeployedEngineering from './forward-deployed-engineering.mdx';
+import * as evalsAsAProductLoop from './evals-as-a-product-loop.mdx';
 
 /**
  * Every post, keyed by slug (its file name). To add one, import its module and list it here.
@@ -10,4 +12,6 @@ import * as howThisSiteWorks from './how-this-site-works.mdx';
  */
 export const postModules: Readonly<Record<string, MDXModule>> = {
   'how-this-site-works': howThisSiteWorks,
+  'forward-deployed-engineering': forwardDeployedEngineering,
+  'evals-as-a-product-loop': evalsAsAProductLoop,
 };

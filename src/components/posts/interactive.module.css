@@ -1,0 +1,379 @@
+.figure {
+  margin: 28px 0 36px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.caption {
+  display: grid;
+  gap: 8px;
+  padding: 20px 22px;
+}
+.eyebrow {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.title {
+  font-family: var(--font-chrome), monospace;
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 400;
+}
+.diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.wire {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.node {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.activeNode {
+  fill: var(--ink);
+}
+.diagramText {
+  fill: var(--ink);
+  font-family: var(--font-chrome), monospace;
+  font-size: 28px;
+}
+.diagramNote {
+  font-family: var(--font-body), sans-serif;
+  font-size: 15px;
+}
+.reverseText {
+  fill: var(--paper);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-block: 1px solid var(--ink);
+}
+.steps button {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 12px 8px;
+  border: 0;
+  border-right: 1px solid var(--ink);
+  background: var(--paper);
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.steps button:last-child {
+  border-right: 0;
+}
+.steps button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.steps button:hover {
+  text-decoration: underline;
+}
+.steps button:focus-visible {
+  position: relative;
+  outline-offset: -4px;
+  outline-color: currentColor;
+}
+.stepNumber {
+  font-family: var(--font-chrome), monospace;
+  font-size: 26px;
+  line-height: 1;
+}
+.detail {
+  padding: 22px;
+}
+.detail > p {
+  margin: 0 0 16px;
+}
+.detailTitle {
+  margin: 0 0 20px;
+  font-size: 21px;
+  line-height: 1.3;
+}
+.perspectives {
+  margin: 0;
+  display: grid;
+  gap: 18px;
+}
+.perspectives > div {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 12px;
+}
+.perspectives dt {
+  font-weight: 700;
+}
+.perspectives dd {
+  margin: 0;
+}
+.detail .signal {
+  display: grid;
+  gap: 6px;
+  margin: 22px 0 0;
+  padding-top: 16px;
+  border-top: 1px dashed var(--ink);
+}
+.signal + .button {
+  margin-top: 20px;
+}
+.footnote {
+  margin: 0;
+  padding: 14px 22px;
+  border-top: 1px solid var(--ink);
+  font-size: 13px;
+}
+.toolbar {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.toolbar label {
+  font-weight: 700;
+}
+.toolbar select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 8px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+.trace {
+  margin: 0 0 22px;
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--ink);
+}
+.trace > div {
+  padding: 14px;
+}
+.trace > div + div {
+  border-top: 1px dashed var(--ink);
+}
+.trace dt {
+  margin-bottom: 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.trace dd {
+  margin: 0;
+}
+.choices {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.choices legend {
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.choices label,
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.choices input,
+.toggle input {
+  appearance: none;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.choices input {
+  border-radius: 50%;
+}
+
+.choices input:checked,
+.toggle input:checked {
+  background: var(--ink);
+  box-shadow: inset 0 0 0 3px var(--paper);
+}
+.feedback {
+  min-height: 112px;
+  margin: 16px 0;
+  padding-top: 12px;
+  border-top: 1px dashed var(--ink);
+}
+.feedback p {
+  margin: 0 0 8px;
+}
+.feedback > span,
+.small {
+  font-size: 13px;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 14px;
+}
+.button:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--paper);
+}
+.button:disabled {
+  border-style: dashed;
+  cursor: default;
+  text-decoration: line-through;
+}
+.bars {
+  display: grid;
+  gap: 14px;
+  margin: 22px 0;
+}
+.barRow {
+  display: grid;
+  grid-template-columns: 155px 1fr 42px;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+}
+.barTrack {
+  height: 20px;
+  border: 1px solid var(--ink);
+}
+.barTrack > span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+.barRow > strong {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.checkCard {
+  border: 1px solid var(--ink);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.checkCard p {
+  margin: 12px 0 0;
+}
+.scores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin: 24px 0;
+}
+.scores > div {
+  display: grid;
+  text-align: center;
+}
+.scores strong {
+  font-family: var(--font-chrome), monospace;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.scoreArrow {
+  font-size: 30px;
+}
+.results {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--ink);
+}
+.results li {
+  border-bottom: 1px solid var(--ink);
+}
+.results summary {
+  display: grid;
+  grid-template-columns: 24px 1fr 95px;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  cursor: pointer;
+}
+.resultId {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+.resultState {
+  border: 1px solid var(--ink);
+  padding: 3px 6px;
+  font-size: 12px;
+  text-align: center;
+}
+.results details[open] .resultState {
+  background: var(--ink);
+  color: var(--paper);
+}
+.resultDetail {
+  padding: 0 0 10px 34px;
+}
+.resultDetail p {
+  margin: 0 0 12px;
+}
+
+@media (max-width: 600px) {
+  .caption,
+  .detail {
+    padding: 18px 14px;
+  }
+  .title {
+    font-size: 30px;
+  }
+  .perspectives > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .footnote {
+    padding: 12px 14px;
+  }
+  .steps button {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+  .barRow {
+    grid-template-columns: 1fr 45px;
+    gap: 6px;
+  }
+  .barRow > span {
+    grid-column: 1 / -1;
+  }
+  .results summary {
+    grid-template-columns: 22px 1fr;
+  }
+  .resultState {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .scores {
+    gap: 22px;
+  }
+}

@@ -10,6 +10,7 @@ export function Post({ post }: { post: PostEntry }) {
   return (
     <article className="post" aria-labelledby={headingId}>
       <header>
+        {meta.draft && <span className="post-draft">Draft</span>}
         <time className={clsx('post-date', 'pix')} dateTime={meta.date}>
           {format(new Date(`${meta.date}T12:00:00Z`), 'MMMM d, yyyy')}
         </time>
