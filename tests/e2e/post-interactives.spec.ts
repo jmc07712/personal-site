@@ -1,6 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from './fixtures';
 
+// Keep the wallpaper still so the article controls run without competing for frames in CI.
+test.use({ reducedMotion: 'reduce' });
+
 test('FDE engagement steps expose the customer, engineering, and product learning', async ({
   page,
 }) => {
